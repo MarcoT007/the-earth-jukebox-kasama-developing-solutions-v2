@@ -116,8 +116,7 @@ export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, d
           </div>
         ) : (
           <p className="empty">
-            {focus ? "Your zone is kept for the map records. " : ""}This record is a camera view, not a map, so it cannot be cut into zones. Zones work in the Time Machine, the sea
-            surface currents and the lightning records.
+            {focus ? "Your zone is kept for the map records. " : ""}This record is a camera view, not a map, so it cannot be cut into zones.
           </p>
         )}
       </Fold>
@@ -145,6 +144,11 @@ export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, d
           <a href={viz.sourceUrl} target="_blank" rel="noreferrer">
             Source: NASA Scientific Visualization Studio #{viz.svsId}
           </a>
+          {viz.map && (
+            <a href={viz.map.sourceUrl} target="_blank" rel="noreferrer" title={`${viz.map.credits}. Layers: ${viz.map.layers.join(", ")}`}>
+              Map on the globe: {viz.map.provider ?? "NASA GIBS"} · {viz.map.span}
+            </a>
+          )}
         </div>
       </Fold>
 

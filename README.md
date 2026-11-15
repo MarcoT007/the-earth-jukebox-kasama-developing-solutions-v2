@@ -53,8 +53,26 @@ it, and the mixer keeps working on that zone only. Open with `?zone=europe` to s
 
 In the Time Machine the heat of a zone is how much it has warmed since 1950, on a scale where 100 is the largest
 warming of any zone, year and scenario. Antarctica is not offered: the source maps paint it at the cold end of the
-colour scale in every year, so its warming cannot be read from them. The other five records are camera views, not
-maps, and cannot be cut into zones. Zone data is built by `pipeline/build_time_machine.py` and `pipeline/build_zones.py`.
+colour scale in every year, so its warming cannot be read from them. Zone data is built by `pipeline/build_time_machine.py`,
+`pipeline/build_zones.py` and `pipeline/build_gibs_maps.py`.
+
+## A map for every record
+
+Five of the SVS visualizations (forest height, Perpetual Ocean, atmospheric river, carbon dioxide and air quality)
+are rendered camera shots, not world maps, so they cannot be wrapped on the globe. For those records the globe
+shows, and the music reads, a world map of the same subject, laid over a dimmed Blue Marble. Four come from NASA
+GIBS; carbon dioxide comes from the European Copernicus Atmosphere Monitoring Service (CAMS), whose map is more
+recent and easier to read than the NASA layers available:
+
+| Record | Layer on the globe | Frames |
+|---|---|---|
+| GEDI Forest Height | `GEDI_ISS_L3_Canopy_Height_Mean_RH100` | 5 maps as the mission added data, 2019–2023 |
+| Perpetual Ocean 2 | `GHRSST_L4_MUR_Sea_Surface_Temperature` | every 15 days, Nov 2025 – Oct 2026 |
+| Atmospheric River | `AMSRU2_Columnar_Water_Vapor_Day` + `_Night` | daily, 1–24 Jan 2025 |
+| DYAMOND Carbon Dioxide | Copernicus CAMS `composition_co2_totalcolumn` (not NASA) | every 6 hours, the 6 days before the build |
+| Air Quality Model Runs | `MERRA2_Total_Aerosol_Optical_Thickness_550nm_Extinction_Monthly` | monthly, Sep 2024 – Aug 2026 |
+
+These maps are related NASA data, not the SVS visualization itself; the About section of each record links both.
 
 ## Narrator, themes and layout
 
@@ -100,9 +118,11 @@ npm run dev
 ```
 
 Data pipeline (Python 3, ffmpeg): `pip install -r pipeline/requirements.txt`, then
-`python pipeline/build_dataset.py`, `python pipeline/build_zones.py` and `python pipeline/build_time_machine.py`.
+`python pipeline/build_dataset.py`, `python pipeline/build_zones.py`, `python pipeline/build_gibs_maps.py` and
+`python pipeline/build_time_machine.py`.
 
 ## Credits
 
-Imagery and data: NASA Scientific Visualization Studio, NEX-GDDP-CMIP6 and GIBS. News headlines: NASA Earth
+Imagery and data: NASA Scientific Visualization Studio, NEX-GDDP-CMIP6 and GIBS. Carbon dioxide map: generated
+using Copernicus Atmosphere Monitoring Service information, drawn by ECMWF. News headlines: NASA Earth
 Observatory and Google News RSS. Independent Space Apps project, not endorsed by NASA.

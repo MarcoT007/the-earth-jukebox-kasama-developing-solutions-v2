@@ -26,6 +26,9 @@ export interface Visualization {
   sourceUrl: string;
   projection: "equirect" | "screen";
   frames: FrameFeatures[];
+  /** Records whose SVS visualization is a camera view: the world map (NASA GIBS or Copernicus) shown on the globe instead. */
+  map?: { title: string; layers: string[]; span: string; provider?: string; credits: string; sourceUrl: string };
+  cover?: string; // those same records: one frame of the SVS visualization
   /** Time machine only: one frame list per emissions scenario, same years in each. */
   scenarios?: Scenario[];
   years?: number[];

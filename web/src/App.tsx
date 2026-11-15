@@ -396,7 +396,7 @@ export default function App() {
       <Dock catalog={catalog} track={track} playing={playing} onSelect={selectTrack} onToggle={togglePlay} />
 
       <footer className="credits">
-        Imagery and data: NASA Scientific Visualization Studio, NEX-GDDP-CMIP6 &amp; GIBS. Independent Space Apps project, not endorsed by NASA.
+        Imagery and data: NASA Scientific Visualization Studio, NEX-GDDP-CMIP6 &amp; GIBS; CO₂ map: Copernicus Atmosphere Monitoring Service. Independent Space Apps project, not endorsed by NASA.
       </footer>
 
       {!started && (
