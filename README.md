@@ -1,0 +1,62 @@
+# The Earth Jukebox v2 – KASAMA Developing Solutions
+
+NASA Space Apps Challenge 2026 · Challenge: [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/)
+
+An interactive web jukebox that turns NASA Earth Information Center visualizations into music.
+This repository continues the work of
+[the-earth-jukebox-kasama-developing-solutions](https://github.com/MarcoT007/the-earth-jukebox-kasama-developing-solutions).
+
+| | Folder | Live |
+|---|---|---|
+| **Working version** – clearer sound, picture follows the sound | `web/` | <https://marcot007.github.io/the-earth-jukebox-kasama-developing-solutions-v2/> |
+| **Backup** – the page exactly as it was before the sound work | `web-v2-Backup/` | <https://marcot007.github.io/the-earth-jukebox-kasama-developing-solutions-v2/backup/> |
+
+## How a picture becomes sound
+
+Every frame lasts one bar of 8 steps. The music has three voices; each comes from one thing in the picture and
+can be muted on its own from the "Playing" tab.
+
+| Voice | Read from the picture | Rule |
+|---|---|---|
+| **Chord** | Colours | Most common hue = root note. Warm colours = major, cool colours = minor. |
+| **Melody** | Light, on an 8 × 4 grid | Scanned left to right, one column per step. The brightest cell of the column sings: higher in the picture = higher register, brighter = higher note. Dark columns are rests. |
+| **Sparkles** | Spots that stand out | They fall on the columns where one cell stands out most from the rest. Same picture, same rhythm: nothing is random. A kick marks each new picture. |
+
+In the **Climate Time Machine** the grid holds the data itself (land temperature from NASA NEX-GDDP-CMIP6,
+[SVS #5343](https://svs.gsfc.nasa.gov/5343/)) instead of brightness:
+
+- the hottest land cell of each column sings, and its note climbs with how much that place has warmed since 1950;
+- columns without land are silent, because the dataset does not cover the oceans;
+- sparkles mark the columns that have warmed the most, and there are more of them as the land heats up;
+- the global heat index raises the root note, turns the harmony minor and adds a dissonant note.
+
+The heat index and the per-cell warming are computed by us from the colours of NASA's frames. They are consistent
+with the data but they are not official figures in degrees.
+
+## How the sound changes the picture
+
+The picture never shows invented effects. Changing the sound changes *which real data is shown* or *which part of
+it is highlighted*:
+
+- **Energy** (height of the wave) selects the emissions scenario in the Time Machine, so the planet shows that scenario's map.
+- **The note that is sounding** lights up its cell on the picture, and on the 3D planet when the map is wrapped on it.
+- **Density** silences the darker columns, and they fade on the picture.
+- **Muting a voice** removes its marks from the picture.
+
+The rules live in `web/src/audio/mapping.ts`; the engine is `web/src/audio/engine.ts`.
+
+## Run it
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Data pipeline (Python 3, ffmpeg): `pip install -r pipeline/requirements.txt`, then
+`python pipeline/build_dataset.py` and `python pipeline/build_time_machine.py`.
+
+## Credits
+
+Imagery and data: NASA Scientific Visualization Studio, NEX-GDDP-CMIP6 and GIBS. News headlines: NASA Earth
+Observatory and Google News RSS. Independent Space Apps project, not endorsed by NASA.

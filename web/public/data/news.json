@@ -1,0 +1,638 @@
+{
+ "updated": "2026-11-14T20:22+00:00",
+ "global": [
+  {
+   "title": "A Global Rebound for Mangroves",
+   "url": "https://science.nasa.gov/earth/earth-observatory/a-global-rebound-for-mangroves/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-13T05:01:00+00:00"
+  },
+  {
+   "title": "Scotland’s Flow Country",
+   "url": "https://science.nasa.gov/earth/earth-observatory/scotlands-flow-country/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-12T05:01:00+00:00"
+  },
+  {
+   "title": "Water Surges Into Navajo Reservoir",
+   "url": "https://science.nasa.gov/earth/earth-observatory/water-surges-into-navajo-reservoir/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-11T05:01:00+00:00"
+  },
+  {
+   "title": "Autumn Mornings Bring Valley Fog",
+   "url": "https://science.nasa.gov/earth/earth-observatory/autumn-mornings-bring-valley-fog/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-10T05:00:00+00:00"
+  },
+  {
+   "title": "Ozone Hole Reaches Its 2026 Maximum",
+   "url": "https://science.nasa.gov/earth/earth-observatory/ozone-hole-reaches-its-2026-maximum/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-09T05:00:00+00:00"
+  },
+  {
+   "title": "Taking a Gander at Utah’s Goosenecks",
+   "url": "https://science.nasa.gov/earth/earth-observatory/taking-a-gander-at-utahs-goosenecks/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-06T05:01:00+00:00"
+  },
+  {
+   "title": "Cyprus: Island of Snakes, Cats, and Ophiolites",
+   "url": "https://science.nasa.gov/earth/earth-observatory/cyprus-island-of-snakes-cats-and-ophiolites/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-05T05:01:00+00:00"
+  },
+  {
+   "title": "Before the Dawn in America’s Heartland",
+   "url": "https://science.nasa.gov/earth/earth-observatory/before-the-dawn-in-americas-heartland/",
+   "source": "NASA Earth Observatory",
+   "date": "2026-11-04T05:01:00+00:00"
+  }
+ ],
+ "regions": {
+  "north-america": {
+   "label": "North America",
+   "items": [
+    {
+     "title": "Carney’s second budget bets on oil, gas and AI as ‘Masters of Canada’s Destiny’ while climate costs soar",
+     "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxOc1BFdjJfWkdXN0ZVUFFaYkpyZWktTDdIVTNzTFc4bUJaUnJ4T242M0JfXzJiNlB3dEZQRldTdWhHcV82QTJaUHBNMXV4MWk2MTM5ajJ4YXVjZGc3LVJrRXhUMXFoWTlZT3I5OUVFa3F2R3VDSlZxS3ZMNGx3X3I0el9COXB1OWxITFZFUElVa2NJRzMyR21jOTFYeWVuZDFBei1ieWJpaXlPR254LUlJTGZkNjRtTlFHNXFDSWFFcEhMa2U0dVFrSjVaZXpMYmtMblk1Zk1GS2taemM?oc=5",
+     "source": "The Pointer",
+     "date": "2026-11-14T16:50:16+00:00"
+    },
+    {
+     "title": "Ethiopia, Canada Explore Stronger Climate Partnership",
+     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE50VElBNWZkenp4ZnkwZlpOMDJheHFXSEFVVnZRazdaV3dFcHE0TXktQ3Z6ekcwTE5KcG16MlF4ZGVOal9mTzRBaXEtejdzYVRDakE?oc=5",
+     "source": "ENA English",
+     "date": "2026-11-14T16:08:16+00:00"
+    },
+    {
+     "title": "Former environment minister says Canada’s commitment to climate targets ‘factually untrue’",
+     "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9GRDdYQ0JZQ3FLbVpXZDUwRENWcUV1Vk51bnhwLTY2M29meFhuMDU5Y0MtVE80SmNSdUtWN3JEZG1KOHI1NkliVkhtclhvODEzLVBtTTZJMkZZN1BiajRRUXlJSHpuazEz?oc=5",
+     "source": "Global News",
+     "date": "2026-11-14T14:40:16+00:00"
+    },
+    {
+     "title": "Are kids feeling climate anxiety?",
+     "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE12WS1QLVN5RnBOREZkQTFSX1JlUEkwSGw5UUlWQncxY1VfbjVxNl80UjdpM1VGVUxRZE52STFRMEsxWHBMRW54Rnd4cFN3Y2pxamlXMnZjZE5hXzlWbnIzZlRBZnFfWjdUa1V5UGpzWjJ1UG5PSEkxUA?oc=5",
+     "source": "Yahoo News Canada",
+     "date": "2026-11-13T22:53:33+00:00"
+    },
+    {
+     "title": "As Canada invests in oil and gas, environment minister boasts of 'warm welcome' at COP31",
+     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE5ra3RQV0ZXMHM5UVZXVk03NVJhNUdsR1cyM0FFNjl6cmg4bm41MngxV01QNTFsSGhpOEkzd09IRUxManh5YU1HRFZUZ3ZwUGpkcUFYUDM2VnNkSDg1eC10LXJIbzQxd19KU0s0bGlhLWtac1U1dlE?oc=5",
+     "source": "CBC",
+     "date": "2026-11-13T22:28:00+00:00"
+    },
+    {
+     "title": "Mark Carney, other world leaders skipping COP31 climate change summit",
+     "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPWnUweHRhdmdZVjRyTlF0RkVpVU8tbF9UT2pHLWZKZW1RdmdwN01ONGVSbk52MFA0ak1UeTJkUzBKSW5abExyMEJnbHZPV2pVaERfUzg1aFNIS19OSmVkRXdIQ2t1T2FhTG1uNHNkbDlxMVhHUTU0ZENKX1ZlQTR0T0J1TjEzQlNBUXNoUjJGZEFWa0NkTE9vank3dXdVNGswQk5Jc19lV25QbGE5TVVFYg?oc=5",
+     "source": "Niagara-on-the-Lake Local",
+     "date": "2026-11-13T19:16:05+00:00"
+    },
+    {
+     "title": "What could El Niño mean for winter weather in the US and Canada?",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9pRVJDSGprTjIycTRkZ2V3dFNWYlNDdDhKVnF5ZWlJdWpVaFZYcTJmb3NQT1ZqUV9jSzVrbWJsS2d3dDA2bmppd3duNTk1dERsc3U3WlNSZnRFQ1ZRdlZ3?oc=5",
+     "source": "BBC",
+     "date": "2026-11-13T18:50:15+00:00"
+    },
+    {
+     "title": "UK, Norway and Canada launch $10 billion climate finance initiative",
+     "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNNWRLdGhNWkstQjg5ZFF3bDlVWGp3LXFIc1ZzZm83dGRnajdsUFh0a0t2VTBEOE9Zam5HVVdBXzhvREFhYjN5S2hmeXAwTjJjY19WcHoxUFV3ZTF5OWhUaXpvcEZ4VWRJMlRkT3VqN3Blbm54dTdoalhza1RxUHdoWE5zVC1KQnlXWjgtS1pJODhEUXpOUWlrT0JGYWprVWtrZU5aampLMFRBUDNCSjZlNkExMDRVbWM?oc=5",
+     "source": "Reuters",
+     "date": "2026-11-13T18:32:54+00:00"
+    }
+   ]
+  },
+  "central-america": {
+   "label": "Mexico, Central America & Caribbean",
+   "items": [
+    {
+     "title": "Central America Prepares for Drought as Rains Fail",
+     "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQMkJLZDhZOHEteDR0VzIydGxyekVRUDVmNW85bHNPYWpsQVZqSnFrVDE2eVROSEdpRlhodTVGMmVEMC1mTVBfZG5xZkU4S055T0h2Q0pmRGFCVG5ZZFB0Vi1WMFcyU3BiS25UOEZLZDZvLTY4eG9nZ3VfTjRURHlqU25heGFlZE1m?oc=5",
+     "source": "Mirage News",
+     "date": "2026-11-14T14:06:00+00:00"
+    },
+    {
+     "title": "St. Lucia PM urges urgent global action to limit warming to 1.5°C at COP31",
+     "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPNm80cE9YbmktWWw0dGoxaTgtVlhaMVNCVU9EbnB6ci1acm50MlVaVDNwc25CWE1SQ2JZSTFVRklvWV9WODh1ZjJKRm1ZYWZOZXlLTlFocWotWkFjdDFqV0EtMzRTSkdDcWlXTHc4ZUFaVURJM3hlRXl0bXpLaG12NUFUS21iSnMzNVhHM0NRNjBOY2V1RDVWVUlLN0xZSUFUdE9mWWZib0RrQXVjZTZIZllWX010MUVj?oc=5",
+     "source": "Caribbean National Weekly",
+     "date": "2026-11-13T20:40:17+00:00"
+    },
+    {
+     "title": "Bahamas PM nominates Justice Cheryl Bazard for top climate law post",
+     "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPa0UwYU5SbnphRy13YkYycnV0Tnd0X19yMS14MzRtTm5xMXlvNUZXajJtQUdBcFE2Zm95UHdSSTdKcXhiWUxidUktMUVlblNyQjB0NGZLMTV3d1NGRHNQY1dTNktOQkstR3NfMWpTTTU4N2NtaW83Q3U5eldBdi0wM2JYZGpUbTljMjJxVVRSeVdGQy1FVkdISnIycVRPZW5sWW1BVDl0MUFwTkY5RnRwRXlxaw?oc=5",
+     "source": "Caribbean National Weekly",
+     "date": "2026-11-13T20:37:11+00:00"
+    },
+    {
+     "title": "Endangered monarch butterflies recover despite threats",
+     "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOM1pNU0llYTdsNVRQa0VOMF9MbmtOdElMME14QUhiTXdoLXJpcGxQSkR4VWJMbzFrLXpxNmp5OGRFNllEMkVLZ1gwR0l2VHJSSXVHUGRHemVpaUJTYmhPY1BEbjZRWWw5SlBwVjlfRzR2ekNnY0U3NnV3QlQxVUtrMy04QWN1eE5la1ZrR2FkSUo?oc=5",
+     "source": "DW.com",
+     "date": "2026-11-13T20:30:34+00:00"
+    },
+    {
+     "title": "Latin America & The Caribbean Weekly Situation Update as of 13 November 2026",
+     "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNa3JmQ2JoTVpvbFdHQUdCMmh3STBtbGllTTNxMmdHTGZ0djZadF9xd3dlTFNvSDhtbXlrelB5My13Q1NxdTJFWlMzdmFHTmpla1dhZG1xMXgtLWJIV2paWkRIRkNNVkpSVkNfbTFCVzZfaS1nSWxqMl9mZVNCR01sYXExOHVsVTR3dGZwdk02cmtiRDdNa1dCbk5kYmxEak45Ync?oc=5",
+     "source": "ReliefWeb",
+     "date": "2026-11-13T18:54:41+00:00"
+    },
+    {
+     "title": "Manitoulin Island monarch butterfly completes 1st confirmed flight over Great Lakes",
+     "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNaVdNQkx6T1JaeUtQWkY2eHBuZ1A5NEY5bE5pZm81S3EzdWQ5dHBZR2VIM28zSHg2Z1htTFhTTENDeG94QVZ0ZXpnUGlvWk9EWnlXWTBBRmZNSW9jczgtejc4QWZmTExvbm50bGFlanJZTERHOTFnMHF3ZmJDM0t0NXBmenAtRG90aWl2eg?oc=5",
+     "source": "CBC",
+     "date": "2026-11-13T18:46:00+00:00"
+    },
+    {
+     "title": "Caribbean gains little from yielding to US demands, says scholar",
+     "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPVlZCS1FoLXM4YUdRUzFyTk9sV1hBTWl4TzNYRmxPV1lHMWREbk1HX2VNTGMzQXZtVnFCUkJzOUZoSUgxU0xFSGpZSExIRkdCZ21KaHNfQVoyWmtKejg1eC1vZnhjbG10T1ZETVZITDJsSkF0RklQTzYzTFpmM013WkJZWVpTQS1td1BvYXZjQ1FmYzh6NHBfcXVSOFZJSHNtWlE?oc=5",
+     "source": "Barbados Today",
+     "date": "2026-11-13T18:04:33+00:00"
+    },
+    {
+     "title": "Deep-Sea Genetic Study Finds Extinction-Risk Signals in Gulf Species",
+     "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOSTZ4YTM2U0RZZjBtMkUweEdnYXBUS3ZCUVdIR0daQVlZZDhRb1V4MERELVUzTzFiWnpiRXk3cnVPWlFmWG5ubTVZZWZ0TVRId1prTTFEOVczY2RUYmQxdHlFaTNoc2Z0aVhnTUFndEVvbWZ6ei1ndDZQUDFUUEZLaUZPTlFrdmR1TS1rMkd5VFdROHdnRHNuTHFqampiaXFmam8ySmQ0R0w1Rkh0Zlp4WHpmMzdnelZtcWZZ?oc=5",
+     "source": "Nature World News",
+     "date": "2026-11-13T14:45:43+00:00"
+    }
+   ]
+  },
+  "south-america": {
+   "label": "South America",
+   "items": [
+    {
+     "title": "\"Climate change, challenge for all humankind\": Argentina’s Socialist Party Secy General at Bharat Summit",
+     "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxQRldpQVZuQmlJLWs2Vk0yUjJkSTBjSDZGS3hCOEZNYmVHOXg1SmZMUTZqSDlnSUVubkcxTnFfbFlxMFVoMXdFOE4tTFJOZzZaMVZ2RkdkM1RqTF9FbGZVMF83OWpZRlUzcFlXTEs4NnM2bUw2cnRoN1M4dHozdS1uVGdZRW15bmJlYTZkbkdFR1cxdXBrZ3FpN3VXLVUtcDFRYVlHamE0MlBhV3pla0JIZ2pnOV9ObUN6RVVxS2tIUkxfN183dWpheUdDNXlhQXZsRnVYRUI0U1FqajNiR1Rsb0NWck1vbk5JVjByMA?oc=5",
+     "source": "ANI News",
+     "date": "2026-11-14T12:57:00+00:00"
+    },
+    {
+     "title": "Venezuela and Brazil to ‘Relaunch’ Bilateral Relations, Demand Climate Action",
+     "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNLVNYSDlLWnk0RFBaZmkyM0VibWppUVNtLThrYnVPT2lYWTF5bThrd2x0MG5iRlROd0JUOE9JSGpOa1NKbHIwYjFSZE02NjNXTlFxQndfTDMtaXMybkhnSWZTSWplc2l6X0ZudEF5X1hiaHJRejRMbEJ5Y3RxNFdGTGtDWTVsSDVnenlhYUZ6MTg4eTc3amtPdk9JMEhvaEZ1cGVrSmQxVFlPdG9QeUE?oc=5",
+     "source": "Venezuelanalysis",
+     "date": "2026-11-14T03:22:00+00:00"
+    },
+    {
+     "title": "Indonesia, Brazil explore tropical forest financing partnership",
+     "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOQjFHdGxsWWlXSGpQcVFxOXNOMWs1QS1nU21LZHhHNTVEak9jQ2M0c1ZIQ0s2N0NGQkdiS19KMEhfQkY3WEVtNGhqNjd3MW1jMzdqVkJQdGVlM3ZtMlZUelM1VjJ4VFRnR0wxRjNsZ0NEOHhCR0dpMDhwd2FHcjBUakNjRklQTmp2VEtRZEZuMERtLXktcmFfTG95QUxDT3h0V2fSAacBQVVfeXFMTTlMMjdjeTNOUjhPWUJsNk04aDVsQlBnbG1PWVJvNVRwOHlxNU84cDVNWnJmWjd6TFpqLVNmU1pESzdzby0talRRXzNqbVpINDhyV2JEcExjQ3ZZTFh6R3AySlJ6YV9qdV84S3VBU1NWYjlVQTVZY1VJR21DUmRWcGFSajhhWGVaNnAzTWJGTUxUNVlieFVUSEFzLW9lQm9NQ3l1WHRFSTg?oc=5",
+     "source": "ANTARA News",
+     "date": "2026-11-14T03:04:26+00:00"
+    },
+    {
+     "title": "COP31: Brazil Proposes Public Solutions to Lead Climate Action in the Global South",
+     "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQd2lmWlkxbnc1RFJNOVJNN09zQ1hNdDV0Z2VmWGtWbkVuRlc0SWl5YlhxY1VYcVdwYnAyTUxucGNxYVc4V2xTQzUtUlZFQk5iX3ZCOUVrdlZvNjkyLTF6eHdIOVhUcDlPaDBzYmgtVV9YNklyYUZ4Ri1LR1dlQmJSRVh5ZlgwQXEtVUE2X2FBWlBoRkk3Tnh4Sk43NXJsdWlScTdhVWJnQXZiNWFYOGR4cXFSRmY3RmlPbTI1MW05Rm9UYXA0Yy1NYUJNQ0I5cTdwYUx6emVpWmIzdTVJY3FRTl9n?oc=5",
+     "source": "Brasil 247",
+     "date": "2026-11-13T22:55:26+00:00"
+    },
+    {
+     "title": "COP31: New initiative targets AI and reliable climate change information",
+     "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE1yUWRNNGFVOHB2dEMtcGhhYk1CbFFybmdLdi1IS2o2cmVmNTdJSzRaSDIwcVM1cnF2MDZsNW5TMVlnVmxHYlVNLWhVRUNkV3pvN0MtbllTYw?oc=5",
+     "source": "UN News",
+     "date": "2026-11-13T12:06:51+00:00"
+    },
+    {
+     "title": "Brazil says Amazon deforestation falls 71% as Lula government rebuilds environmental protections",
+     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE00b0dFTTROVGdHWEh0bDcxYWJmMnNDVldwclduak5jdm9jUjFmM2hpaUlQdTlOSjUwVmNBU2I2el9KZTdGWTR6djk0Y2JXdWRBTHgydENXaEU?oc=5",
+     "source": "TRT World",
+     "date": "2026-11-13T10:50:14+00:00"
+    },
+    {
+     "title": "INTERVIEW – Brazil focuses on Amazon reforestation, not revenge against Bolsonaro, environment minister says",
+     "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPbmNqcVlBaFpOUzV0dlJmRmRaMUt5NExkN2t0dVlJcnRVUVhwa1pOb1BEMjBuZXFYQzNsTTVfbmd4YklTdFJpMU02Xy01YzFwQWFuWEZueXl3M3B4dmM2UnFfa0Z1MU9pMnNBajJ4dTlGTzFlT09XMHhpc1RuZGU2U2JUOXhqRTZsYlF2Tm4waVR5WEFyRVU0ZEJpUjUyOHhKSXRONVQtendCTUxoTmR3QXduYjRYN1Q5MXlIUTNwRFVTZmJmLTZJT0tWQ1o2MUFHSmFCcW9NaXdrYkZXdnFJ?oc=5",
+     "source": "Anadolu Ajansı",
+     "date": "2026-11-13T09:22:38+00:00"
+    },
+    {
+     "title": "As Trump abandons America’s allies, Governor Newsom rallies world leaders at UN climate summit, meets with Brazil’s President Lula, and signs new partnership with Portugal",
+     "url": "https://news.google.com/rss/articles/CBMiqAJBVV95cUxPd0hVOHRZTHFNc28xanRaUjlYbkNUUE5nWDZubjBublZOak1VTVZkdHVpMnF1dUQtRDJ6WVlMQmx1a2pBRFRrRk5WZkNNWUNXaXhQV3NDeXVpdk5PZmJ5eE10dHJEeTliMXoxc3E5Zk42MzYya3FvWExRcE1PaTh2UlctMGh4dHBhUjRjN0tlLUZ4MmtjRERtVGFNUWNSODQtTUFDa0JfQm1PNlowR2J6QllzV0NhSVo4UEVNNjdFZUtwRWE3ZzBSZjVWZWZUWFY1ckcyNVBpejBzcDhHYVZiUzVwN1hzVGd6WWxPMHJ6ZFViN2NXSm53REpmUkpPZDdNTG5ZZHEzUDYwMW4wTmdMUlVkRDA2dGVrQ01SOWxxMHJsUmUyek9hdg?oc=5",
+     "source": "California State Portal | CA.gov",
+     "date": "2026-11-12T23:40:05+00:00"
+    }
+   ]
+  },
+  "europe": {
+   "label": "Europe",
+   "items": [
+    {
+     "title": "Study presents discouraging picture of dwindling European birds and butterflies",
+     "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQRmRzTVM5YjZhb0VoS1FNQk4yNTdPNDVLY0cwZVJLWDBRb2cxc2lXb19fNV9IWEpBWXFSdTJhVU9ucHNDZnBPUl9oeGlvazk2QUtDTE5LQVd5Ym9kMmNLcHZVSVM3ZE1ISUJ5M1hTYTZmQ0Z5UGVoQW5VV3ZZX29HRTlWQU9pYmEzYVU4Z29RWXNzLUUyVVkycldxNHJGSzlnN3lJOHZpMVB5VkpmX3ZnZGdzV2hFMGFiVFdSS25XTQ?oc=5",
+     "source": "CORDIS",
+     "date": "2026-11-14T09:25:02+00:00"
+    },
+    {
+     "title": "Was the heat of this summer really 'normal?'",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9zekZMTHdndWZHWVhNbmZBR1FacWI5THdmZkxvQVhXdWpEZlVFMGpka0QzSFk2RXVEUC1nYXljY0NrWVNqTFczYW01RGV3NkxqcllWQi0zYnJQSE1BamJQUU40X1lsWnBaQjBPSV9VUTI0WkZ2ck43SnZNVHdGNDjSAX9BVV95cUxNWWdiUGpVWmxCdkp5TGRhTXNNRlN1Y3d3UlptMDVQMTFKREc0YWpJOVo5dDF2QWJMSHFLWmVvNE5ic2pNQm91QS1qcjZ5cHpUeW9OWWlqTEVLeDUxR3FCbGJuWlNmenlfcEV5Y3Y2c0ZpV1VoQmM4UzlTTVFXQlhZ?oc=5",
+     "source": "DW.com",
+     "date": "2026-11-14T06:17:56+00:00"
+    },
+    {
+     "title": "EU Commission launches global climate and health research alliance at COP31",
+     "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxNR1ZrTE1iNXl1bXZLY29vWTNjckRyLUZuYm81Ui1mdHJYYmk0WXQ1QjcybHRvUHBkMlhNNE5LeWNnMzhVRC1CSWdpcmZNZ0p0SjVVOFd6Y0JhWUNJU2d3ZFBLd0hCMVhjdnlFdHpiZjBPbmVUb01GNjdQSXplbVMtY25XVmdVaTQ2YVlHbkpkM1FXQ0lPbTg3VGhNbWc4N21fSlZmSVo3eXRTMllGU1ZZaXhtZV8xQWZXbE44bjNUd1kySjVhRWdnbFVQR1RUbE96el9TWHRrSXctZw?oc=5",
+     "source": "INSIGHT EU MONITORING",
+     "date": "2026-11-13T18:11:11+00:00"
+    },
+    {
+     "title": "Will this year’s UN climate change conference be different? Interview with EU Commissioner Wopke Hoekstra",
+     "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNODhndlhYU3NndlZhTmY3eUNGQlFqUHNtdG92SUpIbnl2Y20zT2ZQUXowZFVqQ1Y3QXRzaXZSek13MUZWMlBtWi1Rem8ySy1YamtDQWtVbkZhbUtzWjBYaXo0dXVLdWN0MG1HTS05dWVSVVB2Tl81cW8wSUpLdTh4eDNrQnRkV01GWjl2WnJqYkpjUWp4YnVTREtXcUpPNzFvTHkzZjdUWFR0SXhFdkN1SXMyN1IzV1dnUjRvdzNsd25ORWItWGlFWG1UU1VnQQ?oc=5",
+     "source": "European Newsroom",
+     "date": "2026-11-13T15:32:14+00:00"
+    },
+    {
+     "title": "MEP delegation to push for faster fossil fuel phase-out at COP31 in Türkiye",
+     "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOZ3psUkdCbE1oOXo4Umt4MlRXd1B2TGVHQkRRZUxWM2hkWHc2Q2VyYkxzMnhXbllNMGVCa3ZpQnNGYXFiWEw3SWk0VE9jSGZYckFvdFFlWVRBdGhSMC1DRFBkaFp4azZNNG1wRERQTWFWVmVmb0oyMXpVWGFwaVpPXzBpQTZ6ZkNCSDNveFFENkNrajlmbHlTSWlSYlVFMUJYd0VIWDRUYng3elFOUDZWLW9kZ0tkZFZRbUdpdU5XYzhnYVdXWEs1MzB3TQ?oc=5",
+     "source": "PubAffairs Bruxelles",
+     "date": "2026-11-13T14:50:59+00:00"
+    },
+    {
+     "title": "EU recommits to 2050 climate-neutral target at COP31",
+     "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1KYzMxaFFrb05INVMzOHRqdmo1SVNWNFpRcUVtbnV5NDBscnkwZEMtelNKTnVQTHJIT0RZaWo1RThEZHJmOUZrR094bERmY3psdWpJeHdXMGNjUXRRb1QwUWowcjRWQ0lFdUFFRQ?oc=5",
+     "source": "RTE.ie",
+     "date": "2026-11-13T09:25:55+00:00"
+    },
+    {
+     "title": "Climate change boosts invasive species growth in Europe",
+     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPWWZiaEhFbGI5VHBwd0I5cWdNcGozZWJSeHZIYmJyaWFSdDBMY1BDUnd0ZjZ3TUloUnhpSnBZcFh3aTRvWGZ5NVpmZGI5ZG5YYlVvVmplNDJ0UVJCc3BTQkpUNXI4RXRDWnNWNWJfN05UREVfN2p2VUhhVDNpVi12SVlwY2h5NTV2NTRFS040TS1XQQ?oc=5",
+     "source": "DW.com",
+     "date": "2026-11-12T22:47:56+00:00"
+    },
+    {
+     "title": "German chemical sector enraged by Merz's backing of EU carbon scheme",
+     "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPelpqZW9QTjlQTVZMY3VreTRJNXJlQmsyNHp3UTlXUHNPQlE1dW9ESEd5N1NDWVhIbDduZEN2ekdfLXEzUUtzZ3FmMDMtM0lVRXlaZUdESGFBU18yRG1fVlUxRWREVkhkdnB5TXZrQUpvQXY4RHFoTURlZVhMeUhPNlYtb25wZnQzaURSclpmTEJkZlhIbkdMSTBkSWRWN1MxQVlURlVRUldScWJEQWF4VA?oc=5",
+     "source": "RFI",
+     "date": "2026-11-12T20:13:48+00:00"
+    }
+   ]
+  },
+  "africa": {
+   "label": "Africa",
+   "items": [
+    {
+     "title": "COP31: How Sports, Film and Television Are Becoming Frontlines in the Fight Against Climate Change",
+     "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNY01ReXJGX3FSOWM4MFkxdXZCRkQ3V0VLa0JwU2NseUgzVy1NOGtMNFp6VXdEWWNTb1BSMFRDTzhpZ21Wb1FQZzZDUFk2QmRxS2NwRk0zUWlMb0c2WWxFaWl5SHFPUFN6X3p4bkdxUlpBQl8xMnMzcEMtXzU4MU42ZkhTUHNzV0NkNUctQVNLUXBUUkVFdkxibjgzc05aQWtVYTB0a2tuNDVNemVLNjFVNmNrOHV5TVZtckY0U1dmV3FnNWF2cDZMOVZwSHRTRHhLRjlr?oc=5",
+     "source": "Africa Science News",
+     "date": "2026-11-14T19:30:46+00:00"
+    },
+    {
+     "title": "COP31: AI offers African farmers lifeline as climate change threatens harvests – Microsoft",
+     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFA3ZTVhTFJGZUh6R3hyZjk4UVU0a05RMFE1VVlkT3VXYjZzdUZCWkxVUzJuQ0pwVzFnVnZIbVB6UlJlcTBOTU5fUmc2dlB1YzNjdF9j?oc=5",
+     "source": "شبكة تواصل الإخبارية",
+     "date": "2026-11-14T16:28:53+00:00"
+    },
+    {
+     "title": "Maynier calls on COP31 Climate Summit to deliver real solutions",
+     "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOQjlyazEzRUhSa2hKNkNRMlJHeEVGYjFHUHNaY294NW5wZnpwazhJQ2F3Q0ZFeFdTbFNMaEw2aGpTX1JqUmZMbkRwdnNoOUlmU2hWMXZZVmNCenNkN0thVDR0S3B2NjdtcVVCZmF2R0dUMktMQ1MxTE1UYkFvcTZNVlc3ckhmODRPT0hGb24tWV9Sd0VfQkNTb0otX2JTVXM?oc=5",
+     "source": "SABC News",
+     "date": "2026-11-14T15:13:18+00:00"
+    },
+    {
+     "title": "CAPPA warns fossil fuel expansion threatens Africa’s climate goals",
+     "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxObzJjbzFJMzdoRktkVDhaazBHT0xSSnQ1enlNdkE1aDlwRlZtYmpud1VCMW1XclcxVEFncHZYQXFCQ3N0YU1CaVlvaXJMcEl4SHloSHhYR2FKb2hGUHNmR05nRjNZei1NY2NlYUd0dDllbFpiTkdmT2phOC1NOEVNNllMSVYtaFJ2NC1QcA?oc=5",
+     "source": "The Sun Nigeria",
+     "date": "2026-11-14T15:11:57+00:00"
+    },
+    {
+     "title": "Private climate finance in Africa more than triples, but adaptation share falls",
+     "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNMUd5ajI2T0dyeThLM3NwdkRjQWhBTVNZUFlYcUxzaXV2NER3aUNzQU1wWEtCMERIQ0MtZEF1Y2RPQmRmMXlzZW9oRmhzRWQwa3Z2RUF0Y05uZ0JKSGlJX0c1eFRnT0IwZHFYSkNLZTJUSmVsLWtCTWNxb2MtRnBsRm1sOHU1Z3pfaTdWaUVUNDMzOU9mbGR5TXFnREJVSVNXTTNzNWtJOUE4Y0dO?oc=5",
+     "source": "London Daily News",
+     "date": "2026-11-14T13:40:36+00:00"
+    },
+    {
+     "title": "Africa Day at COP31 calls for water security, climate resilience and accessible finance to advance Agenda 2063",
+     "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPRGktU25ac09EOGNHdTZtMnRWeFZKbldfVFNheHRNRUxnTWNVeG1BdnhXTDVBNVh0bmdkNmV4VEhhWEFtZXNuSzYwYjQ1alFWckxFcUpxVENtbFk4OUczMmpTcDRvbExnNUlvQmpJZjlvS3VHQ21FNG83YnFvVEZkbXpCSXFIQlFJQmp2MzgyUVZ0aHpkeUYwTlkyMkNhMG1BTmlKQ1ZucWJ5WFVDc2xxTFRpMFA?oc=5",
+     "source": "African Union",
+     "date": "2026-11-14T12:16:33+00:00"
+    },
+    {
+     "title": "In UN climate talks, Africa’s energy needs and debt crisis must take priority",
+     "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOSDB0SjdZSWZoM1d5U2Rvd2VzS05qeGZieE1XWjQyMmRlWUlaQUZ2QjZRbDFWaFdwS1N4OGZXRDN5ZTNPQi1wVTNaTVdzbXh2OWVkVTFjaTVQUDV3X3k3TDl3bl9FY0JHT1BqejlaUV96aUVCa09yS3JZN1R3VWMxMlk0ekJKQzhQZUlhZFd2Ti1fdU9idlZNdS1zeS1EZw?oc=5",
+     "source": "Blueprint Newspapers",
+     "date": "2026-11-14T12:03:14+00:00"
+    },
+    {
+     "title": "COP31-26, Türkiye: Kenya highlights African and South-South cooperation to strengthen agricultural resilience and agro-industrialisation",
+     "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxOVXR0LWR5UXpKVUNIa1RZZEpYbWw1bFNyR29hMzRMSlI0b2xFUWFWYjgzN1FWaDZydEczS1pUV0N5SGRzMER3LUhqMElrT1FVV3JORjJpNWprUzRZZFRQa21UU0lGMjdZWi16ZFZrRG1pVTc4OHk4Mk51eHVIQ0h0cXBwQ2xTLUFpRkQzSHo1ODQwTmZGcElUWDZsa09ybkV6bk1JS2xKWmpPcUlzVm8zWUg4U2gzcUZYRWlKXzQ1TWc1cWd6MU01cmhiaHo5X2d3UTJ0M3d0SjJVNWhaTHpsdy1ZczNhSlZ3TXhTRGpYUTVkaTV5YTQyUWVub2gyNzJfcXM4?oc=5",
+     "source": "Tech Review Africa",
+     "date": "2026-11-14T10:25:50+00:00"
+    }
+   ]
+  },
+  "middle-east": {
+   "label": "Middle East",
+   "items": [
+    {
+     "title": "UN chief says 'immediate and drastic' emissions cuts needed to avert climate change catastrophe",
+     "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxQUlgtdnBVSlROU2R0NVEtcklmNWhQUFRQRUZubWs2M0NMVDZiTVRKeFdwakQzY3ZWeVMxdTRYYlV4LWZHejBrMU1fUW0wSndzSU5sTGw5clNTQWJGc0pGbngxNUhYLXhmUFJIZWhkTFJZMm9ibTJRRWJkNHFxRG45dEhkZkhKNDUzN1hQRWUzdDg4VFdxYjd4ak9aNlBoLXhON0xMSFUyRzBoV09zZEdsRm90NC1OY1JqWFg4UVZJT2hScXBUcUhaU1JDeEtjR1NOcDhMalY3Rk85cmhKUGd4emJxQXVZU0d6NjMxcklLdzkwY2FQaUVGbDJWcFVpeXM4RDdQSUVR?oc=5",
+     "source": "Herald-Banner",
+     "date": "2026-11-14T18:30:00+00:00"
+    },
+    {
+     "title": "Climate change: Australia deserves credit for electrification push",
+     "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOYTRuVmt4Q05OWUFQcXdCNXNwMENGTlVza0ctLXBDNk9wc1FJOXFPUjRWZ2UwUVVoMTI2QnJhY0VIQ1VsN0JrOXR6TU9HRWxELWNWeVBUdGFTVW9oRHhELVc3YmFJeWRXcmtIR0pWdWR5NHp2Nmt1dW9RaUE0elAxcndSb0xGRlpndGt3ZGNfSzhmQlZjMmVWYk1PaXBSV2hrOURDNElseUpDTFpKb2VnTlBjcnl1LUoxNGNPdjB3?oc=5",
+     "source": "SMH.com.au",
+     "date": "2026-11-14T18:00:00+00:00"
+    },
+    {
+     "title": "COP31: Protesters, UN urge swift climate deal",
+     "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQeURSTlJ1UlpqamctWXM5eTBmakNQZlBkekJuaVVENzlXVXRkNUMyajNzQ045VGtNbUozRXdaYXgyc0V4RXRwTXVCMlU4Uk9ja3RYSTJBMF9TVDM0VEVwRjhmLVpRSVZQSjFoOW1kbWJGNlpmbkNzSE5CbnhPRVpmamV30gGCAUFVX3lxTE5XNEJHRGc0N3pDMld6OUNaWnJOaVVRNE5iNEZsMnpUTlFJbEZLVGRHSVlZYzV6WlItQWJJMWJiQ1RDMmZLWHB1cmZBZmxPekJxaV8xTWdWR0h3eUlXeWh5R09CMTd3dnpmYkhCRUlQMzZ5U1lrVW5iU2x5SW40ZF83T0E?oc=5",
+     "source": "DW.com",
+     "date": "2026-11-14T17:24:22+00:00"
+    },
+    {
+     "title": "Egypt calls for easier climate financing for developing countries - Economy - Business",
+     "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOWFNhOWhEazR0T2ZtTXktd1BaNGlORHhIY3U5dWNFOFZMUFlEallxM2lXN3duekN5RUt1QmhjMTNxMDBSQjNzbGx2VThMSmdyUWJXdE5ybm1jZDRuV3hsbUhzdGVGakNvWktqVkxXWlhTaU5md3ZZQzVtdXh3X3dfSlhWSGdxQW5OMkxFZEphc3prczNGNUpIVFFEREswN3dONjlrNm1GYS02c25oZ0pfWlJxaHBadw?oc=5",
+     "source": "Ahram Online",
+     "date": "2026-11-14T16:55:34+00:00"
+    },
+    {
+     "title": "UN climate chief urges speed as COP31 confronts fossil fuel divide",
+     "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNMUdMa3BVSk45alRMRFZoSmM0ZllsLVVMcEdKaDZpbzh5UW5EeGR2WHVmYTh5aE1KRnlleEIwMEVyc1o0VVVael9pMHVaa25BSmpZYUpENWxCZ09aOW1VRlJqZkhMcjVSWnlXcFNBaGFzSUkwbG85SlpZZF9jYlltMHkzRC1fSUxVSFNRQ2hfVEdUMzdXSHc4TzBzZnFFZFhtSU1fNjJVcFppZ1Z2REp6bFdDV0NGbGlRVHc?oc=5",
+     "source": "Reuters",
+     "date": "2026-11-14T15:31:46+00:00"
+    },
+    {
+     "title": "Experts Urge Prioritization of Early Warning Systems and Scientific Research for Himalayan Water Disaster Risk Reduction",
+     "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQbUVNeFgzdEZETk84aWl6bU9KYjNOX2xfcHM5Z0lNcnVYMkdySjIycERUeG8yRFk2dFBjZkppLWU0bW55cmgtQ1VUOHpPcWlUSkdLcW5LaWxKLVZEMWdncTJ5VXJYcEQtcHhVcS1GMG9ZNExVUUJmQ0NGYnluTkNLNnhCV3dkSVRCOUJaRWZLSkFRSWRuWjloSlE1ci1LQVJWR09RLTM4TnBJeHlublNvMzNxc3JxZlR3bENwOFNIYUYwenB6bHQ4NWlB?oc=5",
+     "source": "Ratopati",
+     "date": "2026-11-14T11:32:47+00:00"
+    },
+    {
+     "title": "UN climate chief urges speed as COP31 confronts fossil fuel divide",
+     "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQcHRMZlA5X1J6ZE9YbmNQcVYwOVc2cVgtU2hVbkY2Um50emx3OWdsQVd2VFVzNkVnVDJxWGhpRWt4ckZSVGZpeXVoTWRwZy1GYkItRGFQV191dEVGUHpnMU8ySFdvOGxTZ0NmbFU5WER0MXhiVTdiMmU0UTROdjI5c21jcVVyalc1dTUzNnlkM3JiTlBqeEE4SDVBell3bTBUN3RwOVdsLTRKWjRyVDkwZ3BrZ2dodmwtVXhnUzZ5aTNWTEtDZS1EQnh3?oc=5",
+     "source": "Internazionale",
+     "date": "2026-11-14T09:45:31+00:00"
+    },
+    {
+     "title": "As Turkey hosts COP31 its beaches are becoming too hot for sea turtles",
+     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQdk5yNTdaZVRId2hDZWRmdWdub0RsRjVXSURMMVd0STBWUi03dHhpa1RxUTdwSkY2ODE2VWhjRzA2Ql9ES1BBb19vMDZLUGtTYWtLTEt3Y3FONUtSZkkzNmNCNlJNbl9OZVdoTHZEMDhCNml3dUtPbmMxQlc5VEpINg?oc=5",
+     "source": "DW.com",
+     "date": "2026-11-14T08:46:40+00:00"
+    }
+   ]
+  },
+  "south-asia": {
+   "label": "South Asia",
+   "items": [
+    {
+     "title": "Musadik Malik to represent Pakistan at SCO Civilisational Forum in New Delhi",
+     "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOX0VQdV84UG1oVUlCNXhsSG1LTThJMkVoS0RlZHcxVVc1TzE1SXY5WVpFMW00alZWOW95REFZMlBHV2JxRFlZcGZGbzBjVVdRQ25vVUV6ckN4TEFMUXltN1Q2Vl81bjhfdk9maFdnLXdqTE5BeFFJVUY1Z1M5dEtnYk5KQTRFU1UxRzhfMWNDUldwV3R0QlpldHZ3NWxJeVpOSF9XLWN3?oc=5",
+     "source": "Telangana Today",
+     "date": "2026-11-14T19:39:27+00:00"
+    },
+    {
+     "title": "Bangladesh, Singapore sign MoU on carbon market cooperation",
+     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5uWWFmeExJaDBtR01Mckl0NWxtQUlCLVdCMW9EUnJ3MGFzT2h6Z2FBMFkwM2Z0a0k2UGZJY0J5VXQ5WGI0SjNrei0xMG5QQzNqSUtv?oc=5",
+     "source": "Bangladesh Sangbad Sangstha (BSS)",
+     "date": "2026-11-14T18:17:56+00:00"
+    },
+    {
+     "title": "Pakistan to send climate minister to India for SCO cultural dialogue next week",
+     "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNek92VFNiei1wdGc3TVZ6RkRjWVBFT0V3SVA3bUZLQkV6cXp2S1lZWFUyY2J5bXlEVDBRS3YydFVOaWFkVGxnbFZLS1B3MDJKa2NzUVNkZ0NZR1F5U1NOclNZalZzX2x2RWtwZFVHQmU5R2xQR0pPeHNscGJ4WHlKcmQwR1RySmRlSDJoSWdqQ2FOSkZwcjRQV19faDJwYTk3eVpYZ0NISGVRX3Z4MGRGWklvQ2pYY21jNTBB?oc=5",
+     "source": "Arab News PK",
+     "date": "2026-11-14T18:11:00+00:00"
+    },
+    {
+     "title": "Pak to send minister for SCO Civilisational Dialogue in India",
+     "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxONE1BWFNCaFhwLXJLcFphU2x0SzFqZUJra0RwX2x4ajFzTFVOdXk4d3ZGUGY1QnZXcS1qNDM0MXJSNm15NjZ1R1hXb1FaRm0yRThWT2tFUHVyTEVGUUJVUUxjbzBBOTRYajRmT2NqV0RNNk1FNS14RWgxMWowbFNCbFR0Y2xPc0l4bzdKR0Z2YTA2YWRiNVRoZ21TQWpEbnRMbXZ4NTNOaGNhR3RTUGfSAbABQVVfeXFMUEo5bEI3anF4ZGtlUlB0Nm94bDdKa2hjeEJFa3hMMUc4TVZ4ejdlV3VnMzNBcGdTRjlzYlp2V21RQTVfZ3hNcGc3SVRkV0NCNE9ONmVmNVJfVndBNThNVzZSV0NId0VOT1RRV2dWV1VJNl8yQjdPOUpNYkNCRG9DT3k2U29IOVNENTM2NnJxS1hHSHVLS0l0REdLcTVJZWkyS1BKSmRYc3ptSGpTYzRiOFc?oc=5",
+     "source": "Rediff",
+     "date": "2026-11-14T15:56:40+00:00"
+    },
+    {
+     "title": "Pakistan minister to visit India for first time in three years for SCO forum",
+     "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOenFzaGZZdVVvVkFDRzh6akxsQ1dRZUpsVXRHbUNacXhBdy1GeVRNMkluT3Y0VEQ1U3VHcE14UTVrdlBhZkpQeFA0b1hBckE1RjdPUnpLbXh5UmNPdDZIbFdMVUh6OGVCd3dVMDA3NzFtRHBqVlllNDVCZEFzR25YNlpsVlhVNC15SkRKV3NWNjA3Z2gtX0l0am1MendIU0ZRX3l5U256OU01TnV0a3BKQ2NodzMxYU1qUHdrT1RWcm9ieEF6VGfSAdMBQVVfeXFMUDFqVGk0ZnBqd09WOFliUTFkMXVFZG5mS21CM0dnb3Z6Qk5fRjVNUGlwd05jaTBOOGpCOERkdThpbW9IMU9uN3JPTGcyaWYtTm50eUJVUWNQMjJBSFlmWFNCY3VJblJxbFpDdEFfcWdsWFdrUW1CZE1OVk5rVmFiM1dpM2NXSDFxWUtma1JJQ3laUkFneWhSR2g1VHJNb3JjM0hHNDNmdXY3T1FxM0ozQWJrQVB5MkMyRUFMeFc0X0YtN0NSeDlJYWgwOVk2WXh1dVE4dw?oc=5",
+     "source": "The New Indian Express",
+     "date": "2026-11-14T13:54:48+00:00"
+    },
+    {
+     "title": "Pakistan to send climate minister to Delhi for SCO meet, first ministerial visit in over three years",
+     "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNc2ROLUo5NDJYRldqWTBBVGFqQUswNVNnaUIxSGRrdWtvbXdYRUVydlM1bF9XakUyRXF5V0pydG9mTTE5VlBMM0g3aG9HU0tuYjU0M0toZUp2TFpEdkplOFE1T0x5bDF6RXRGMG5oNWlrLVR1VUlJSWxFcHU4T0ZxSWV0VFppQzRGNG5Ma0YxQXA2RDRVUnFyN01ndWlydmszRVhyWEVmdFh2RHhNXzRmZjUyam1QWmRzOTZxam0tRGtxMmx6aDhScV9MeGFXUlhfVHJma0ppQnNwSzVXeldlZTdqM3jSAfIBQVVfeXFMTmx3MjRwN3hBUDZtdUJkVXRmTkluMFAySVhmaXRLb0g2Rmd3THVXdUpyTHFMVXQyQVIzZWxEX3c5dTlsS0tMM0I0MlpZcjFKT1A0UWpSMnlzN01oVjF6RHFyWmV5bkdTbFJSMjV5cmZnT3JzQjdjdGo1UDZuQzduTDhxaWo3UXd2aTVMUmJ3VDVuZFRLVm1VU01aNW4zTDNsUE9NVDVHZzZlbXdwSm04OEJ2dk40ak1ZZDhFOGFBVng1THV5X1J1THRMX1ZOTzE2VFVYSF9NbENkNldUc3VPQmJYajlacGsxa29iYVhHNmR0U3c?oc=5",
+     "source": "The New Indian Express",
+     "date": "2026-11-14T13:54:48+00:00"
+    },
+    {
+     "title": "'Debt by design': Bangladesh's climate debt estimated at $80 per person, new index finds",
+     "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQUWNHWmx0NnRaTUFRUldkUFBJbG1ESmJyc3lxUE5MWjltTVdlSUFDN2VNMXl0YXFRdHdSeEtuUW9RY2FBcGlkdFgxV1R5MFRBbmU2NFpMV3I1TkNyTTd4azFudUFzRXU4LUdBd2ZZXzNoVDY0eWJwVS1hMmFqMnpIdXdnZFRCcUhULTZRRHdtcVpRbDRRUWhfb0JxVHRCZ0N4ZjhmZm9nWW9KYXB4T1lRMTlMVVMzODUzSW84RkROblk?oc=5",
+     "source": "The Business Standard",
+     "date": "2026-11-14T13:50:00+00:00"
+    },
+    {
+     "title": "Rare Ministerial Trip: Pakistan Confirms Participation In SCO Forum In New Delhi",
+     "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPRlpTN3hfa2NzZWUzbjY0TG1mNFFHcnEtcUhKVmxUaFB0SGlRbTM0aTdMTjhIOFFEN1lyS2tHbkluTDNseXhyX1lfTExRMlBUdUhvNl9sQWVQdVAxV1lrUEFnVENzdVpBd3hPZnliWGtiT3RWREhwbW9hOUxXbkdMUDZLWEpXbFlVMWNPQ1hXRzZ0X3hfb1k3R0tQUEZVcjZEZkF1QjNwZVVpOWxYU1ROMklWYTI0bTJTbDhrSXRR0gHGAUFVX3lxTE1ndVZSRVJoUXVqRTl0SXdNd2FqZWY4NzFTYzhRSzh5eHhUR2dvZnhLVmY2R2xyS0NVcHczYmNpNld6dE02cTRwR0h0amZ6NnFDN1gxTmlMRWl0VUt5V2Q1MXNhWnNBT05hcTFDNFMyZmdGNFZiTzZUcEU3TnFvU1RiSjgyT2FJUVpUVk9RWXlMeGZOWGxFa2xwWHhjbW5RVFI4Mmk3aWI2ZzVwWkxaZFIyUVlYQzk3bWZyVjM3MmJTNmg1WHluQQ?oc=5",
+     "source": "NDTV Profit",
+     "date": "2026-11-14T13:47:55+00:00"
+    }
+   ]
+  },
+  "east-asia": {
+   "label": "East Asia",
+   "items": [
+    {
+     "title": "Drafting of Ganges treaty must include Nepal, China, UN: expert",
+     "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOSDlzQzlfQlVmbWtiNTExODh6VFBPLVoxTUJRQXhEdGstTTZobUd5NmRqc3MzTjQ2X1pLRkFxakd3LUV6dW9IdHhaVnFDU1JhSGxvdXFIZ25lS2J3QlE0VnQxYXFXMnE1M1UtSHlRbU1YVVBRRDgwU3hNUTdtVGtBMXhWTTVjZ3hUSkluRDhJMmRyanFhTF93RnFvT0FSMFpPSEJPR0pVdjAwaWFOOG02d19tMjdQbkFpV0wwSVFQZzhPZw?oc=5",
+     "source": "New Age BD",
+     "date": "2026-11-14T09:27:00+00:00"
+    },
+    {
+     "title": "UN climate chief: China's energy transition is like nowhere else on Earth",
+     "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQdlR2N1NxekxrdjU4YnhkQldqT2VnZTY4VmRDOHBGeV8wNnZWNzhZN1BoLXBvdU5oNlhyaFZJUUF2RzJmQWdwdXhuV3N1QkJaaU80OUotY1FyMkR5em9WUWpsaDdmNUdBbWdfdDhXQXdIeXl3WTVtYmJIUmd5QnBLNk83R1V1ZGNPbmZQM09NNDBHNWZucnlESzRJSjdJcVpTS3YybUZ0czltLVppVFY3UXN1V2pXVko3TXljRw?oc=5",
+     "source": "CGTN",
+     "date": "2026-11-14T09:26:13+00:00"
+    },
+    {
+     "title": "News Lounge Comes to Türkiye, Fostering Dialogue Across Borders",
+     "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOdEp5RzdRTHB1NWhQbkx1TmFhNzU3NWt2S2lCRmJ0MlpxU1hJU0xnZHhMWHZqLXRlVUNQN08wZ3p3Q0hhQWN2VV8xUS15UUx5bzhidEFoeV9kdEVDalVhQXRIZGVRRVZNYTEtcHc3a2t3RHhtR0poM09leVZ2SEFQQng2MkVXNFRwb19LTTNHU1hlaTdiZ0FNTXo5ekhyeDFEZVNMQl9WOUhockFOeXdMS21vQ29kRUE?oc=5",
+     "source": "USA Today",
+     "date": "2026-11-14T08:24:02+00:00"
+    },
+    {
+     "title": "Ministry, Tsinghua launch program to support climate talent development",
+     "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5ZRm1GX2x2TVlPU09HOTV2bzkwTDR4TnE1R1JlV0lBR1dENmFrSV9vNUcteEowRUZEN01oNnFVUDBhT2o3dHlNc216ZXJZRWlZOEEzdmlOcmZzbjFEVHJnRUEwQU1MYXpCdU0zT3hnRHpXakI0R19BWjVlZGJjQQ?oc=5",
+     "source": "China Daily",
+     "date": "2026-11-14T07:40:41+00:00"
+    },
+    {
+     "title": "News Lounge Comes to Türkiye, Fostering Dialogue Across Borders",
+     "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPekNWNXZhcFU4dWNtbDZ1WHp2UWJFVVBFeFBnWmROXzEwblVJMURHMGt5MGJEWTVlTmhEazNzZC01N3hxQ1p1b1k2RFVwZFRya3p0WGpwV1FGajh4NXFrNlZRSUpvMFl6ZWcxR3NDNHQ0cm1CZVo2UER2MHdscDA5Tk5xLVo2dDlIZnBCNkl5SWRrM044eVNkemQ1TFplU01xRlprd3I0Ty1uMDlH?oc=5",
+     "source": "DagangNews",
+     "date": "2026-11-14T06:17:16+00:00"
+    },
+    {
+     "title": "Nepal and China Environment Ministers Hold Bilateral Meeting in Turkey",
+     "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxNLVRKX3pHNGhBRjV6S3V2N3IwejdrM3hVR0pXdTVnVnlzZEh1TVJqWXY2SlV6cjMwbThzSHRxMXJDTXc3Mk0xZ21xQmNzRG1rWlFMX0xEMWRud2o2dGFDV1lNX2dyR0E4RjE3NWpEaWNuNGppc0gwNk5lSDBqZW5ZbnhFN3JsbEpvLVVCU3AzdHcyNi10SFhoZkhPcFo2b1oyQWtxNU1JNUVuNU9VRVZVTjkxMzBEMXpVeVRmd3JzTmdzWFFraGhralpHVmxPbllld3F4YnpfNTZfeVRpbHgtXzlzcG41X2U0?oc=5",
+     "source": "Ratopati",
+     "date": "2026-11-14T06:12:42+00:00"
+    },
+    {
+     "title": "China, India step back from COP33: What's at stake for Asia's climate fight",
+     "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPUU1GSzF2UnM4RnNwZlBlUUI4cFFWU1NYMDUtX0twYmZPcXhHUjFLWFdqTHlOUUltZlMxX0stZThRLWJQbUJ3VHFDNEV1NkZzWG1WWVhLVkVTQU5qZ1NSV2xReVpDUFdxUWZ6WGlnLU94NEw5dWp6YkFQbnhGbjVLSno3UHQ5T1dvcUNtbEkyNnJ1dzlZWGpmUm9WYll1eHc4cUhXZU5FZmRTcWhYNGJaWElKWTQ4QU5JNzdzUjZOSnd1eW5wTzk2bllidm0xWVVTYmlaZHlB0gHbAUFVX3lxTE51c0w5MWRLbjUzdGZaQ2YwRXRVb2RBZTJ0ZXBvQ3FTLWdHYjZYVDUzNGtGTXhzamJXQ0lrUThPY1pCQndJTTRvU3A0UTRJc19Fa0xQNUZsQ0lkcDdzOWZnY3c4clE5ZDFweTdZQ1d4R05WRXQxcS1FaV9ZNFgxSndtVkJJOWFTdHozUEhHcEY5WEFXS1lFYlQ1Rng1MFVVT2RyN09PMnRmc3E1Z1o5clB1aHpzRzh1OGF2amRGVjV3QlBBXzNiWU9DOFQzWmZkNkdZZEhRQ3Y4MVNVMA?oc=5",
+     "source": "India Today",
+     "date": "2026-11-14T06:05:20+00:00"
+    },
+    {
+     "title": "News Lounge Comes to Türkiye, Fostering Dialogue Across Borders #NewsLounge",
+     "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPbTZIV1I2ZUxnX2hyV1VpVkNLSVA4TElHN2R5c1FiWVdfOGdmTDlBVDB6TU1xd2NWbkpCUlpYa2JhOVN1bkhxTlVBekU3YzBINGVIZnNBZllmYkMzekZ6M0dfQ3hOdmdwRmI4UUFMc3RPdlJ5ZmQ4UmJmZnlkbVFCc2ZvdWhsdU02cGJjYVJnSkxiVV9iTC0ybzIwUVpKXzc5dDJGRmlaakJPQm5hOUdkX0FNRlYxR1QwSlhMQmh3bE8?oc=5",
+     "source": "Media OutReach Newswire",
+     "date": "2026-11-14T06:05:00+00:00"
+    }
+   ]
+  },
+  "southeast-asia": {
+   "label": "Southeast Asia",
+   "items": [
+    {
+     "title": "Climate change made Indonesia fire season about 1.6°C hotter: study",
+     "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOOVNRWm5YN0M2eDUxODVYaXdBVUh1ZzI4SWpVaW4xOThXWUZQbzVLN05pdExucU12TmhHN0xra2w0N1o1TDRNcFVvVy1Wb3JxQWw0VkhPWHlwNTRKclluZ292SmZZXzRXbDFxSmllZ2lsWmtyWlpjQjM3eG5rTG9EZ3pCdzZ5a3M2cTAzNE5jTVc?oc=5",
+     "source": "iNews Zoombangla",
+     "date": "2026-11-14T16:50:09+00:00"
+    },
+    {
+     "title": "Indonesia supports COP31 BRIDGE Initiative, urges flexible financing",
+     "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPTjZfOU9XVzRkTlRQX3NOSHNSUXZlSUNHbnMxNExHOW9Rdk5kY1B6Y3pIZDlmS0Jac0pCRW1CbDVfRFQwZXc4ZmJaQkc1UUN1eTlCZXVsa3AxRjF5N1d3OXRWWmltRGhxM2RnaFcxSU1KM1RJVnNyNWx4bl91M25YaHRONVRUOXp4RWw5RFBDY25xck5pV1pVTUY1bTE1UXF4aXRhYVl6X0nSAa4BQVVfeXFMTkwtQl9tQ1dMUGs5YWJ2QkIyYU1VMEE5S2Y3OGdFN1FTczJSWk5rRm5USlNpNTUtNzFfRVRiTWJrOTlhUEZaN2dOaS1EM0M0YU96TGthSTFXd25zdkdZSmkwTi1hZS03SUkxcXM4cThpNkJDMHhyODlqa3Q5RjZUbHVpQnp1WkR4NWJaQ0hXUENLdThFYVlIa2YyVFpmT2JaejRZVVpVaFF1U0EyQ0hR?oc=5",
+     "source": "ANTARA News",
+     "date": "2026-11-14T16:38:49+00:00"
+    },
+    {
+     "title": "The Philippines impacted by climate change",
+     "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPZkQ2d1g2eHpMU05TcmNUdmlIcHRUSjUwY2tURHVha1dYMVg5WGFRMFJjSlV5VFNXSHdqbjdVUXBjX0U5OUUyRGRGZmE0blI1WFJadDhBbDdjUDJ4TERCTzZsMmdSUndTejJYcUZFRUpjUVRlQms5NE96UHJsdG9aZEdqSUxyRm55RVlzTTVheXZIcE1WcTByeWw2NVFNaDh4QVBGVFo5Uk_SAa4BQVVfeXFMTko0c28zcG9JVC1tcFhfWloxVnNzTjgwTHNqWHRLU3FQX1JxWmRaaG54bFZWWm5YMnlDcFZWTnZiT2hpU1VtN3UyZUQxNUxDUDVQWl93M0FKb0ZUaXVsVEZ1NmFQX0dOVHB0Z2ZUUS1fZE0xdWhSbmVkV09IakJXSWZBZDVkaUMzLWlBblpraTZMZHg0aHMtd29KSFA0SW5saGVxVkZobExyX1M2QlJ3?oc=5",
+     "source": "The Manila Times",
+     "date": "2026-11-14T16:05:00+00:00"
+    },
+    {
+     "title": "Indonesia detains suspect accused of burning Bima city forest",
+     "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPTkdNalN1aXVxN3owSnNtWWVRcURTUlZpcVl5YWd5ZkVDa1hFN0RrZzJLQ3FUNU9yc3Uxdm1iVXFIdjdzYWJReDNoZndVRE9jaG1SbE9aenFVUFQtVV9SUHhSd0N6S0RlbjgwUFF4ZkpQUXFHeFk4MWVpdG1HcmJZVVJoNExXb0hvNFJWV092LXVnckhDYzRzTHdQRQ?oc=5",
+     "source": "https://streamlinefeed.co.ke/",
+     "date": "2026-11-14T10:44:37+00:00"
+    },
+    {
+     "title": "Indonesia, Finland push for scientific cooperation to strengthen MRV of forestry climate action",
+     "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNQ1RkLVctSVJFd0Q2dDNrZnpoSUJkOVhsY2dXaXFJNmJDV0hNeU9FWEhsbkQtbHB6WjUzUTFMY1NkcndvSjNBbXllRjE2dUg2RUhEdnVna0x0LTh4V2JVYjlMM0FpZUZJaHFNbkpMUTJOT0pGUXpMbWlMYWhCdGJfR1h1SWZUdF9od1JoN1IyVHZQWndnMEtzbXU0aEJwZjB6Qk1SdERIc2tZMk5HVG9nVXhzWlByMTBKRWZ2ZmJR?oc=5",
+     "source": "Forest Insights Indonesia",
+     "date": "2026-11-14T10:28:45+00:00"
+    },
+    {
+     "title": "The open carbon market offers opportunities to attract international capital for green transition.",
+     "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNenE3YUd1ajlqUkxtazgxNXEwSlhidzZaQUI3VWFTTjFvcWFJSklNYTZ2OG9xTjg0Y2s0eUhhVFhVZHNfTVV4dU0xdmQ0N3BYcDdTTy1sbTZWZXVVOU8xbnJVOXg5YWFkZ1hqN29NRmxVYXhDRU5LcnZlbG5NYXpyU28yLXZhRklORE9fWU9EWFRPRDk0Y0N4ag?oc=5",
+     "source": "Vietnam.vn",
+     "date": "2026-11-14T09:59:35+00:00"
+    },
+    {
+     "title": "Philippines leads ASEAN push to develop carbon markets, attract climate investments",
+     "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQbDIzMzZadnh4Y0k2MU4tbzJmZ0pHYUprLWtaMVBuTmN6ZjZFejRYTHNDR3lDNnd3aGJ5bGYtS0VORnJzQTlpT0dYQVVQQ2tXUi0xUmI5bzJFVV93cTg4Qk85Y1loR1N4SnF3VDlyQTlhUGVmd2dLbnN3MWxGbi1admZKcldHejlVT3hSQmtTYU41V19RajczcXpUdExqemhDejl2ekpRTnctcFdjb2pzNQ?oc=5",
+     "source": "thechronicle.com.ph",
+     "date": "2026-11-14T09:35:19+00:00"
+    },
+    {
+     "title": "Introducing Vietnam's carbon market to the international community.",
+     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPZlA1eHZTdVpacHYwNzRmeEx2d1pGc2hDdnBKQmxJMVozOFBBbm9EeG1XX21HanJoMHZjaUdhQzZPTkFPc3VzbzhlanN4bjI0c25MLU5mTzFrQ2FsaW9jZzRvQ0RjdGMyT0pNQ0NJWHVUejVsZ2JIQjFBakFBTmN5cQ?oc=5",
+     "source": "Vietnam.vn",
+     "date": "2026-11-14T09:08:46+00:00"
+    }
+   ]
+  },
+  "oceania": {
+   "label": "Australia & Pacific",
+   "items": [
+    {
+     "title": "Anthony Albanese is caught between climate ambition and political reality at COP31",
+     "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOTDZmaE9feFhtdDAxNTZVb2ZKN0pQZERJTHBoWnJCUVVIX2VlbDZzRUx4WDB1TmZ6OGhpNTdBRlVvNmhwclZkdkwya014UUdXcU1vWWV6dnpUTFRDQlZDOGNMSVZxeURnTG9oUjNQM2xZOGZqSDJaOTNualhYeU1SQTluQThfVC16X21XSUtGeGJzSWJKX2ZKeDk1R1FiZ1E?oc=5",
+     "source": "ABC News & Headlines – Australian Broadcasting Corporation",
+     "date": "2026-11-14T18:50:21+00:00"
+    },
+    {
+     "title": "Climate change: Australia deserves credit for electrification push",
+     "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOYTRuVmt4Q05OWUFQcXdCNXNwMENGTlVza0ctLXBDNk9wc1FJOXFPUjRWZ2UwUVVoMTI2QnJhY0VIQ1VsN0JrOXR6TU9HRWxELWNWeVBUdGFTVW9oRHhELVc3YmFJeWRXcmtIR0pWdWR5NHp2Nmt1dW9RaUE0elAxcndSb0xGRlpndGt3ZGNfSzhmQlZjMmVWYk1PaXBSV2hrOURDNElseUpDTFpKb2VnTlBjcnl1LUoxNGNPdjB3?oc=5",
+     "source": "SMH.com.au",
+     "date": "2026-11-14T18:00:00+00:00"
+    },
+    {
+     "title": "Climate change: Australia deserves credit for electrification push",
+     "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNd1ZHZE0xb2pCa3ZZWDdwQjJTNEhnUDhoZWltZ0FJWEE2dENQakU0ci02MmhWZXRxUzg2MlhlSVlOMFJxMzA4TUZyekk2a3NGNXBFQ05PMmNxU29kQTRHMkRwVWxVNk01dHpzUE9pRGRZV2staG5YaXVZNmZRdk9yU3lVMk4ybzBzdlpaZmR4UzZEajU2Qi16djhkbTc5YnB3MHJxUEFxTlJqMmZNTmhnajAwTmV3a2FEZEpSdWVkOVBzbVhuelNaQ1U4Yw?oc=5",
+     "source": "Brisbane Times",
+     "date": "2026-11-14T18:00:00+00:00"
+    },
+    {
+     "title": "Hundreds take to water to protest coal exports at Newcastle port as Australia faces climate scrutiny",
+     "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNVERIZTVxZVlQWHBZZU5WbDJqcklIZGVacUhmSDBZbzhQT2hVbW1Ta19GMTZ0TVRlTFVscVFXV05lcUU3TUpjeTNCSmxVMlZwRlFYN01ZU2J0eDNrUWg4LVdVZHh5TENaOWpxQ2lmZ05PMlRsc3V0QWpmdWtnYUg1ZkRFZXl0VmZoQmt4WnBOUVR5X3BTNWtYYkNPZUtQcUhSajEzNWttRV83OHc?oc=5",
+     "source": "The Independent",
+     "date": "2026-11-14T08:41:00+00:00"
+    },
+    {
+     "title": "Australian PM Anthony Albanese caught on hot-mic making crude joke with minister at COP31",
+     "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQQW5TNEhjRm0ybFBDenB0WWttWHYyR04wV3dFdjVTNVEtbnUtR0duRm9JNlZMcHRTOENLUGstQWhrbGxaeVFlOEMtenp1LWhBTzlUTy03b1pDbFM3am55dTZGUTl3Zl9mNkRWbVBBSkx5VVVYaTRnZlNjb2djZ3lpd3BSeGp3czBlenRTakxoS24tbmQyRnJFUm5yR0pHREdFQ3M5VENHNk5acGEwY1lNallR?oc=5",
+     "source": "The Independent",
+     "date": "2026-11-14T06:52:00+00:00"
+    },
+    {
+     "title": "Newcastle climate protest goes ahead, no arrests made",
+     "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPdExmMUNsV2ZETEFmb3gwS21VYklVM3E3c0NvVm9XVk9XbnlwZG4zUGJUTS1QX3JnZTM2YXVxVEJuU0M1cERoVU1TbkNqbDQ3a3FyQlBZZlcwUk5jbkdiWmRoU3BrSGVDeE1GMFdCU3N4WkZlZ2loamNUV1BLR3E2Sjh1cnlGMWJ4NWhleEtHZEk1RWM2R2NsM3g0V1BqVkE?oc=5",
+     "source": "ABC News & Headlines – Australian Broadcasting Corporation",
+     "date": "2026-11-14T05:13:53+00:00"
+    },
+    {
+     "title": "Albanese, Bowen caught talking phones and 'dicks' in hot-mic gaffe",
+     "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOT3VTcFhhZkdyQ1VRbHVER0ZtQ3FtOFkzRG94RnNxbndjV09wNkotMGNPRUJ0MEg5MjNYaWN0blhkUnNFOEhQV3BtSmkydl9SeUVQSW0wd3NrWm9IVVRKZms3alpYSHZOZEpRX0FLc3J5amNKSzl6VHRod0prRktJNFV6WXdWeEhVX3p6NU5RS2pwVVZiX2pvMHp6WXdUQnlndXpLeks0d0xIQjN3UjlSX0JVSQ?oc=5",
+     "source": "ABC News & Headlines – Australian Broadcasting Corporation",
+     "date": "2026-11-14T01:36:11+00:00"
+    },
+    {
+     "title": "Australian PM jokes about genitalia in hot mic mishap",
+     "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPcjZiQ2xvUEZwcEptUldMOGEwdTlYbDdBS0pRMEZUb2ZqT2kyYVhtczJ2WmJpUHh0S0ZvVjk2amJzamFoV3BoMlZOUnFIOFR3U1VZVDRGcWNnMER5d0ljQkV6WGxTZlRJTk1qa3dvS1ZWNDh0S3AyLVJpWnNsUlpHS2ZYNTlQN2tDZWFtdWZNemhuM1djdjY3el9ObDZNY1VOS0E?oc=5",
+     "source": "France 24",
+     "date": "2026-11-14T00:23:22+00:00"
+    }
+   ]
+  },
+  "polar": {
+   "label": "Arctic & Antarctica",
+   "items": [
+    {
+     "title": "Shrinking Arctic sea ice may bring drier summers to Kazakhstan",
+     "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNTXVVTTI1QWFoVm9NS3o4WWhMWDVjTVZydm93Y0MyUVdqaVQzZkFRMUM4NWMxYTRWV1BXQlRLYm5ya2VLWFhtQ1c5cjN1U08wb3BFQ0VKS0pUSUJCX19na3JxaGF6SmcxMV9sQkRKU2ktOFV2RHV4aEc0eWNBclMwMGU5czFJWURNV2FPdGk4RFlCRm01STBvbGJJcWbSAZwBQVVfeXFMT2RnclY4UXFNX3FmeGs5Q1REYVJCSFFFM3hwd2pkOG8zdkpNLVFReGRwRzhwUDJRa0tQVWZ2cUgtSi1nQ0pXMUxZOWMyN21kWWx3Wm1WZng5YmxTVTNNUFBTOFJKUGZUWldqczFhWlNScEE0cUg4R1RVc1FUSXBtQzF4OVM0S19HcEt6VkdDY1dvWFNwMVZWTGVsSTVs?oc=5",
+     "source": "Qazinform",
+     "date": "2026-11-14T03:43:02+00:00"
+    },
+    {
+     "title": "The EU Is Taking the Lead on Reducing Arctic Black Carbon. Will Canada, Iceland and Norway Join In?",
+     "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOWml4MXF5aDdoYXdxcnZDamZ3MHdlRlhmNjBnaEtLWkpvN0ZJNUJ6aUVjSGJqX2NHRmZFVm1OamJmWFBhaW1MS1VDWWd5WGxZRk5rV2psalM5R09wYjZaYlg1QnhpalhzdjR1ODJON0JjM2tvODJjYVBGMzF0SEFEWVcyS3dSWXlBV3pSdVJLZjNVbEEtaTZqZmNmSkNOOVBOcURWZ2RGQ04xbmtMZUlLRTVSeHNJdmswcDBkeGwxLVRyUjR5M0lyekxSaG5jc19nU05UNFNoOXY1dw?oc=5",
+     "source": "High North News",
+     "date": "2026-11-13T14:56:12+00:00"
+    },
+    {
+     "title": "Global climate action: What the new Yearbook says as Antalya negotiates",
+     "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxNSWpOMVRxODZYaVVRR3BKSGJjMDFiaktOMVBVSlNhU3piSXRPa1BzQkVPemN6aW1XeFZRQzMzY1c5eDZiU2lGbEpUWUZzaUl2c1FnUGpNdzlLOTFVQWdFZHlxOTBnT1pYNGRZRWpwSnhzdjNXT1prRS14OVg5YnJrNW5lWUttdUFIbTZhSGdRanh1WEJ0MnpDZktBdEZ3d3diamlBdGYwWGt1R25nWV9EMk5xUGJiN1J0ZHI0UWRJWk1YaTBMMkhPaU1vcV9jRE9SYVN0LXhYWEozQQ?oc=5",
+     "source": "Arctic Portal",
+     "date": "2026-11-13T08:39:43+00:00"
+    },
+    {
+     "title": "Climate change, shifting fisheries and lack of infrastructure shrink Greenland’s coastal settlements",
+     "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPODdkN2lnTlFib2JWNnNNc3BVNkxScm52dUJsd1RxS1R5WW5ndkpYeW45SXlqZ2pwRnRJMk1fZTU4QUFFQXVzX2hwdmhFNWhCM3BHUDZFVmVWTVAtQzlTNE84T1lfeUZPcjhFbm0wZ2ZLSVFoOUZEdnRfMjNxZGY0LU5vMFdFZDJWeDJSQjNGY2lma3I0UTBQRHMtZWRFTTItQVpfNjRDTmVxbHJCelhKVDg0Nl9uTGRRNFA2Si1TZDRtYkN1OWlLMjgzZHBFVjJ3VHZGWGxwNHFWRTJnUlM5SHdJbUxhbDBXeHJuMQ?oc=5",
+     "source": "AP News",
+     "date": "2026-11-12T08:59:00+00:00"
+    },
+    {
+     "title": "Climate change, shifting fisheries and lack of infrastructure shrink Greenland’s coastal settlements",
+     "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNbU53SVUxbjBxdlRtbm0zVmM1MUIwRkRtaVoyR1FCN1VVLXpGZHR0UFZsMW1sRnRFbjlWTnBkT1hpYUZHVXZjTEhYZU5aTFFZamVmUTdTa0FVYmVHanFzLVYwMDlBTF94MzFZMlJtUE9zZjh5RE9IRW5reGg2bEtndnF1eFZydw?oc=5",
+     "source": "Yahoo News Canada",
+     "date": "2026-11-12T08:58:18+00:00"
+    },
+    {
+     "title": "What Temperature Overshoot Means for Antarctica and Southern Ocean",
+     "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPSG00UjBzQWdlWk5IRE5WTS1hb2VsNE45UTJqZkI0YV9SYVJQQWRrclJJdWNxUUZRQU43R1lsU0c3WWgySV9iZ1pCYzBPYWhwcGN2aFZCYUx5WU5iMjdLMHdhX3lSQVViMm0wN1ZtMzdWb2pDZWdFQUlJZktYSGdncHlqa3A4aGhwdXFz?oc=5",
+     "source": "Mirage News",
+     "date": "2026-11-12T05:50:00+00:00"
+    },
+    {
+     "title": "As Greenland’s climate changes, a new project preserves memories of a fading past",
+     "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9OX25EcWg5cW9VNkJCaDg5RUdFbWsyaThWclY5OERqeFF1S2pJVWJadmZ2RXV5RzI2elMtWUg1b280R21kbGhpRFpEMnBoRmtSajRiMHk5S2d0b3BsZmd3anZhLUxZRkRPRnFWc2hETDh4SnYteXBoWGhUbkl4QQ?oc=5",
+     "source": "Boston Herald",
+     "date": "2026-11-11T22:49:10+00:00"
+    },
+    {
+     "title": "Antarctica’s Melting Ice Has Triggered a Sudden Shift Deep in the Ocean",
+     "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPTWNuVGpDUWFVOWdzeHJsUnpILXRxUnlNSkJvMFBLcktsclJuUzZsdE1oZ0JXN3NTalB5SGtWM0tQVV94aVZDSm9NVDd3dGJYQl9SYTlEX3pYS2pFbUZxcXVFMUxmcHlDOG5CbEg1SU9nRjh0LTF4M2prcWNCZC1aN0tKLUhWc2h1dEkzeTVEcV8zeFFkRGRxczJHN2c?oc=5",
+     "source": "SciTechDaily",
+     "date": "2026-11-11T11:04:06+00:00"
+    }
+   ]
+  }
+ }
+}

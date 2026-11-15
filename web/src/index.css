@@ -1,0 +1,29 @@
+@import "@fontsource-variable/fraunces/index.css";
+@import "@fontsource-variable/space-grotesk/index.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/600.css";
+
+/* v2 palette: daylight. Warm paper, deep ink, and three signal colours with one job each. */
+:root {
+  color-scheme: light;
+  --paper: #f4eee3;
+  --sky: #cfe6ec;
+  --card: #fffdf8;
+  --ink: #17233b;
+  --muted: #5a6478;
+  --line: #e3d9c6;
+  --coral: #e2542d; /* energy, play, the wave */
+  --coral-ink: #b83a17; /* coral for small text */
+  --teal: #0e6f6a; /* news */
+  --sun: #f5b82e; /* kids */
+  --radius: 22px;
+  --display: "Fraunces Variable", Georgia, serif;
+  --font: "Space Grotesk Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-family: var(--font);
+}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); }
+button { font: inherit; color: inherit; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
