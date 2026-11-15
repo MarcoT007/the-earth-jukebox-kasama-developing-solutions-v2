@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-11-15 — The channels are explained for the Time Machine, and the faders are easier to hear
+
+**Channel explanations.** "What are the channels", "what is heat", "what is warming" and "what are hot spots"
+now say what each channel is in the Time Machine (heat is the chords, warming the melody, hot spots the
+sparkles) and what the same channel is called in the other records (colours, light, bright spots). "Heat" and
+"warming" are understood as topics. Volume is described as the volume of everything together.
+
+**Mixer.** The chord is 6 dB louder in the reference mix. The channel faders follow a steeper curve, so a move
+is clearly heard: the top adds about 7 dB and half-way takes away about 11 dB (before, about 5 dB at the top).
+
+**Diagrams.** `docs/diagrams.html`: architecture, use cases and a sequence diagram of the app (in Spanish).
+
+**Files.** `web/src/voice.ts`, `web/src/audio/engine.ts`, `pipeline/narrator_phrases.json` and
+`web/public/narrator/` (5 narrator clips), `docs/diagrams.html`.
+
+**Checked.** The app compiles and builds. The new explanations and the fader curve were not listened to in a
+browser before this push.
+
+**Backup.** State before this change: tag `backup/2026-11-15-before-channels` (commit `9e13f30`) and
+`~/kasama-backups/earth-jukebox-v2-2026-11-15-9e13f30.bundle`.
+
 ## 2026-11-15 — The welcome screen speaks, and "what is…?" explains every part of the page
 
 **Spoken welcome.** As soon as the welcome screen appears it says the name of the page, then "Press T for a

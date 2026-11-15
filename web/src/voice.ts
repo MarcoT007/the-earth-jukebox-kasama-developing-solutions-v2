@@ -61,11 +61,11 @@ export const EXPLAIN = {
   page: "Kasama for Earth turns maps of the Earth, made by NASA and other space agencies, into music, so the planet can be heard and not only seen.",
   mixer: "The mixer is the panel on the left. It changes how the map becomes music. It has an energy slider, three channels, five knobs, and the shape of the wave. Say help with the mixer to hear how to use it.",
   energy: "Energy is the big slider at the top of the mixer. It sets how intense the music is and how much the planet glows. In the Time Machine it chooses the emissions scenario, from low to very high.",
-  channels: "The channels are the three voices of the music. Colours play the chord, light plays the melody, and bright spots play the sparkles. Each one has a level, a mute button and a solo button.",
-  colours: "Colours is the first channel. The main colours of the map choose the chord you hear in the background.",
-  light: "Light is the second channel. The brightest point of each strip of the map, read from west to east, plays the melody.",
-  spots: "Bright spots is the third channel. Places that stand out from what is around them, like a lightning flash or a city, play the sparkles.",
-  volume: "Volume is how loud everything is.",
+  channels: "The channels are the three voices of the music. In the Time Machine, heat is represented by the chords, warming by the melody, and hot spots by the sparkles. In the other records the same three channels are called colours, light and bright spots. Volume is the volume of everything together. Each channel has a level, a mute button and a solo button.",
+  colours: "Heat is the first channel, and it is represented by the chords: a hotter planet turns the chord darker and more tense. Outside the Time Machine this channel is called colours, and the main colours of the map choose the chord.",
+  light: "Warming is the second channel, and it is represented by the melody: each note climbs with how much that place has warmed since 1950. Outside the Time Machine this channel is called light, and the brightest point of each strip of the map plays the note.",
+  spots: "Hot spots is the third channel, and it is represented by the sparkles: they mark the places that have warmed the most. Outside the Time Machine this channel is called bright spots, and the sparkles mark what stands out, like a lightning flash or a city.",
+  volume: "Volume is the volume of everything together.",
   mute: "Mute silences one channel. Solo lets you hear only that channel, so you can tell where each sound comes from.",
   knobs: "The knobs are mood, notes, speed, echo and filter. They shape the sound. They do not change the data.",
   mood: "Mood pushes the chord toward major, which sounds brighter, or minor, which sounds darker. In the middle, the colours of the map decide.",
@@ -93,7 +93,7 @@ export type Topic = keyof typeof EXPLAIN;
 // The more specific words go first: "bright spots" before "light", "kids mode" before "mode".
 const TOPIC_WORDS: [RegExp, Topic][] = [
   [/bright spots?|hot spots?|sparkles?/, "spots"],
-  [/colou?rs?\b|chords?\b/, "colours"],
+  [/colou?rs?\b|chords?\b|\bheat\b/, "colours"],
   [/\bmute\b|\bsolo\b/, "mute"],
   [/\bmood\b|major|minor/, "mood"],
   [/\bnotes\b|density/, "notes"],
@@ -120,7 +120,7 @@ const TOPIC_WORDS: [RegExp, Topic][] = [
   [/voice|microphone|space ?bar/, "voice"],
   [/tutorial/, "tutorial"],
   [/dark mode|light mode|\btheme\b/, "theme"],
-  [/\blight\b|melody/, "light"],
+  [/\blight\b|melody|warming/, "light"],
   [/kasama|this (page|site|website|app)|jukebox|the (page|site|website|app)\b/, "page"],
 ];
 

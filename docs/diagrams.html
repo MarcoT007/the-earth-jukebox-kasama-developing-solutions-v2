@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earth Jukebox Diagrams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one reading column; each diagram is a wide figure that scrolls on its own on small screens.
+   Blue marks what runs in the visitor's browser, amber marks what runs before publishing. */
+:root {
+  --bg: #f4f6f8;
+  --ink: #16212b;
+  --muted: #5a6a78;
+  --panel: #ffffff;
+  --line: #cfd8e0;
+  --run: #1f6fb5;
+  --run-soft: #e2eefa;
+  --build: #a8640a;
+  --build-soft: #fbefd9;
+  --lane: #e9eef2;
+  --display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10171d; --ink: #e6edf2; --muted: #96a6b3; --panel: #18222b; --line: #2c3a46;
+    --run: #6db3ee; --run-soft: #17324a; --build: #e5a84a; --build-soft: #3a2c12; --lane: #151e26;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10171d; --ink: #e6edf2; --muted: #96a6b3; --panel: #18222b; --line: #2c3a46;
+  --run: #6db3ee; --run-soft: #17324a; --build: #e5a84a; --build-soft: #3a2c12; --lane: #151e26;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+main { max-width: 1040px; margin: 0 auto; padding: 40px 20px 72px; display: flex; flex-direction: column; gap: 48px; }
+header p, section > p, figcaption, li { max-width: 68ch; }
+h1 { font-family: var(--display); font-size: 2.1rem; line-height: 1.1; margin: 0 0 10px; text-wrap: balance; }
+h2 { font-family: var(--display); font-size: 1.4rem; margin: 0 0 6px; text-wrap: balance; }
+p { margin: 0 0 10px; }
+.lede { color: var(--muted); }
+nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+nav a { color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: var(--panel); padding: 6px 12px; border-radius: 6px; font-size: .92rem; font-weight: 500; }
+nav a:hover, nav a:focus-visible { border-color: var(--run); outline: none; }
+section { display: flex; flex-direction: column; gap: 10px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.frame { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px; overflow-x: auto; }
+.frame svg { display: block; width: 100%; min-width: 780px; height: auto; color: var(--ink); font-family: var(--body); }
+figcaption { color: var(--muted); font-size: .93rem; }
+.key { display: flex; flex-wrap: wrap; gap: 16px; font-size: .88rem; color: var(--muted); }
+.key span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; border: 1.5px solid; }
+.key .k-run::before { background: var(--run-soft); border-color: var(--run); }
+.key .k-build::before { background: var(--build-soft); border-color: var(--build); }
+.key .k-ext::before { background: var(--panel); border-color: var(--ink); }
+ul { margin: 0; padding-left: 20px; }
+code { font-family: var(--mono); font-size: .88em; }
+
+/* SVG marks */
+svg .lane { fill: var(--lane); }
+svg .b { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; }
+svg .run { fill: var(--run-soft); stroke: var(--run); stroke-width: 1.4; }
+svg .bld { fill: var(--build-soft); stroke: var(--build); stroke-width: 1.4; }
+svg .hold { fill: none; stroke: var(--muted); stroke-width: 1.2; }
+svg .t { font-size: 12px; font-weight: 600; fill: var(--ink); }
+svg .s { font-size: 10.5px; fill: var(--muted); }
+svg .m { font-size: 11px; fill: var(--ink); }
+svg .h { font-size: 11px; font-weight: 600; letter-spacing: .08em; fill: var(--muted); }
+svg .ln { stroke: var(--ink); stroke-width: 1.3; fill: none; }
+svg .dash { stroke-dasharray: 6 4; }
+svg .life { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 5; }
+svg .thin { stroke: var(--muted); stroke-width: 1; fill: none; }
+svg .head { fill: var(--ink); }
+svg .open { fill: var(--panel); stroke: var(--ink); stroke-width: 1.3; }
+svg .uc { fill: var(--run-soft); stroke: var(--run); stroke-width: 1.3; }
+svg .ucb { fill: var(--build-soft); stroke: var(--build); stroke-width: 1.3; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Earth Jukebox: arquitectura, casos de uso y secuencia</h1>
+  <p class="lede">Tres diagramas de la versión de trabajo (<code>web/</code> y <code>pipeline/</code>). Las etiquetas están en inglés para poder usarlas tal cual en la página del proyecto y en las diapositivas.</p>
+  <nav aria-label="Diagramas">
+    <a href="#architecture">1. Arquitectura</a>
+    <a href="#use-cases">2. Casos de uso</a>
+    <a href="#sequence">3. Secuencia</a>
+  </nav>
+</header>
+
+<section id="architecture">
+  <h2>1. Arquitectura</h2>
+  <p>No hay servidor propio. Los scripts de Python preparan los datos antes de publicar y el navegador solo descarga archivos del mismo sitio.</p>
+  <figure>
+    <div class="frame">
+    <svg viewBox="0 0 980 600" role="img" aria-label="Architecture: external sources feed Python scripts at build time; their output is published as static files on GitHub Pages; the visitor's browser downloads those files and runs the app, the globe, the audio engine and the narrator locally.">
+      <defs>
+        <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0L10 5L0 10z"/></marker>
+      </defs>
+      <rect class="lane" x="10" y="40" width="220" height="550" rx="6"/>
+      <rect class="lane" x="250" y="40" width="300" height="550" rx="6"/>
+      <rect class="lane" x="570" y="40" width="400" height="550" rx="6"/>
+      <text class="h" x="20" y="28">EXTERNAL SOURCES</text>
+      <text class="h" x="260" y="28">BUILD TIME · pipeline/ (Python)</text>
+      <text class="h" x="580" y="28">RUNTIME · no backend</text>
+
+      <!-- sources -->
+      <rect class="b" x="25" y="80" width="190" height="56" rx="5"/>
+      <text class="t" x="120" y="104" text-anchor="middle">NASA SVS API</text>
+      <text class="s" x="120" y="121" text-anchor="middle">8 visualizations</text>
+      <rect class="b" x="25" y="190" width="190" height="56" rx="5"/>
+      <text class="t" x="120" y="214" text-anchor="middle">NASA Earth Observatory</text>
+      <text class="s" x="120" y="231" text-anchor="middle">RSS feed, global news</text>
+      <rect class="b" x="25" y="260" width="190" height="56" rx="5"/>
+      <text class="t" x="120" y="284" text-anchor="middle">Google News</text>
+      <text class="s" x="120" y="301" text-anchor="middle">RSS search, 11 regions</text>
+      <rect class="b" x="25" y="380" width="190" height="56" rx="5"/>
+      <text class="t" x="120" y="404" text-anchor="middle">ElevenLabs</text>
+      <text class="s" x="120" y="421" text-anchor="middle">Text-to-Speech API</text>
+
+      <!-- pipeline -->
+      <rect class="bld" x="270" y="70" width="260" height="76" rx="5"/>
+      <text class="t" x="400" y="92" text-anchor="middle">build_dataset · build_zones</text>
+      <text class="t" x="400" y="108" text-anchor="middle">build_time_machine</text>
+      <text class="s" x="400" y="130" text-anchor="middle">frames → colour, light and warming numbers</text>
+      <rect class="bld" x="270" y="225" width="260" height="56" rx="5"/>
+      <text class="t" x="400" y="249" text-anchor="middle">fetch_news</text>
+      <text class="s" x="400" y="266" text-anchor="middle">headlines grouped by region</text>
+      <rect class="bld" x="270" y="380" width="260" height="56" rx="5"/>
+      <text class="t" x="400" y="404" text-anchor="middle">build_narrator</text>
+      <text class="s" x="400" y="421" text-anchor="middle">fixed phrases → 470 voice clips</text>
+      <rect class="bld" x="270" y="497" width="260" height="56" rx="5"/>
+      <text class="t" x="400" y="521" text-anchor="middle">GitHub Actions</text>
+      <text class="s" x="400" y="538" text-anchor="middle">Vite build + deploy · on push and every 6 h</text>
+
+      <!-- source to pipeline -->
+      <line class="ln" x1="215" y1="108" x2="268" y2="108" marker-end="url(#a1)"/>
+      <text class="s" x="242" y="100" text-anchor="middle">frames</text>
+      <line class="ln" x1="215" y1="218" x2="268" y2="244" marker-end="url(#a1)"/>
+      <line class="ln" x1="215" y1="288" x2="268" y2="262" marker-end="url(#a1)"/>
+      <text class="s" x="242" y="210" text-anchor="middle">RSS</text>
+      <line class="ln" x1="270" y1="398" x2="217" y2="398" marker-end="url(#a1)"/>
+      <text class="s" x="242" y="390" text-anchor="middle">text</text>
+      <line class="ln" x1="215" y1="418" x2="268" y2="418" marker-end="url(#a1)"/>
+      <text class="s" x="242" y="433" text-anchor="middle">MP3</text>
+
+      <!-- GitHub Pages -->
+      <text class="t" x="660" y="62" text-anchor="middle">GitHub Pages · static files</text>
+      <rect class="hold" x="580" y="70" width="160" height="505" rx="6"/>
+      <rect class="b" x="588" y="86" width="144" height="44" rx="4"/>
+      <text class="m" x="660" y="104" text-anchor="middle">data/*.json</text>
+      <text class="s" x="660" y="120" text-anchor="middle">586 frames (.jpg)</text>
+      <rect class="b" x="588" y="231" width="144" height="44" rx="4"/>
+      <text class="m" x="660" y="249" text-anchor="middle">data/news.json</text>
+      <text class="s" x="660" y="265" text-anchor="middle">refreshed every 6 h</text>
+      <rect class="b" x="588" y="386" width="144" height="44" rx="4"/>
+      <text class="m" x="660" y="404" text-anchor="middle">narrator/*.mp3</text>
+      <text class="s" x="660" y="420" text-anchor="middle">470 clips + index</text>
+      <rect class="b" x="588" y="503" width="144" height="44" rx="4"/>
+      <text class="m" x="660" y="521" text-anchor="middle">app bundle</text>
+      <text class="s" x="660" y="537" text-anchor="middle">JS · CSS · fonts</text>
+      <line class="ln" x1="530" y1="108" x2="586" y2="108" marker-end="url(#a1)"/>
+      <line class="ln" x1="530" y1="253" x2="586" y2="253" marker-end="url(#a1)"/>
+      <line class="ln" x1="530" y1="408" x2="586" y2="408" marker-end="url(#a1)"/>
+      <line class="ln" x1="530" y1="525" x2="586" y2="525" marker-end="url(#a1)"/>
+
+      <!-- browser -->
+      <text class="t" x="890" y="62" text-anchor="middle">Visitor's browser</text>
+      <rect class="hold" x="820" y="70" width="140" height="505" rx="6"/>
+      <rect class="run" x="828" y="86" width="124" height="48" rx="4"/>
+      <text class="t" x="890" y="106" text-anchor="middle">React app</text>
+      <text class="s" x="890" y="122" text-anchor="middle">mixer, panels, kids</text>
+      <rect class="run" x="828" y="182" width="124" height="48" rx="4"/>
+      <text class="t" x="890" y="202" text-anchor="middle">Globe</text>
+      <text class="s" x="890" y="218" text-anchor="middle">Three.js · WebGL</text>
+      <rect class="run" x="828" y="278" width="124" height="48" rx="4"/>
+      <text class="t" x="890" y="298" text-anchor="middle">Audio engine</text>
+      <text class="s" x="890" y="314" text-anchor="middle">Tone.js · Web Audio</text>
+      <rect class="run" x="828" y="374" width="124" height="48" rx="4"/>
+      <text class="t" x="890" y="394" text-anchor="middle">Narrator</text>
+      <text class="s" x="890" y="410" text-anchor="middle">clips + Web Speech</text>
+      <rect class="run" x="828" y="470" width="124" height="48" rx="4"/>
+      <text class="t" x="890" y="490" text-anchor="middle">localStorage</text>
+      <text class="s" x="890" y="506" text-anchor="middle">theme, kids, missions</text>
+      <line class="thin" x1="890" y1="134" x2="890" y2="182"/>
+      <line class="thin" x1="890" y1="230" x2="890" y2="278"/>
+      <line class="thin" x1="890" y1="326" x2="890" y2="374"/>
+      <line class="thin" x1="890" y1="422" x2="890" y2="470"/>
+
+      <line class="ln" x1="740" y1="322" x2="818" y2="322" marker-end="url(#a1)"/>
+      <text class="s" x="780" y="313" text-anchor="middle">HTTPS GET</text>
+      <text class="s" x="780" y="338" text-anchor="middle">same site only</text>
+    </svg>
+    </div>
+    <div class="key"><span class="k-ext">Servicio externo o archivo</span><span class="k-build">Corre antes de publicar</span><span class="k-run">Corre en el navegador</span></div>
+    <figcaption>Las fuentes externas solo se consultan al preparar los datos. <code>fetch_news</code> corre dentro de GitHub Actions; los demás scripts corren en la computadora del equipo y su resultado se sube al repositorio. La clave de ElevenLabs nunca llega al sitio.</figcaption>
+  </figure>
+</section>
+
+<section id="use-cases">
+  <h2>2. Casos de uso</h2>
+  <p>Quién usa el sistema y para qué. Los casos en azul ocurren en la página; los de color ámbar son de preparación y publicación.</p>
+  <figure>
+    <div class="frame">
+    <svg viewBox="0 0 980 630" role="img" aria-label="Use cases: a visitor picks a record, plays the music, mixes the sound, focuses on a zone, chooses an emissions scenario, reads news and switches theme; a kid uses kids mode and missions; a visitor with low vision or blindness hears the page read aloud and operates it by keyboard; a GitHub Actions timer refreshes the news; the team builds the NASA dataset and records narrator clips.">
+      <rect class="hold" x="240" y="24" width="500" height="590" rx="8"/>
+      <text class="t" x="490" y="48" text-anchor="middle">Earth Jukebox</text>
+
+      <!-- visitor lines -->
+      <line class="thin" x1="122" y1="250" x2="265" y2="85"/>
+      <line class="thin" x1="122" y1="250" x2="265" y2="140"/>
+      <line class="thin" x1="122" y1="250" x2="265" y2="195"/>
+      <line class="thin" x1="122" y1="250" x2="265" y2="250"/>
+      <line class="thin" x1="122" y1="250" x2="265" y2="305"/>
+      <line class="thin" x1="122" y1="250" x2="265" y2="360"/>
+      <line class="thin" x1="122" y1="250" x2="265" y2="415"/>
+      <line class="thin" x1="122" y1="518" x2="265" y2="490"/>
+      <line class="thin" x1="122" y1="518" x2="265" y2="545"/>
+      <line class="thin" x1="858" y1="138" x2="715" y2="110"/>
+      <line class="thin" x1="858" y1="138" x2="715" y2="165"/>
+      <line class="thin" x1="858" y1="330" x2="715" y2="330"/>
+      <line class="thin" x1="858" y1="498" x2="715" y2="470"/>
+      <line class="thin" x1="858" y1="498" x2="715" y2="525"/>
+
+      <!-- column 1 -->
+      <ellipse class="uc" cx="370" cy="85" rx="105" ry="22"/><text class="m" x="370" y="89" text-anchor="middle">Pick a record</text>
+      <ellipse class="uc" cx="370" cy="140" rx="105" ry="22"/><text class="m" x="370" y="144" text-anchor="middle">Play or pause the music</text>
+      <ellipse class="uc" cx="370" cy="195" rx="105" ry="22"/><text class="m" x="370" y="199" text-anchor="middle">Mix the sound</text>
+      <ellipse class="uc" cx="370" cy="250" rx="105" ry="22"/><text class="m" x="370" y="254" text-anchor="middle">Focus on a zone</text>
+      <ellipse class="uc" cx="370" cy="305" rx="105" ry="22"/><text class="m" x="370" y="309" text-anchor="middle">Choose emissions scenario</text>
+      <ellipse class="uc" cx="370" cy="360" rx="105" ry="22"/><text class="m" x="370" y="364" text-anchor="middle">Read news by region</text>
+      <ellipse class="uc" cx="370" cy="415" rx="105" ry="22"/><text class="m" x="370" y="419" text-anchor="middle">Switch light or dark theme</text>
+      <ellipse class="uc" cx="370" cy="490" rx="105" ry="22"/><text class="m" x="370" y="494" text-anchor="middle">Use kids mode</text>
+      <ellipse class="uc" cx="370" cy="545" rx="105" ry="22"/><text class="m" x="370" y="549" text-anchor="middle">Complete missions</text>
+      <!-- column 2 -->
+      <ellipse class="uc" cx="610" cy="110" rx="105" ry="22"/><text class="m" x="610" y="114" text-anchor="middle">Hear the page read aloud</text>
+      <ellipse class="uc" cx="610" cy="165" rx="105" ry="22"/><text class="m" x="610" y="169" text-anchor="middle">Operate by keyboard</text>
+      <ellipse class="ucb" cx="610" cy="330" rx="105" ry="22"/><text class="m" x="610" y="334" text-anchor="middle">Refresh the news</text>
+      <ellipse class="ucb" cx="610" cy="470" rx="105" ry="22"/><text class="m" x="610" y="474" text-anchor="middle">Build the NASA dataset</text>
+      <ellipse class="ucb" cx="610" cy="525" rx="105" ry="22"/><text class="m" x="610" y="529" text-anchor="middle">Record narrator clips</text>
+
+      <!-- actors -->
+      <g transform="translate(100,250)"><circle class="ln" cx="0" cy="-26" r="9"/><path class="ln" d="M0-17V8M-14-8H14M0 8L-12 26M0 8L12 26"/><text class="t" x="0" y="44" text-anchor="middle">Visitor</text></g>
+      <g transform="translate(100,518)"><circle class="ln" cx="0" cy="-26" r="9"/><path class="ln" d="M0-17V8M-14-8H14M0 8L-12 26M0 8L12 26"/><text class="t" x="0" y="44" text-anchor="middle">Kid</text></g>
+      <line class="ln" x1="100" y1="476" x2="100" y2="316"/>
+      <polygon class="open" points="100,304 93,316 107,316"/>
+      <text class="s" x="108" y="400">is a visitor</text>
+      <g transform="translate(880,138)"><circle class="ln" cx="0" cy="-26" r="9"/><path class="ln" d="M0-17V8M-14-8H14M0 8L-12 26M0 8L12 26"/><text class="t" x="0" y="44" text-anchor="middle">Visitor with low</text><text class="t" x="0" y="59" text-anchor="middle">vision or blindness</text></g>
+      <g transform="translate(880,330)"><circle class="ln" cx="0" cy="-26" r="9"/><path class="ln" d="M0-17V8M-14-8H14M0 8L-12 26M0 8L12 26"/><text class="t" x="0" y="44" text-anchor="middle">GitHub Actions</text><text class="s" x="0" y="59" text-anchor="middle">timer, every 6 h</text></g>
+      <g transform="translate(880,498)"><circle class="ln" cx="0" cy="-26" r="9"/><path class="ln" d="M0-17V8M-14-8H14M0 8L-12 26M0 8L12 26"/><text class="t" x="0" y="44" text-anchor="middle">Team developer</text></g>
+    </svg>
+    </div>
+    <figcaption>El niño y el visitante con baja visión o ceguera también pueden hacer todo lo del visitante; el diagrama solo marca lo que es propio de cada uno. «Mix the sound» agrupa faders, mute y solo, perillas, filtro y el crossfader de energía.</figcaption>
+  </figure>
+</section>
+
+<section id="sequence">
+  <h2>3. Secuencia: reproducir un disco y cambiar la energía</h2>
+  <p>El recorrido principal de la demostración, desde abrir la página hasta que mover un control cambia el sonido y el planeta.</p>
+  <figure>
+    <div class="frame">
+    <svg viewBox="0 0 980 640" role="img" aria-label="Sequence: the visitor opens the site, the app downloads the data files from GitHub Pages and draws the planet; on Play the audio engine turns each frame into notes once per bar, reports the frame to the app, and the globe shows it; moving the Energy crossfader updates the engine and switches the emissions scenario shown on the globe.">
+      <defs>
+        <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0 0L10 5L0 10z"/></marker>
+      </defs>
+      <!-- lifelines -->
+      <line class="life" x1="90" y1="58" x2="90" y2="620"/>
+      <line class="life" x1="290" y1="58" x2="290" y2="620"/>
+      <line class="life" x1="490" y1="58" x2="490" y2="620"/>
+      <line class="life" x1="690" y1="58" x2="690" y2="620"/>
+      <line class="life" x1="890" y1="58" x2="890" y2="620"/>
+      <rect class="b" x="20" y="18" width="140" height="40" rx="5"/><text class="t" x="90" y="43" text-anchor="middle">Visitor</text>
+      <rect class="run" x="220" y="18" width="140" height="40" rx="5"/><text class="t" x="290" y="43" text-anchor="middle">React app</text>
+      <rect class="b" x="420" y="18" width="140" height="40" rx="5"/><text class="t" x="490" y="43" text-anchor="middle">GitHub Pages</text>
+      <rect class="run" x="620" y="18" width="140" height="40" rx="5"/><text class="t" x="690" y="43" text-anchor="middle">Audio engine</text>
+      <rect class="run" x="820" y="18" width="140" height="40" rx="5"/><text class="t" x="890" y="43" text-anchor="middle">Globe</text>
+
+      <!-- load -->
+      <text class="m" x="190" y="88" text-anchor="middle">opens the site</text>
+      <line class="ln" x1="90" y1="95" x2="288" y2="95" marker-end="url(#a3)"/>
+      <text class="m" x="390" y="123" text-anchor="middle">GET data/*.json</text>
+      <line class="ln" x1="290" y1="130" x2="488" y2="130" marker-end="url(#a3)"/>
+      <text class="m" x="390" y="158" text-anchor="middle">records, features, headlines</text>
+      <line class="ln dash" x1="490" y1="165" x2="292" y2="165" marker-end="url(#a3)"/>
+      <text class="m" x="390" y="193" text-anchor="middle">draw planet, first frame</text>
+      <line class="ln" x1="290" y1="200" x2="888" y2="200" marker-end="url(#a3)"/>
+
+      <!-- play -->
+      <text class="m" x="190" y="238" text-anchor="middle">presses Play (Space)</text>
+      <line class="ln" x1="90" y1="245" x2="288" y2="245" marker-end="url(#a3)"/>
+      <text class="m" x="390" y="273" text-anchor="middle">play()</text>
+      <line class="ln" x1="290" y1="280" x2="688" y2="280" marker-end="url(#a3)"/>
+
+      <!-- loop -->
+      <rect class="hold" x="50" y="302" width="890" height="176" rx="5"/>
+      <text class="h" x="100" y="320">LOOP · ONE BAR PER FRAME</text>
+      <path class="ln" d="M690 336H730V356H694" marker-end="url(#a3)"/>
+      <text class="m" x="738" y="350">toMusic(frame, controls)</text>
+      <text class="m" x="590" y="383" text-anchor="middle">onFrame(index, notes)</text>
+      <line class="ln dash" x1="690" y1="390" x2="292" y2="390" marker-end="url(#a3)"/>
+      <text class="m" x="390" y="418" text-anchor="middle">show frame, light sounding cell</text>
+      <line class="ln" x1="290" y1="425" x2="888" y2="425" marker-end="url(#a3)"/>
+      <text class="m" x="590" y="453" text-anchor="middle">sound: chord, melody, sparkles</text>
+      <line class="ln dash" x1="690" y1="460" x2="92" y2="460" marker-end="url(#a3)"/>
+
+      <!-- control change -->
+      <text class="m" x="190" y="513" text-anchor="middle">moves Energy crossfader</text>
+      <line class="ln" x1="90" y1="520" x2="288" y2="520" marker-end="url(#a3)"/>
+      <text class="m" x="390" y="548" text-anchor="middle">update(controls)</text>
+      <line class="ln" x1="290" y1="555" x2="688" y2="555" marker-end="url(#a3)"/>
+      <text class="m" x="390" y="583" text-anchor="middle">switch emissions scenario map</text>
+      <line class="ln" x1="290" y1="590" x2="888" y2="590" marker-end="url(#a3)"/>
+    </svg>
+    </div>
+    <figcaption>Las flechas continuas son llamadas y las punteadas son respuestas. El audio solo puede arrancar después de un clic o una tecla del visitante, por regla de los navegadores. Después de la carga inicial ya no hay peticiones de datos: la música se calcula en el navegador a partir de los números de cada cuadro.</figcaption>
+  </figure>
+</section>
+</main>
+</body>
+</html>

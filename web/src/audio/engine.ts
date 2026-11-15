@@ -32,7 +32,7 @@ export class JukeboxEngine {
   private djLow = new Tone.Filter({ frequency: 20000, type: "lowpass", Q: 2 });
   private djHigh = new Tone.Filter({ frequency: 10, type: "highpass", Q: 2 });
   private duckGain = new Tone.Volume(0); // lowered while the narrator speaks
-  private pad = new Tone.PolySynth(Tone.AMSynth, { volume: -18, envelope: { attack: 1.2, release: 3 } });
+  private pad = new Tone.PolySynth(Tone.AMSynth, { volume: -12, envelope: { attack: 1.2, release: 3 } });
   private lead = new Tone.Synth({ oscillator: { type: "triangle" }, volume: -10, envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.4 } });
   private leadPan = new Tone.Panner(0);
   private kick = new Tone.MembraneSynth({ volume: -14 });
@@ -73,8 +73,9 @@ export class JukeboxEngine {
     this.reverb.wet.rampTo(c.space, 0.5);
     this.lead.oscillator.type = c.shape;
     this.master.volume.rampTo(c.volume <= 0.01 ? -Infinity : Tone.gainToDb(c.volume), 0.2);
-    // Channel faders: 75% is the reference mix, the top of the fader adds about 5 dB.
-    const fader = (v: number) => (v <= 0.01 ? -Infinity : Tone.gainToDb((v / 0.75) ** 2));
+    // Channel faders: 75% is the reference mix. The curve is steep on purpose, so a move of the fader is clearly heard:
+    // the top adds about 7 dB and half-way takes away about 11 dB.
+    const fader = (v: number) => (v <= 0.01 ? -Infinity : Tone.gainToDb((v / 0.75) ** 3));
     this.chordBus.volume.rampTo(fader(c.chord), 0.1);
     this.melodyBus.volume.rampTo(fader(c.melody), 0.1);
     this.beatBus.volume.rampTo(fader(c.beat), 0.1);
