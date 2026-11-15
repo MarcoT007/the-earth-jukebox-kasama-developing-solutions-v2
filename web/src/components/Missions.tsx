@@ -8,9 +8,11 @@ interface Props {
 export default function Missions({ completed, onReset }: Props) {
   return (
     <div className="missions">
-      <h2>
-        Missions <span className="count">{completed.length} / {MISSIONS.length}</span>
-      </h2>
+      <details name="missions" className="fold" open>
+        <summary>
+          <b>Missions</b>
+          <span className="count">{completed.length} / {MISSIONS.length} stars</span>
+        </summary>
       <ol>
         {MISSIONS.map((m) => {
           const done = completed.includes(m.id);
@@ -34,7 +36,12 @@ export default function Missions({ completed, onReset }: Props) {
         </button>
       )}
 
-      <h2>What can I do?</h2>
+      </details>
+      <details name="missions" className="fold">
+        <summary>
+          <b>What can I do?</b>
+          <span>3 ideas</span>
+        </summary>
       <ul className="actions">
         {ACTIONS.map((a) => (
           <li key={a}>{a}</li>
@@ -43,6 +50,7 @@ export default function Missions({ completed, onReset }: Props) {
       <a className="kids-link" href={KIDS_LINK.href} target="_blank" rel="noreferrer">
         {KIDS_LINK.label} ↗
       </a>
+      </details>
     </div>
   );
 }

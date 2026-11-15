@@ -335,3 +335,111 @@ kbd { padding: 0.1rem 0.4rem; border: 1px solid var(--line); border-radius: 5px;
 .panel[hidden], .panel-show[hidden] { display: none; }
 .cta.ghost { background: var(--surface); color: var(--ink); }
 .cta.ghost[aria-checked="true"] { background: var(--sun); color: var(--on-sun); }
+
+/* ================= compact layout: panels size to their content, one folding section open at a time ================= */
+.panel { top: 4.5rem; bottom: auto; max-height: calc(100dvh - 4.5rem - 9.2rem); padding: 0.8rem; }
+.panel.left { width: 300px; left: 1rem; }
+.panel.right { width: 300px; right: 1rem; }
+.panel-head { margin-bottom: 0.55rem; }
+.panel-head h2 { font-size: 1.1rem; }
+.tabs button { padding: 0.45rem 0.3rem; font-size: 0.78rem; }
+
+.fold { border-top: 1.5px solid var(--line); font-size: inherit; line-height: inherit; color: inherit; }
+.fold > summary { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; padding: 0.5rem 0.1rem; list-style: none; cursor: pointer; }
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary b { font-family: var(--display); font-size: 1.02rem; font-weight: 700; white-space: nowrap; }
+.fold > summary b::before { content: "▸"; display: inline-block; width: 1em; font-family: var(--font); font-size: 0.8em; color: var(--coral-ink); }
+.fold[open] > summary b::before { content: "▾"; }
+.fold > summary span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.72rem; font-weight: 600; color: var(--muted); }
+.fold[open] { padding-bottom: 0.6rem; }
+
+/* mixer */
+.crossfader { padding: 0.45rem 0.6rem 0.5rem; margin-bottom: 0.5rem; }
+.crossfader label { margin-bottom: 0.3rem; }
+.crossfader label .control-title, .crossfader label strong { font-size: 1.2rem; }
+.crossfader .ends { margin-top: 0.2rem; }
+.strips { margin: 0; gap: 0.25rem; }
+.strip { padding: 0.35rem 0.15rem 0.4rem; gap: 0.3rem; border-top-width: 5px; }
+.strip header { min-height: 2.9rem; }
+.strip header b { font-size: 0.92rem; }
+.strip header small { font-size: 0.56rem; }
+.fader { height: 92px; padding: 2px 0; }
+.strip-buttons { flex-direction: row; gap: 0.15rem; padding: 0 0.15rem; }
+.strip-buttons button { flex: 1; padding: 0.25rem 0; font-size: 0.56rem; letter-spacing: 0; box-shadow: none; border-width: 1.5px; }
+.knob-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.1rem; margin-bottom: 0.5rem; }
+.mixer .knob-row .knob { width: 100%; }
+.mixer .knob-row .knob-dial { width: 40px; height: 40px; }
+.mixer .knob-row .knob-label { font-size: 0.88rem; margin-bottom: 0.1rem; }
+.mixer .knob-row .knob-output { font-size: 0.58rem; white-space: nowrap; }
+.mixer .shapes { grid-template-columns: repeat(4, 1fr); margin: 0; }
+.mixer .shapes button { padding: 0.25rem 0.1rem; font-size: 0.62rem; }
+.mixer .shapes svg { height: 18px; }
+.mixer .wavepad { height: 96px; }
+.pad-help b { color: var(--ink); }
+
+/* now playing */
+.now-playing h3 { margin: 0.1rem 0 0.4rem; font-size: 1.05rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.np-time { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.4rem; }
+.np-time strong { font-family: var(--display); font-size: 2.1rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.np-time .scrub { flex: 1; min-width: 0; margin: 0; gap: 0.2rem; }
+.np-heat { margin-bottom: 0.5rem; }
+.np-heat .heat { height: 8px; margin: 0; }
+.np-heat .heat-label { margin: 0.2rem 0 0; font-size: 0.72rem; }
+.scenarios button { flex-direction: row; align-items: baseline; justify-content: space-between; padding: 0.3rem 0.45rem; border-left-width: 6px; }
+.scenarios b { font-size: 0.74rem; }
+.scenarios small { font-size: 0.56rem; }
+.blurb { margin: 0.4rem 0 0; font-size: 0.74rem; line-height: 1.35; }
+.zone-pick { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+.zone-pick select { padding: 0.4rem 0.5rem; font-size: 0.86rem; }
+.zone-here { padding: 0.4rem 0.5rem; font-size: 0.74rem; }
+.scan { margin: 0; }
+.scan-picture img { aspect-ratio: 2.3 / 1; }
+.scan-zone { max-height: 130px; }
+.scan-help { margin: 0.3rem 0 0; font-size: 0.68rem; line-height: 1.3; }
+.about p { margin: 0 0 0.3rem; font-size: 0.74rem; line-height: 1.4; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+.about a { font-size: 0.74rem; font-weight: 600; color: var(--teal); }
+:root[data-theme="dark"] .about a { color: #5fd0c7; }
+
+/* news and missions */
+.news-list li { padding: 0.3rem 0 0.3rem 0.6rem; margin-bottom: 0.3rem; }
+.news-list a { font-size: 0.8rem; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.news-list .meta { margin-top: 0.1rem; font-size: 0.58rem; }
+.region-pick { margin-bottom: 0.4rem; }
+.region-pick select { padding: 0.25rem 0.4rem; font-size: 0.74rem; }
+.news-note { margin: 0.4rem 0 0; font-size: 0.66rem; }
+.missions ol, .actions { gap: 0.3rem; margin-bottom: 0.4rem; }
+.missions ol li { padding: 0.4rem 0.5rem; gap: 0.5rem; border-width: 1.5px; border-radius: 10px; }
+.missions .badge { font-size: 1.2rem; }
+.missions li strong { font-size: 0.82rem; }
+.missions li p { margin: 0.1rem 0 0; font-size: 0.72rem; line-height: 1.3; }
+.actions li { font-size: 0.78rem; }
+.link { margin: 0; }
+.kids-link { padding: 0.5rem; font-size: 0.78rem; }
+
+/* dock a little lower and slimmer, so the panels get the height */
+.dock { bottom: 1.6rem; padding: 0.4rem 0.9rem; }
+.record { width: 74px; }
+.disc { width: 44px; height: 44px; }
+.icon.play { width: 52px; height: 52px; }
+@media (max-width: 1040px) {
+  .panel { max-height: none; }
+}
+.panel { max-height: calc(100dvh - 4.5rem - 8.2rem); }
+.now-playing, .news, .missions, .mixer { position: relative; }
+.now-playing > .sr-only { top: 0; left: 0; }
+.fold > summary { padding: 0.4rem 0.1rem; }
+.fader { height: 82px; }
+.strip header { min-height: 2.6rem; }
+.scan-picture img { aspect-ratio: 2.7 / 1; }
+.scan-zone { max-height: 104px; }
+.about p { -webkit-line-clamp: 5; }
+.crossfader label { gap: 0.5rem; }
+.crossfader label .control-title { flex: none; font-size: 1.02rem; letter-spacing: 0.03em; }
+.crossfader label strong { min-width: 0; font-size: 1.1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panel.right .panel-head { gap: 0.3rem; }
+.panel.right .tabs { min-width: 0; gap: 0.2rem; }
+.panel.right .tabs button { min-width: 0; padding: 0.4rem 0.25rem; font-size: 0.72rem; gap: 0.25rem; overflow: hidden; }
+.panel-hide { padding: 0.3rem 0.55rem; }
+.scenarios button { flex-direction: column; align-items: flex-start; gap: 0; }
+.strip header b { font-size: 0.86rem; }
+.strip-buttons button { font-size: 0.53rem; }

@@ -57,11 +57,11 @@ const FILTER: KnobSpec = {
  * The biggest word on every control is the property it acts on. For a channel that is the thing in the picture
  * (or, in the time machine, in the climate data) that feeds it; the musical name comes second, in small type.
  */
-const STRIPS: { id: "chord" | "melody" | "beat" | "volume"; prop: string; heatProp: string; voice: string; kidVoice: string; knob: KnobSpec }[] = [
-  { id: "chord", prop: "Colours", heatProp: "Heat", voice: "chord", kidVoice: "soft notes", knob: MOOD },
-  { id: "melody", prop: "Light", heatProp: "Warming", voice: "melody", kidVoice: "the tune", knob: NOTES },
-  { id: "beat", prop: "Bright spots", heatProp: "Hot spots", voice: "sparkles", kidVoice: "sparkles", knob: TEMPO },
-  { id: "volume", prop: "Volume", heatProp: "Volume", voice: "everything", kidVoice: "everything", knob: ECHO },
+const STRIPS: { id: "chord" | "melody" | "beat" | "volume"; prop: string; heatProp: string; voice: string; kidVoice: string }[] = [
+  { id: "chord", prop: "Colours", heatProp: "Heat", voice: "chord", kidVoice: "soft notes" },
+  { id: "melody", prop: "Light", heatProp: "Warming", voice: "melody", kidVoice: "the tune" },
+  { id: "beat", prop: "Bright spots", heatProp: "Hot spots", voice: "sparkles", kidVoice: "sparkles" },
+  { id: "volume", prop: "Volume", heatProp: "Volume", voice: "everything", kidVoice: "everything" },
 ];
 
 const SHAPES: { id: WaveShape; label: string; path: string }[] = [
@@ -106,6 +106,16 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
   const voices = Object.keys(DEFAULT_LAYERS) as (keyof Layers)[];
   const soloed = (id: keyof Layers) => layers[id] && voices.every((v) => v === id || !layers[v]);
 
+  const fold = (title: string, note: string, open: boolean, body: React.ReactNode) => (
+    <details name="mixer" open={open} className="fold">
+      <summary>
+        <b>{title}</b>
+        <span>{note}</span>
+      </summary>
+      {body}
+    </details>
+  );
+
   return (
     <div className="modulator mixer">
       <div className="panel-head">
@@ -113,86 +123,6 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
         <button className="panel-hide" aria-label="Hide this panel" onClick={onHide}>
           Hide
         </button>
-      </div>
-      <WavePad controls={controls} onChange={onChange} />
-      <p className="pad-help">
-        <span>↕ {ends ? "Emissions" : kids ? "Power" : "Energy"}</span>
-        <span>↔ Speed</span>
-      </p>
-
-      <div className="strips">
-        {STRIPS.map((s, i) => {
-          const voice = s.id === "volume" ? null : s.id;
-          const name = ends ? s.heatProp : s.prop;
-          const off = voice ? !layers[voice] : false;
-          return (
-            <section key={s.id} className={`strip ch-${s.id}${off ? " off" : ""}`} aria-label={`${name} channel`}>
-              <header>
-                <b>{name}</b>
-                <small>{voice ? "plays " : ""}{kids ? s.kidVoice : s.voice}</small>
-              </header>
-              {knob(s.knob)}
-              <div className="fader">
-                <span className="meter" aria-hidden="true">
-                  <span
-                    ref={(el) => {
-                      meters.current[i] = el;
-                    }}
-                  />
-                </span>
-                <input
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  value={controls[s.id]}
-                  aria-label={`${name} level`}
-                  aria-valuetext={pct(controls[s.id])}
-                  title={kids ? KID_KNOBS[s.id].hint : `${name} level. Double-click to reset.`}
-                  onChange={(e) => onChange({ ...controls, [s.id]: Number(e.target.value) })}
-                  onDoubleClick={() => onChange({ ...controls, [s.id]: DEFAULT_CONTROLS[s.id] })}
-                />
-              </div>
-              <output>{pct(controls[s.id])}</output>
-              {voice ? (
-                <div className="strip-buttons">
-                  <button className="mute" aria-pressed={!layers[voice]} title={`Mute ${name}`} onClick={() => onLayers({ ...layers, [voice]: !layers[voice] })}>
-                    {kids ? "Off" : "Mute"}
-                  </button>
-                  <button
-                    className="solo"
-                    aria-pressed={soloed(voice)}
-                    title={`Hear only ${name}`}
-                    onClick={() => onLayers(soloed(voice) ? DEFAULT_LAYERS : { chord: voice === "chord", melody: voice === "melody", beat: voice === "beat" })}
-                  >
-                    {kids ? "Only" : "Solo"}
-                  </button>
-                </div>
-              ) : (
-                <div className="strip-buttons">
-                  <button className="reset" title="Put every control back" onClick={() => (onChange(DEFAULT_CONTROLS), onLayers(DEFAULT_LAYERS))}>
-                    Reset
-                  </button>
-                </div>
-              )}
-            </section>
-          );
-        })}
-      </div>
-
-      <div className="fx">
-        <div className="big-knob">{knob(FILTER)}</div>
-        <div className="shapes" role="radiogroup" aria-labelledby="shape-title">
-          <b id="shape-title" className="control-title">{kids ? "Sound shape" : "Wave shape"}</b>
-          {SHAPES.map((s) => (
-            <button key={s.id} role="radio" aria-checked={controls.shape === s.id} onClick={() => onChange({ ...controls, shape: s.id })}>
-              <svg viewBox="0 0 28 24" aria-hidden="true">
-                <path d={s.path} />
-              </svg>
-              {kids ? KID_SHAPES[s.id] : s.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       <div className="crossfader">
@@ -208,6 +138,7 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
           step={0.01}
           value={controls.energy}
           aria-valuetext={energyMeaning}
+          title={energyMeaning}
           onChange={(e) => onChange({ ...controls, energy: Number(e.target.value) })}
         />
         <p className="ends" aria-hidden="true">
@@ -215,14 +146,110 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
           <span>{ends ? ends[1].replace(" emissions", "") : kids ? "Strong" : "Intense"}</span>
         </p>
       </div>
-      <p className="energy-meaning" aria-live="polite">
-        {energyMeaning}
-      </p>
 
-      <div className="readout">
-        <span className="eyebrow">{kids ? "Mood" : "Key"}</span>
-        <strong>{!music ? "—" : kids ? (music.mode === "major" ? "Bright" : "Dark") : `${NOTE_NAMES[music.root]} ${music.mode}`}</strong>
-      </div>
+      {fold(
+        "Channels",
+        kids ? "how loud each part is" : "level, mute and solo",
+        true,
+        <div className="strips">
+          {STRIPS.map((s, i) => {
+            const voice = s.id === "volume" ? null : s.id;
+            const name = ends ? s.heatProp : s.prop;
+            const off = voice ? !layers[voice] : false;
+            return (
+              <section key={s.id} className={`strip ch-${s.id}${off ? " off" : ""}`} aria-label={`${name} channel`}>
+                <header>
+                  <b>{name}</b>
+                  <small>{kids ? s.kidVoice : s.voice}</small>
+                </header>
+                <div className="fader">
+                  <span className="meter" aria-hidden="true">
+                    <span
+                      ref={(el) => {
+                        meters.current[i] = el;
+                      }}
+                    />
+                  </span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={controls[s.id]}
+                    aria-label={`${name} level`}
+                    aria-valuetext={pct(controls[s.id])}
+                    title={kids ? KID_KNOBS[s.id].hint : `${name} level: how loud the ${s.voice} plays. Double-click to reset.`}
+                    onChange={(e) => onChange({ ...controls, [s.id]: Number(e.target.value) })}
+                    onDoubleClick={() => onChange({ ...controls, [s.id]: DEFAULT_CONTROLS[s.id] })}
+                  />
+                </div>
+                {voice ? (
+                  <div className="strip-buttons">
+                    <button className="mute" aria-pressed={!layers[voice]} title={`Mute ${name}`} onClick={() => onLayers({ ...layers, [voice]: !layers[voice] })}>
+                      {kids ? "Off" : "Mute"}
+                    </button>
+                    <button
+                      className="solo"
+                      aria-pressed={soloed(voice)}
+                      title={`Hear only ${name}`}
+                      onClick={() => onLayers(soloed(voice) ? DEFAULT_LAYERS : { chord: voice === "chord", melody: voice === "melody", beat: voice === "beat" })}
+                    >
+                      {kids ? "Only" : "Solo"}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="strip-buttons">
+                    <button className="reset" title="Put every control back" onClick={() => (onChange(DEFAULT_CONTROLS), onLayers(DEFAULT_LAYERS))}>
+                      Reset
+                    </button>
+                  </div>
+                )}
+              </section>
+            );
+          })}
+        </div>,
+      )}
+
+      {fold(
+        kids ? "Knobs" : "Knobs & filter",
+        kids ? "mood, notes, speed, echo" : "mood, notes, speed, echo, wave",
+        false,
+        <>
+          <div className="knob-row">
+            {knob(MOOD)}
+            {knob(NOTES)}
+            {knob(TEMPO)}
+            {knob(ECHO)}
+            {knob(FILTER)}
+          </div>
+          <div className="shapes" role="radiogroup" aria-label={kids ? "Sound shape" : "Wave shape of the melody"}>
+            {SHAPES.map((s) => (
+              <button key={s.id} role="radio" aria-checked={controls.shape === s.id} onClick={() => onChange({ ...controls, shape: s.id })}>
+                <svg viewBox="0 0 28 24" aria-hidden="true">
+                  <path d={s.path} />
+                </svg>
+                {kids ? KID_SHAPES[s.id] : s.label}
+              </button>
+            ))}
+          </div>
+        </>,
+      )}
+
+      {fold(
+        "Wave",
+        kids ? "grab it and move it" : "drag it: height and speed",
+        false,
+        <>
+          <WavePad controls={controls} onChange={onChange} />
+          <p className="pad-help">
+            <span>↕ {ends ? "Emissions" : kids ? "Power" : "Energy"}</span>
+            <span>
+              {kids ? "Mood" : "Key"}: <b>{!music ? "—" : kids ? (music.mode === "major" ? "Bright" : "Dark") : `${NOTE_NAMES[music.root]} ${music.mode}`}</b>
+            </span>
+            <span>↔ Speed</span>
+          </p>
+        </>,
+      )}
     </div>
   );
 }

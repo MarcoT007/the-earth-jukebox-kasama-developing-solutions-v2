@@ -22,8 +22,8 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const INK = "#17233b";
 const narrator = new Narrator();
-const PANEL_LEFT = 404; // px the open panels cover on each side of the stage
-const PANEL_RIGHT = 350;
+const PANEL_LEFT = 316; // px the open panels cover on each side of the stage
+const PANEL_RIGHT = 316;
 const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 export default function App() {
@@ -49,7 +49,7 @@ export default function App() {
   const [width, setWidth] = useState(() => window.innerWidth);
   const [leftOpen, setLeftOpen] = useState(true);
   // On mid-sized screens both panels would crowd the planet, so the right one starts folded.
-  const [rightOpen, setRightOpen] = useState(() => window.innerWidth >= 1280 || window.innerWidth <= 1040 || params.has("tab") || params.has("kids"));
+  const [rightOpen, setRightOpen] = useState(() => true);
   const engine = useRef<JukeboxEngine | null>(null);
   const frameRef = useRef(0);
   const lastSlug = useRef<string | undefined>(undefined);
@@ -341,8 +341,8 @@ export default function App() {
             <span className="dot" aria-hidden="true" /> News
           </button>
           {kids && (
-            <button role="tab" className="t-missions" aria-selected={tab === "missions"} onClick={() => setTab("missions")}>
-              ★ Missions {completed.length}/{MISSIONS.length}
+            <button role="tab" className="t-missions" aria-label={`Missions: ${completed.length} of ${MISSIONS.length} stars`} aria-selected={tab === "missions"} onClick={() => setTab("missions")}>
+              ★ {completed.length}/{MISSIONS.length}
             </button>
           )}
         </div>
@@ -370,7 +370,6 @@ export default function App() {
             onFocus={setFocus}
             music={music}
             layers={layers}
-            onLayers={setLayers}
             step={step}
             playing={playing}
           />

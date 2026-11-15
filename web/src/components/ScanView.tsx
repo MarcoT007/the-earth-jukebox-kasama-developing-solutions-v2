@@ -8,7 +8,6 @@ interface Props {
   alt: string;
   music: MusicalFrame | null;
   layers: Layers;
-  onLayers: (l: Layers) => void;
   step: () => number; // step currently sounding, 0..7
   playing: boolean;
   equirect: boolean; // true when left/right and top/bottom are really west/east and north/south
@@ -20,18 +19,12 @@ interface Props {
 const ROWS = 4;
 const COLS = 8;
 
-const LAYERS: { key: keyof Layers; from: string; to: string; kidFrom: string; kidTo: string; heatFrom?: string; kidHeatFrom?: string }[] = [
-  { key: "chord", from: "Colours", to: "chord", kidFrom: "Colours", kidTo: "long, soft notes", heatFrom: "Heat of the land", kidHeatFrom: "Heat of the land" },
-  { key: "melody", from: "Light, left to right", to: "melody", kidFrom: "Bright places", kidTo: "the tune", heatFrom: "Warming of each place", kidHeatFrom: "Hot places" },
-  { key: "beat", from: "Spots that stand out", to: "sparkles", kidFrom: "Tiny bright spots", kidTo: "sparkles", heatFrom: "Fastest-warming strips", kidHeatFrom: "Places heating fastest" },
-];
-
 /**
  * The "score": the picture that is playing, cut into the same 8 x 4 cells the music reads.
  * The cell that is sounding lights up, silent columns fade, and sparkle columns carry a dot,
  * so every change made to the sound is visible on the picture.
  */
-export default function ScanView({ src, alt, music, layers, onLayers, step, playing, equirect, kids, heat, zone }: Props) {
+export default function ScanView({ src, alt, music, layers, step, playing, equirect, kids, heat, zone }: Props) {
   const grid = useRef<HTMLDivElement>(null);
   const latest = useRef({ music, layers, playing });
   latest.current = { music, layers, playing };
@@ -73,24 +66,11 @@ export default function ScanView({ src, alt, music, layers, onLayers, step, play
       </div>
       <p className="scan-help">
         {kids
-          ? "The glowing square is the note you hear. Higher up in the picture means a higher note."
+          ? "The glowing square is the note you hear. Higher up means a higher note."
           : heat
-            ? "The lit cell is the note you hear: the hottest land in each strip of the map sings, and its note climbs as that place warms. The dataset has no ocean, so strips without land are silent. Dots mark the strips that have warmed the most."
-            : equirect
-              ? "The lit cell is the note you hear: west to east in time, north is high, south is low. Faded columns are silent."
-              : "The lit cell is the note you hear: left to right in time, top is high, bottom is low. Faded columns are silent."}
+            ? "Lit cell = the note you hear. The hottest land of each strip sings, higher as it warms; dots mark the fastest-warming strips."
+            : `Lit cell = the note you hear: ${equirect ? "west to east" : "left to right"} in time, ${equirect ? "north" : "top"} is high. Faded strips are silent; dots are sparkles.`}
       </p>
-      <div className="layers" role="group" aria-label="Voices of the music">
-        {LAYERS.map((l) => (
-          <button key={l.key} className={`layer l-${l.key}`} aria-pressed={layers[l.key]} onClick={() => onLayers({ ...layers, [l.key]: !layers[l.key] })}>
-            <span className="swatch" aria-hidden="true" />
-            <span>
-              {(heat && (kids ? l.kidHeatFrom : l.heatFrom)) || (kids ? l.kidFrom : l.from)} <b>→ {kids ? l.kidTo : l.to}</b>
-            </span>
-            <small>{layers[l.key] ? "on" : "muted"}</small>
-          </button>
-        ))}
-      </div>
     </div>
   );
 }

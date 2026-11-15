@@ -66,8 +66,10 @@ maps, and cannot be cut into zones. Zone data is built by `pipeline/build_time_m
   triggers a spoken hint: "Press V to turn on the narrator". It is off by default so it does not talk over a
   screen reader such as VoiceOver or NVDA; the page keeps its labels for those too.
 - **Light and dark theme**: button in the top bar, remembered on the device (`?theme=dark` to open in dark).
-- **Folding panels**: the mixer and the right panel each have a Hide button; the planet re-centres and resizes to
-  the free space, so panels, planet and record dock never overlap.
+- **Compact, folding panels**: each side panel is as tall as its content and is split into sections of which only
+  one is open at a time (Channels / Knobs / Wave in the mixer; Emissions / Zone / Picture → sound / About in
+  Playing), so nothing scrolls inside a panel and nothing overlaps. Each panel also has a Hide button, and the
+  planet re-centres and resizes to the free space. Checked in a real browser at 1190 × 680 and 1440 × 900.
 
 ## The mixer
 

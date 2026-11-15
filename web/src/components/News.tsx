@@ -55,8 +55,11 @@ export default function News({ data, regionInView, kids }: Props) {
   return (
     <div className="news">
       {!kids && (
-        <section aria-live="polite">
-          <h2>Climate news · {region ? region.label : "open ocean in view"}</h2>
+        <details name="news" className="fold" open>
+          <summary>
+            <b>Climate news</b>
+            <span>{region ? region.label : "open ocean in view"}</span>
+          </summary>
           <label className="region-pick">
             <span className="eyebrow">Region</span>
             <select value={choice} onChange={(e) => setChoice(e.target.value)}>
@@ -68,19 +71,18 @@ export default function News({ data, regionInView, kids }: Props) {
               ))}
             </select>
           </label>
-          {region ? <List items={region.items.slice(0, 6)} /> : <p className="empty">Spin the globe toward land to see local climate headlines.</p>}
-        </section>
+          {region ? <List items={region.items.slice(0, 4)} /> : <p className="empty">Spin the globe toward land to see local climate headlines.</p>}
+        </details>
       )}
 
-      <section>
-        <h2>{kids ? "Earth stories from NASA" : "From NASA"}</h2>
-        <List items={data.global.slice(0, kids ? 8 : 6)} />
-      </section>
-
-      <p className="news-note">
-        {!kids && "Regional headlines via Google News; links open external sites. "}
-        {data.updated && `Updated ${ago(data.updated)}.`}
-      </p>
+      <details name="news" className="fold" open={kids}>
+        <summary>
+          <b>{kids ? "Earth stories" : "From NASA"}</b>
+          <span>Earth Observatory{data.updated ? ` · updated ${ago(data.updated)}` : ""}</span>
+        </summary>
+        <List items={data.global.slice(0, 5)} />
+      </details>
+      {!kids && <p className="news-note">Regional headlines via Google News; links open external sites.</p>}
     </div>
   );
 }

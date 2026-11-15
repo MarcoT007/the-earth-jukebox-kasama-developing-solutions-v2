@@ -14,7 +14,6 @@ interface Props {
   kids: boolean;
   music: MusicalFrame | null;
   layers: Layers;
-  onLayers: (l: Layers) => void;
   step: () => number;
   playing: boolean;
   frames: FrameFeatures[] | undefined; // what is playing: the whole map, or the zone in focus
@@ -24,7 +23,20 @@ interface Props {
   onFocus: (id: string | null) => void;
 }
 
-export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, description, kids, music, layers, onLayers, step, playing, frames: live, zone, focus, inView, onFocus }: Props) {
+/** Only one section is open at a time, so the panel never needs to scroll. */
+function Fold({ title, value, open, children }: { title: string; value?: string; open?: boolean; children: React.ReactNode }) {
+  return (
+    <details name="playing" open={open} className="fold">
+      <summary>
+        <b>{title}</b>
+        {value && <span>{value}</span>}
+      </summary>
+      {children}
+    </details>
+  );
+}
+
+export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, description, kids, music, layers, step, playing, frames: live, zone, focus, inView, onFocus }: Props) {
   if (!viz) return <p>Loading visualizations…</p>;
   const frames = live ?? (viz.scenarios ? viz.scenarios[scenario].frames : viz.frames);
   const canFocus = viz.projection === "equirect";
@@ -32,43 +44,58 @@ export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, d
   const f = frames[frame];
   const year = f?.year;
   const active = viz.scenarios?.[scenario];
+  const short = (label: string) => label.replace(" emissions", "");
 
   return (
-    <div className="now-playing">
-      {viz.scenarios && <span className="tag real">Real NASA climate data</span>}
-      <h3>{viz.title}</h3>
+    <div className="now-playing" key={viz.slug}>
+      <h3 title={viz.title}>{viz.title}</h3>
 
-      {active && year !== undefined ? (
-        <div className="machine">
-          <div className="year" aria-live="off">
-            <strong>{year}</strong>
-            <span>{year <= 2014 ? "Model reconstruction of the past" : "Model projection"}</span>
-          </div>
+      <div className="np-time">
+        {year !== undefined && <strong aria-hidden="true">{year}</strong>}
+        <label className="scrub">
+          <span>
+            <span className="eyebrow">{year !== undefined ? (year <= 2014 ? "Year · model of the past" : "Year · projection") : kids ? "Picture" : "Frame"}</span>
+            {year === undefined && <output>{`${String(frame + 1).padStart(2, "0")} / ${frames.length}`}</output>}
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={frames.length - 1}
+            value={frame}
+            aria-valuetext={year !== undefined ? String(year) : `Frame ${frame + 1} of ${frames.length}`}
+            onChange={(e) => onSeek(Number(e.target.value))}
+          />
+        </label>
+      </div>
+      {active && f && (
+        <div className="np-heat">
           <div className="heat" aria-hidden="true">
             <div style={{ width: `${(f.heat ?? 0) * 100}%` }} />
           </div>
           <p className="heat-label">
             {zone ? `Warming of ${zone.label} since 1950` : "Land heat index"}: <b>{Math.round((f.heat ?? 0) * 100)}</b> / 100
           </p>
+        </div>
+      )}
+
+      {active && (
+        <Fold title="Emissions" value={short(active.label)} open>
           <div className="scenarios" role="radiogroup" aria-label="Emissions scenario">
             {viz.scenarios!.map((s, i) => (
-              <button key={s.id} role="radio" aria-checked={i === scenario} onClick={() => onScenario(i)} className={`s${i}`}>
-                <b>{kids ? s.label.replace(" emissions", "") : s.label}</b>
+              <button key={s.id} role="radio" aria-checked={i === scenario} onClick={() => onScenario(i)} className={`s${i}`} title={s.blurb}>
+                <b>{short(s.label)}</b>
                 {!kids && <small>{s.code}</small>}
               </button>
             ))}
           </div>
           <p className="blurb">{active.blurb}</p>
-        </div>
-      ) : null}
-      <div className={`zone-pick${zone ? " on" : ""}`}>
-        <label htmlFor="zone">
-          <b className="control-title">Zone</b>
-          <span>{kids ? "Which part of Earth makes the music" : "Part of the planet the music reads"}</span>
-        </label>
+        </Fold>
+      )}
+
+      <Fold title="Zone" value={zone ? zone.label : canFocus ? "Whole planet" : "not for this record"}>
         {canFocus ? (
-          <>
-            <select id="zone" value={zone?.id ?? ""} onChange={(e) => onFocus(e.target.value || null)}>
+          <div className="zone-pick">
+            <select aria-label="Zone: part of the planet the music reads" value={zone?.id ?? ""} onChange={(e) => onFocus(e.target.value || null)}>
               <option value="">Whole planet</option>
               {ZONES.map((z) => (
                 <option key={z.id} value={z.id}>
@@ -86,60 +113,44 @@ export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, d
                 Back to the whole planet
               </button>
             )}
-          </>
+          </div>
         ) : (
           <p className="empty">
-            {focus ? "Your zone is kept for the map records. " : ""}This record is a camera view, not a map, so it cannot be cut into zones. Zones work in the Time Machine, the
-            sea surface currents and the lightning records.
+            {focus ? "Your zone is kept for the map records. " : ""}This record is a camera view, not a map, so it cannot be cut into zones. Zones work in the Time Machine, the sea
+            surface currents and the lightning records.
           </p>
         )}
-      </div>
-      {f && (
-        <ScanView
-          zone={zone}
-          src={f.src}
-          alt={`Frame ${frame + 1} of ${viz.title}. ${description}`}
-          music={music}
-          layers={layers}
-          onLayers={onLayers}
-          step={step}
-          playing={playing}
-          equirect={viz.projection === "equirect"}
-          kids={kids}
-          heat={!!f.warmGrid}
-        />
-      )}
+      </Fold>
 
-      {kids && KID_STORIES[viz.slug] && (
-        <div className="story">
-          <span className="eyebrow">What am I hearing?</span>
-          <p>{KID_STORIES[viz.slug]}</p>
+      <Fold title={kids ? "Picture to sound" : "Picture → sound"} value="what is playing" open={!active}>
+        {f && (
+          <ScanView
+            zone={zone}
+            src={f.src}
+            alt={`Frame ${frame + 1} of ${viz.title}. ${description}`}
+            music={music}
+            layers={layers}
+            step={step}
+            playing={playing}
+            equirect={viz.projection === "equirect"}
+            kids={kids}
+            heat={!!f.warmGrid}
+          />
+        )}
+      </Fold>
+
+      <Fold title="About" value={viz.scenarios ? "is this a real prediction?" : "this record"}>
+        <div className="about">
+          {kids && KID_STORIES[viz.slug] ? <p>{KID_STORIES[viz.slug]}</p> : <p>{viz.description}</p>}
+          <a href={viz.sourceUrl} target="_blank" rel="noreferrer">
+            Source: NASA Scientific Visualization Studio #{viz.svsId}
+          </a>
         </div>
-      )}
-      <p className="live" aria-live="polite">
+      </Fold>
+
+      <p className="sr-only" aria-live="polite">
         {description}
       </p>
-      <label className="scrub">
-        <span>
-          <span className="eyebrow">{year !== undefined ? "Year" : kids ? "Picture" : "Frame"}</span>
-          <output>{year !== undefined ? year : `${String(frame + 1).padStart(2, "0")} / ${frames.length}`}</output>
-        </span>
-        <input
-          type="range"
-          min={0}
-          max={frames.length - 1}
-          value={frame}
-          aria-valuetext={year !== undefined ? String(year) : undefined}
-          onChange={(e) => onSeek(Number(e.target.value))}
-        />
-      </label>
-      <details open={!!viz.scenarios && !kids}>
-        <summary>{viz.scenarios ? "Is this a real prediction?" : "About this visualization"}</summary>
-        <p>{viz.description}</p>
-        <a href={viz.sourceUrl} target="_blank" rel="noreferrer">
-          Source: NASA Scientific Visualization Studio #{viz.svsId}
-        </a>
-      </details>
     </div>
   );
 }
