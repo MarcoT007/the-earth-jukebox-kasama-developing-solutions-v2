@@ -16,6 +16,8 @@ interface Props {
   kids: boolean;
   /** What the energy control currently does on the planet (e.g. the emissions scenario). */
   energyMeaning: string;
+  /** Big readout of the crossfader: the scenario name in the time machine, a percentage elsewhere. */
+  value: string;
   /** Time machine: names of the two ends of the crossfader (lowest and highest emissions). */
   ends: [string, string] | null;
 }
@@ -37,7 +39,7 @@ interface KnobSpec {
 
 const MOOD: KnobSpec = { key: "warmth", label: "Mood", hint: "Pushes the chord toward major (brighter) or minor (darker)", min: -1, max: 1, step: 0.05, format: (v) => (v > 0.02 ? "major" : v < -0.02 ? "minor" : "data") };
 const NOTES: KnobSpec = { key: "density", label: "Notes", hint: "How many notes the scanner plays. Columns that go silent fade in the picture.", min: 0, max: 1, step: 0.05, format: pct };
-const TEMPO: KnobSpec = { key: "tempo", label: "Tempo", hint: "Speed of the scan. Faster music spins the planet faster.", min: 50, max: 160, step: 1, format: (v) => `${v} bpm` };
+const TEMPO: KnobSpec = { key: "tempo", label: "Speed", hint: "Tempo: speed of the scan. Faster music spins the planet faster.", min: 50, max: 160, step: 1, format: (v) => `${v} bpm` };
 const ECHO: KnobSpec = { key: "space", label: "Echo", hint: "Reverb: how big the room sounds", min: 0, max: 1, step: 0.05, format: pct };
 const FILTER: KnobSpec = {
   key: "filter",
@@ -50,11 +52,15 @@ const FILTER: KnobSpec = {
 };
 
 /** One strip per voice of the music, plus the master. `source` says what in the picture feeds the channel. */
-const STRIPS: { id: "chord" | "melody" | "beat" | "volume"; name: string; source: string; kidSource: string; knob: KnobSpec }[] = [
-  { id: "chord", name: "Chord", source: "colours", kidSource: "colours", knob: MOOD },
-  { id: "melody", name: "Melody", source: "light", kidSource: "bright places", knob: NOTES },
-  { id: "beat", name: "Beat", source: "spots", kidSource: "tiny spots", knob: TEMPO },
-  { id: "volume", name: "Master", source: "all", kidSource: "everything", knob: ECHO },
+/**
+ * The biggest word on every control is the property it acts on. For a channel that is the thing in the picture
+ * (or, in the time machine, in the climate data) that feeds it; the musical name comes second, in small type.
+ */
+const STRIPS: { id: "chord" | "melody" | "beat" | "volume"; prop: string; heatProp: string; voice: string; kidVoice: string; knob: KnobSpec }[] = [
+  { id: "chord", prop: "Colours", heatProp: "Heat", voice: "chord", kidVoice: "soft notes", knob: MOOD },
+  { id: "melody", prop: "Light", heatProp: "Warming", voice: "melody", kidVoice: "the tune", knob: NOTES },
+  { id: "beat", prop: "Bright spots", heatProp: "Hot spots", voice: "sparkles", kidVoice: "sparkles", knob: TEMPO },
+  { id: "volume", prop: "Volume", heatProp: "Volume", voice: "everything", kidVoice: "everything", knob: ECHO },
 ];
 
 const SHAPES: { id: WaveShape; label: string; path: string }[] = [
@@ -65,7 +71,7 @@ const SHAPES: { id: WaveShape; label: string; path: string }[] = [
 ];
 
 /** The mixing desk: every voice of the music has its own channel, like on a DJ mixer. */
-export default function Modulator({ controls, onChange, layers, onLayers, levels, music, kids, energyMeaning, ends }: Props) {
+export default function Modulator({ controls, onChange, layers, onLayers, levels, music, kids, energyMeaning, value, ends }: Props) {
   const meters = useRef<(HTMLSpanElement | null)[]>([]);
 
   // LED meters follow the real level of each channel.
@@ -103,17 +109,21 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
     <div className="modulator mixer">
       <h2>{kids ? "Sound machine" : "Mixer"}</h2>
       <WavePad controls={controls} onChange={onChange} />
+      <p className="pad-help">
+        <span>↕ {ends ? "Emissions" : kids ? "Power" : "Energy"}</span>
+        <span>↔ Speed</span>
+      </p>
 
       <div className="strips">
         {STRIPS.map((s, i) => {
           const voice = s.id === "volume" ? null : s.id;
-          const name = kids && voice ? KID_KNOBS[s.id].label : s.name;
+          const name = ends ? s.heatProp : s.prop;
           const off = voice ? !layers[voice] : false;
           return (
             <section key={s.id} className={`strip ch-${s.id}${off ? " off" : ""}`} aria-label={`${name} channel`}>
               <header>
                 <b>{name}</b>
-                <small>{kids ? s.kidSource : s.source}</small>
+                <small>{voice ? "plays " : ""}{kids ? s.kidVoice : s.voice}</small>
               </header>
               {knob(s.knob)}
               <div className="fader">
@@ -166,7 +176,8 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
 
       <div className="fx">
         <div className="big-knob">{knob(FILTER)}</div>
-        <div className="shapes" role="radiogroup" aria-label="Wave shape of the melody">
+        <div className="shapes" role="radiogroup" aria-labelledby="shape-title">
+          <b id="shape-title" className="control-title">{kids ? "Sound shape" : "Wave shape"}</b>
           {SHAPES.map((s) => (
             <button key={s.id} role="radio" aria-checked={controls.shape === s.id} onClick={() => onChange({ ...controls, shape: s.id })}>
               <svg viewBox="0 0 28 24" aria-hidden="true">
@@ -180,9 +191,8 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
 
       <div className="crossfader">
         <label htmlFor="xfade">
-          <span>{ends ? ends[0].replace(" emissions", "") : kids ? "Gentle" : "Calm"}</span>
-          <b>{kids ? "Power" : "Energy"}</b>
-          <span>{ends ? ends[1].replace(" emissions", "") : kids ? "Strong" : "Intense"}</span>
+          <b className="control-title">{ends ? "Emissions" : kids ? "Power" : "Energy"}</b>
+          <strong>{value}</strong>
         </label>
         <input
           id="xfade"
@@ -194,6 +204,10 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
           aria-valuetext={energyMeaning}
           onChange={(e) => onChange({ ...controls, energy: Number(e.target.value) })}
         />
+        <p className="ends" aria-hidden="true">
+          <span>{ends ? ends[0].replace(" emissions", "") : kids ? "Gentle" : "Calm"}</span>
+          <span>{ends ? ends[1].replace(" emissions", "") : kids ? "Strong" : "Intense"}</span>
+        </p>
       </div>
       <p className="energy-meaning" aria-live="polite">
         {energyMeaning}

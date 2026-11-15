@@ -161,7 +161,7 @@ export default function App() {
   const energyMeaning = active
     ? kids
       ? `Wave height = pollution: ${active.label.replace(" emissions", "")}`
-      : `Energy ${Math.round(controls.energy * 100)}% = ${active.label} (${active.code})`
+      : `The planet shows ${active.label.toLowerCase()} (${active.code}).`
     : kids
       ? "A taller wave makes the music stronger and the planet glow."
       : "Energy drives the intensity of the sound and the planet's glow. Play the Time Machine to change the climate itself.";
@@ -217,6 +217,7 @@ export default function App() {
           music={music}
           kids={kids}
           energyMeaning={energyMeaning}
+          value={active ? active.label.replace(" emissions", "") : `${Math.round(controls.energy * 100)}%`}
           ends={active && viz?.scenarios ? [viz.scenarios[0].label, viz.scenarios[viz.scenarios.length - 1].label] : null}
         />
       </aside>

@@ -19,7 +19,7 @@ const ROWS = 4;
 const COLS = 8;
 
 const LAYERS: { key: keyof Layers; from: string; to: string; kidFrom: string; kidTo: string; heatFrom?: string; kidHeatFrom?: string }[] = [
-  { key: "chord", from: "Colours", to: "chord", kidFrom: "Colours", kidTo: "long, soft notes" },
+  { key: "chord", from: "Colours", to: "chord", kidFrom: "Colours", kidTo: "long, soft notes", heatFrom: "Heat of all the land", kidHeatFrom: "Heat of the land" },
   { key: "melody", from: "Light, left to right", to: "melody", kidFrom: "Bright places", kidTo: "the tune", heatFrom: "Warming of each place", kidHeatFrom: "Hot places" },
   { key: "beat", from: "Spots that stand out", to: "sparkles", kidFrom: "Tiny bright spots", kidTo: "sparkles", heatFrom: "Fastest-warming strips", kidHeatFrom: "Places heating fastest" },
 ];
