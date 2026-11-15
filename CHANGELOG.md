@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-11-15 — The welcome screen speaks, and "what is…?" explains every part of the page
+
+**Spoken welcome.** As soon as the welcome screen appears it says the name of the page, then "Press T for a
+spoken tutorial", "Press V for the narrator", and how the space bar works. Browsers only let a page make sound
+by itself where the visitor or the site settings allow it; where they do not, the same words are said on the
+first key press, click or touch anywhere (before, only on a key press). A visitor who goes straight to T, V or a
+button is not interrupted. For a demo, allow sound for the site in `chrome://settings/content/sound`.
+
+**"What is…?" by voice.** "What is the mixer", "explain the news", "what does solo do", "tell me about the
+filter": the voice says what that part of the page is, without changing anything. Covered: the mixer, energy,
+the three channels, volume, mute and solo, each knob, the filter, the wave, the Now playing, News and Stories
+tabs, zone, picture to sound, about, the records, emissions, kids mode, missions, the narrator, voice control,
+the tutorial, the themes and the page itself. Asking about a record ("what is forest height") gives its name,
+whether it is measured or modelled, where the data comes from and how to read its colours. "What is this" and
+"what's playing" still describe the record that is on.
+
+**Files.** `web/src/voice.ts` (`EXPLAIN`, the topics and the interpreter), `web/src/App.tsx` (the welcome and
+the two new orders), `web/src/tutorial.ts`, `pipeline/narrator_phrases.json` and `web/public/narrator/` (35
+narrator clips).
+
+**Checked.** 187 phrases, the new ones together with every earlier order, are interpreted as intended. The
+welcome was tried in headless Chrome both with sound allowed (it speaks at load) and with Chrome's default
+blocking (it speaks at the first click). Not tried with a person speaking.
+
+**Backup.** State before this change: tag `backup/2026-11-15-before-welcome` (commit `50e594d`) and
+`~/kasama-backups/earth-jukebox-v2-2026-11-15-50e594d.bundle`.
+
 ## 2026-11-15 — KASAMA for Earth: voice control, spoken tutorial, more kids missions
 
 **New name.** The project and the page are now called **KASAMA for Earth**. The slogan "What does our planet
@@ -108,7 +135,7 @@ colour legends (NASA SVS API, NASA GIBS layer metadata and legends, the Copernic
   wording than NASA's "plains into seas". The water-vapour map is from January 2025, not from the 2022 floods.
 - No official colour legend was found for "Ocean currents" or the Time Machine; for CO₂ the 405–430 ppm range is
   from the Copernicus catalogue and the colour order is inferred from the palette name (Spectral, reversed).
-- Still open from the previous entry: whether this use of the Copernicus/ECMWF public map server is permitted.
+- The use of the Copernicus/ECMWF public map server was confirmed as permitted by the team on 2026-11-15.
 
 **Backup.** State before this change: tags `backup/2026-11-15-maps-published` and
 `backup/2026-11-15-before-stories` (commit `9c53f83`), and `~/kasama-backups/earth-jukebox-v2-2026-11-15-9c53f83.bundle`.

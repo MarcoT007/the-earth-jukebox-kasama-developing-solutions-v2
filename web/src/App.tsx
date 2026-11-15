@@ -8,7 +8,7 @@ import News, { type NewsData } from "./components/News";
 import Ticker from "./components/Ticker";
 import Stories, { StoryCaptions } from "./components/Stories";
 import { STORIES, type Story } from "./stories";
-import { HELP, HELP_MIXER, parseCommand, voice, VOICE_SAY, type Command, type NumKey } from "./voice";
+import { EXPLAIN, HELP, HELP_MIXER, parseCommand, voice, VOICE_SAY, type Command, type NumKey } from "./voice";
 import { RECORD_INFO, recordName } from "./records";
 import { TUTORIAL, TUTORIAL_SAY, type TutorialState } from "./tutorial";
 import { kidDescribe, MISSIONS } from "./kids";
@@ -31,8 +31,14 @@ const SAY = {
   off: "Narrator off.",
   onKids: "Narrator on. Point at something, or press Tab, and I will read it to you. Press R to hear it again.",
   on: "Narrator on. Move with the Tab key or the mouse and I will read what you land on. Press R to repeat, V to turn me off, and Space to play or pause the music.",
-  hint: "Kasama for Earth. Press V to turn on the narrator, which reads this page aloud. Press Space to play the music.",
 };
+// What the welcome screen says by itself, in this order.
+const WELCOME = [
+  "Kasama for Earth.",
+  "Press T for a spoken tutorial, made for people who cannot see the screen.",
+  "Press V for the narrator, which reads this page aloud.",
+  "Tap the space bar to play the music, or hold it down and speak to control the page with your voice.",
+];
 const missionToast = (m: { title: string; learned: string }) => `Mission complete: ${m.title}! ${m.learned}`;
 // Phrases the narrator says that are not written on the page; pipeline/build_narrator.py records them too.
 const HEARD = {
@@ -55,7 +61,7 @@ const SPOKEN: Record<NumKey, { label: string; min: number; max: number; say: (v:
   filter: { label: "Filter", min: -1, max: 1, say: (v) => (v < -0.02 ? "low-pass" : v > 0.02 ? "high-pass" : HEARD.off) },
 };
 const SHAPE_SAY = { sine: "Sine wave", triangle: "Triangle wave", square: "Square wave", sawtooth: "Saw wave" };
-(window as unknown as { __ejExtra: string[] }).__ejExtra = [...Object.values(SAY), ...Object.values(VOICE_SAY), ...Object.values(TUTORIAL_SAY), ...TUTORIAL.flatMap((t) => t.say), ...HELP, ...HELP_MIXER, ...Object.values(HEARD), ...Object.values(SHAPE_SAY), ...Object.values(SPOKEN).map((c) => c.label), "Warming since 1950",
+(window as unknown as { __ejExtra: string[] }).__ejExtra = [...Object.values(SAY), ...WELCOME, ...Object.values(EXPLAIN), ...Object.values(VOICE_SAY), ...Object.values(TUTORIAL_SAY), ...TUTORIAL.flatMap((t) => t.say), ...HELP, ...HELP_MIXER, ...Object.values(HEARD), ...Object.values(SHAPE_SAY), ...Object.values(SPOKEN).map((c) => c.label), "Warming since 1950",
   ...["major", "minor", "low-pass", "high-pass", "Back to the whole planet"],
   ...MISSIONS.map((_, i) => `Missions: ${i} of ${MISSIONS.length} stars`),
   `Missions: ${MISSIONS.length} of ${MISSIONS.length} stars`,
@@ -175,16 +181,37 @@ export default function App() {
     });
   }, [kids]);
 
-  // A page cannot speak before the first key press (a browser rule). So the first key a visitor presses
-  // gets a spoken hint about the narrator, unless that key already turns it on.
+  // The welcome screen speaks as soon as it appears: the name of the page, then T for the tutorial and V for the
+  // narrator. Browsers only let a page make sound by itself where the visitor (or the site settings) allow it;
+  // where they do not, the same words are said on the very first key press, click or touch anywhere.
   useEffect(() => {
-    if (narrating) return;
-    const hint = (ev: KeyboardEvent) => {
-      window.removeEventListener("keydown", hint, true);
-      if (!"vt".includes(ev.key.toLowerCase())) narrator.say([SAY.hint, VOICE_SAY.hint, TUTORIAL_SAY.offer]);
+    if (started) return;
+    let armed = false;
+    const first = (ev: Event) => {
+      disarm();
+      const key = ev instanceof KeyboardEvent ? ev.key.toLowerCase() : "";
+      // A visitor who goes straight to a key or a button that does something is not interrupted.
+      if (key === "t" || key === "v" || (ev.target as HTMLElement | null)?.closest?.("button, a")) return;
+      narrator.say(WELCOME);
     };
-    window.addEventListener("keydown", hint, true);
-    return () => window.removeEventListener("keydown", hint, true);
+    const disarm = () => {
+      armed = false;
+      window.removeEventListener("keydown", first, true);
+      window.removeEventListener("pointerdown", first, true);
+    };
+    const timer = setTimeout(() => {
+      // A silent sound tells whether the page may speak yet.
+      const probe = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=");
+      probe.volume = 0;
+      probe.play().then(
+        () => armed && (disarm(), narrator.say(WELCOME)),
+        () => {},
+      );
+    }, 700); // the recorded clips are listed by then
+    armed = true;
+    window.addEventListener("keydown", first, true);
+    window.addEventListener("pointerdown", first, true);
+    return () => (clearTimeout(timer), disarm());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const togglePlay = useCallback(async () => {
@@ -304,6 +331,12 @@ export default function App() {
         setTab("stories");
         setRightOpen(true);
         return void playStory(s, c.lang === "local" ? 0 : s.parts.length - 1);
+      }
+      case "explain":
+        return say(EXPLAIN[c.topic]);
+      case "explainRecord": {
+        const r = RECORD_INFO[c.slug];
+        return say(r ? [r.name, r.kindLabel, r.basis, `How to read it: ${r.read}`] : VOICE_SAY.unknown);
       }
       case "what":
         return say(info ? [name, info.kindLabel, info.basis] : name);

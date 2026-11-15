@@ -85,7 +85,6 @@ export const TUTORIAL: TutorialStep[] = [
 ];
 
 export const TUTORIAL_SAY = {
-  offer: "Press T at any time for a spoken tutorial, made for people who cannot see the screen.",
   skipVoice: "This browser cannot hear you, so the steps that use your voice are skipped. For voice control, open this page in Chrome.",
   left: "Tutorial closed. Press T to start it again.",
   finished: "Tutorial finished.",

@@ -31,6 +31,8 @@ export type Command =
   | { do: "story"; id: string | null; lang: "local" | "english" }
   | { do: "news"; zone: string | null }
   | { do: "what" }
+  | { do: "explain"; topic: Topic }
+  | { do: "explainRecord"; slug: string }
   | { do: "read" }
   | { do: "repeat" }
   | { do: "narrator"; on: boolean }
@@ -53,6 +55,74 @@ export type Command =
   | { do: "help" }
   | { do: "helpMixer" }
   | { do: "unknown"; heard: string };
+
+/** What each part of the page is, for "what is the mixer?" and the like. Kept true to what the page really does. */
+export const EXPLAIN = {
+  page: "Kasama for Earth turns maps of the Earth, made by NASA and other space agencies, into music, so the planet can be heard and not only seen.",
+  mixer: "The mixer is the panel on the left. It changes how the map becomes music. It has an energy slider, three channels, five knobs, and the shape of the wave. Say help with the mixer to hear how to use it.",
+  energy: "Energy is the big slider at the top of the mixer. It sets how intense the music is and how much the planet glows. In the Time Machine it chooses the emissions scenario, from low to very high.",
+  channels: "The channels are the three voices of the music. Colours play the chord, light plays the melody, and bright spots play the sparkles. Each one has a level, a mute button and a solo button.",
+  colours: "Colours is the first channel. The main colours of the map choose the chord you hear in the background.",
+  light: "Light is the second channel. The brightest point of each strip of the map, read from west to east, plays the melody.",
+  spots: "Bright spots is the third channel. Places that stand out from what is around them, like a lightning flash or a city, play the sparkles.",
+  volume: "Volume is how loud everything is.",
+  mute: "Mute silences one channel. Solo lets you hear only that channel, so you can tell where each sound comes from.",
+  knobs: "The knobs are mood, notes, speed, echo and filter. They shape the sound. They do not change the data.",
+  mood: "Mood pushes the chord toward major, which sounds brighter, or minor, which sounds darker. In the middle, the colours of the map decide.",
+  notes: "Notes sets how many notes the melody plays. With fewer notes, the darker strips of the map stay silent.",
+  speed: "Speed is the tempo: how fast the music reads the map. Faster music also spins the planet faster.",
+  echo: "Echo is reverb: how big the room sounds.",
+  filter: "The filter works like the one on a DJ mixer. Low pass muffles the sound, high pass thins it, and off leaves it as it is.",
+  wave: "The wave shape is the tone of the melody. Sine is the softest, then triangle, then square, and saw is the roughest. In the wave section you can also drag the wave to change energy and speed.",
+  playing: "Now playing is the first tab of the panel on the right. It shows the record that is on, its picture or year, the zone the music reads, how the picture becomes sound, and where the data comes from.",
+  news: "News is the second tab on the right. It lists recent headlines about the Earth and the climate: worldwide from NASA Earth Observatory, and by region from news sites, gathered automatically. Say read the news to hear them.",
+  stories: "Stories is the third tab on the right. It has four real events, each told by a voice over the record it belongs to, in the language of the place and in English. Say tell me the story of, and a place.",
+  zone: "Zone lets the music read only one part of the world, like Africa or Europe, instead of the whole planet. Say go to, and a place.",
+  picture: "Picture to sound shows the picture that is playing, and lights up the strip that is sounding right now.",
+  about: "About says where the data of the record comes from, whether it is measured or modelled, and how to read its colours.",
+  records: "The records are at the bottom of the page. Each record is a different map of the Earth, and there are eight. Say next, previous, or the name of a record.",
+  emissions: "Emissions are the four futures of the Time Machine: low, intermediate, high and very high. They are scenarios used by climate scientists, not forecasts.",
+  kids: "Kids mode makes the page simpler, with easier words and twelve missions. Say kids mode to turn it on, and normal mode to leave.",
+  missions: "Missions are small challenges in kids mode. Each one you complete gives you a star and teaches something about the Earth.",
+  narrator: "The narrator reads aloud whatever you point at with the mouse, or land on with the Tab key. Press V, or say narrator on.",
+  voice: "Voice control lets you run the whole page by speaking. Hold the space bar, speak, and let go.",
+  tutorial: "The tutorial is a spoken tour in eight steps, made for people who cannot see the screen. Press T, or say tutorial.",
+  theme: "Dark mode and light mode change the colours of the page. Say dark mode, or light mode.",
+};
+export type Topic = keyof typeof EXPLAIN;
+// The more specific words go first: "bright spots" before "light", "kids mode" before "mode".
+const TOPIC_WORDS: [RegExp, Topic][] = [
+  [/bright spots?|hot spots?|sparkles?/, "spots"],
+  [/colou?rs?\b|chords?\b/, "colours"],
+  [/\bmute\b|\bsolo\b/, "mute"],
+  [/\bmood\b|major|minor/, "mood"],
+  [/\bnotes\b|density/, "notes"],
+  [/speed|tempo|\bbpm\b/, "speed"],
+  [/echo|reverb/, "echo"],
+  [/filter|low ?pass|high ?pass/, "filter"],
+  [/\bwave\b|sine|triangle|square|\bsaw\b|shape/, "wave"],
+  [/energy|power\b/, "energy"],
+  [/volume/, "volume"],
+  [/channels?/, "channels"],
+  [/knobs?|dials?/, "knobs"],
+  [/mixer|sound machine|mixing/, "mixer"],
+  [/now playing|playing (tab|panel|section)|\bplaying$/, "playing"],
+  [/\bnews\b|headlines?/, "news"],
+  [/stor(y|ies)/, "stories"],
+  [/\bzones?\b/, "zone"],
+  [/picture to sound|picture|scan/, "picture"],
+  [/\babout\b(?! (the|this|that|it)\b)|about (tab|section)/, "about"],
+  [/emissions?|scenarios?/, "emissions"],
+  [/\brecords?\b|\bdock\b|discs?\b|\btracks?\b/, "records"],
+  [/missions?\b|\bstars?\b/, "missions"],
+  [/kids?( mode)?\b|children/, "kids"],
+  [/narrator/, "narrator"],
+  [/voice|microphone|space ?bar/, "voice"],
+  [/tutorial/, "tutorial"],
+  [/dark mode|light mode|\btheme\b/, "theme"],
+  [/\blight\b|melody/, "light"],
+  [/kasama|this (page|site|website|app)|jukebox|the (page|site|website|app)\b/, "page"],
+];
 
 // Words that point at a record, a zone or a story. The first entry that matches wins, so the more specific words go first.
 const RECORD_WORDS: [RegExp, string][] = [
@@ -133,6 +203,15 @@ export function parseCommand(heard: string): Command {
   const hide = has(/\bhide\b|\bclose\b|collapse|put away|get rid of/);
   const show = has(/\bshow\b|\bopen\b|expand|bring back|bring up|unhide/);
 
+  if (has(/how (do|to|can) (i|you|we)? ?(read|understand)|what do the colou?rs mean|legend/)) return { do: "read" };
+  // "What is the mixer?", "explain the news", "what does solo do?": say what that part of the page is, without touching it.
+  if (has(/\bwhat\b|\bwhats\b|explain|tell me about|meaning of|how does|what s\b/) && !has(/what can (i|you)|what do the colou?rs mean|which zone|what zone|what part|what( is| s|s) (this|it)$|what( is| s|s) playing$|what am i/)) {
+    const about = t.replace(/^.*?\b(about|what is|what s|whats|what are|what does|what do|explain|meaning of|how does)\b/, "").trim();
+    const topic = find(about, TOPIC_WORDS)?.[1];
+    const which = find(about, RECORD_WORDS)?.[1];
+    if (which && (!topic || /time machine|temperature|currents|lightning|forest|vapou?r|carbon|smoke|dust|haze/.test(about))) return { do: "explainRecord", slug: which };
+    if (topic) return { do: "explain", topic };
+  }
   if (has(/tutorial|teach me|how does (this|it) work|guide me/)) return { do: "tutorial", on: !has(/\bexit\b|leave|close|stop|quit|\bend\b|skip/) };
   if (has(/\bhelp\b|what can (i|you) (say|do)|commands/)) return has(/mixer|sound|controls|more/) ? { do: "helpMixer" } : { do: "help" };
   if (has(/\brepeat\b|say (that|it) again|\bagain\b|pardon/)) return { do: "repeat" };
@@ -203,7 +282,6 @@ export function parseCommand(heard: string): Command {
   if (control) return { do: "set", key: control, amount: amountOf(t, control) };
 
   // What is playing, and where.
-  if (has(/how (do|to|can) (i|you|we)? ?(read|understand)|what do the colou?rs mean|legend/)) return { do: "read" };
   if (has(/which zone|what zone|where am i|where are we|what part/)) return { do: "where" };
   if (has(/what( is| s|s) (this|playing|it)|what am i (hearing|listening)|is (it|this) real|describe/)) return { do: "what" };
   if (has(/\bnext\b|skip/)) return { do: "next" };
@@ -228,6 +306,7 @@ export const HELP = [
   `Say tell me the story of ${STORIES.map((s) => s.place.split(",")[0]).join(", or ")}. Add in Spanish, Urdu or Portuguese to hear it in the language of the place.`,
   "Say read the news to hear the latest headlines.",
   "Say what is this, or how do I read it. Say stop to cut a story.",
+  "Say what is, and the name of anything on the page, like what is the mixer, or what is the news, to hear what it is.",
   "Say help with the mixer to hear how to change the sound. Say tutorial for a guided tour.",
 ];
 export const HELP_MIXER = [
@@ -240,7 +319,6 @@ export const HELP_MIXER = [
 ];
 
 export const VOICE_SAY = {
-  hint: "Hold the space bar and speak to control the jukebox. Say help to hear what you can say.",
   unsupported: "Voice control needs the Chrome or Edge browser. You can still use the keyboard: Space plays and pauses, N and P change the record.",
   blocked: "The microphone is blocked. Allow the microphone for this page, then hold the space bar again.",
   offline: "Voice control needs an internet connection.",
