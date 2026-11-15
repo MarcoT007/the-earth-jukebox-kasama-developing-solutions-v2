@@ -3,6 +3,7 @@ import { Billboard, OrbitControls } from "@react-three/drei";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { Controls } from "../types";
+import type { Zone } from "../zones";
 
 export const BASE_TEXTURE = "textures/blue-marble.jpg";
 
@@ -16,6 +17,7 @@ interface GlobeProps {
   cell: () => { col: number; row: number } | null; // piece of the map that is sounding (equirect maps only)
   melody: (string | null)[]; // which of the 8 steps carry a note
   playing: boolean;
+  zone: Zone | null; // zone in focus: outlined on the planet, and the planet turns to face it
   accent: string; // CSS colour of the current frame
   reducedMotion: boolean;
   onView: (lat: number, lon: number) => void; // point of the planet facing the viewer
@@ -60,7 +62,30 @@ function useSmoothTexture(url: string, fallback: THREE.Texture) {
   return tex;
 }
 
-function Planet({ textureUrl, controls, energy, level, reducedMotion, onView, cell }: GlobeProps) {
+/** Piece of a sphere covering a latitude/longitude box, laid out like the equirectangular texture. */
+const boxGeometry = (lon0: number, lon1: number, lat0: number, lat1: number, radius: number) =>
+  new THREE.SphereGeometry(radius, 16, 10, ((lon0 + 180) / 360) * Math.PI * 2, ((lon1 - lon0) / 360) * Math.PI * 2, ((90 - lat1) / 180) * Math.PI, ((lat1 - lat0) / 180) * Math.PI);
+
+function Planet({ textureUrl, controls, energy, level, reducedMotion, onView, cell, zone }: GlobeProps) {
+  const box = useRef<THREE.Mesh>(null);
+  // In focus, the 8 x 4 cells divide the zone instead of the whole planet.
+  const zoneShapes = useMemo(() => {
+    if (!zone) return null;
+    const [lat0, lat1] = zone.lat;
+    const [lon0, lon1] = zone.lon;
+    const dLon = (lon1 - lon0) / 8;
+    const dLat = (lat1 - lat0) / 4;
+    return {
+      outline: boxGeometry(lon0, lon1, lat0, lat1, 2.008),
+      cells: Array.from({ length: 32 }, (_, i) => {
+        const col = Math.floor(i / 4);
+        const row = i % 4;
+        return boxGeometry(lon0 + col * dLon, lon0 + (col + 1) * dLon, lat1 - (row + 1) * dLat, lat1 - row * dLat, 2.016);
+      }),
+      centre: THREE.MathUtils.degToRad((lon0 + lon1) / 2),
+    };
+  }, [zone]);
+  useEffect(() => () => void (zoneShapes && [zoneShapes.outline, ...zoneShapes.cells].forEach((g) => g.dispose())), [zoneShapes]);
   const patch = useRef<THREE.Mesh>(null);
   // One patch per cell of the 8 x 4 grid the music reads; same layout as the texture, so it sits exactly on the data.
   const patches = useMemo(
@@ -84,11 +109,20 @@ function Planet({ textureUrl, controls, energy, level, reducedMotion, onView, ce
     const now = cell();
     if (patch.current) {
       patch.current.visible = !!now;
-      if (now) patch.current.geometry = patches[now.col * 4 + now.row];
+      if (now) patch.current.geometry = (zoneShapes?.cells ?? patches)[now.col * 4 + now.row];
     }
     // Sound -> planet: tempo drives rotation, loudness makes the atmosphere pulse,
     // warmth tints the planet and its atmosphere (cool blue <-> overheated orange).
-    if (earth.current) earth.current.rotation.y += dt * (controls.tempo / (reducedMotion ? 2400 : 600));
+    if (earth.current && zoneShapes) {
+      // Focus: stop spinning and turn the shortest way until the zone faces the viewer.
+      const target = Math.atan2(-camera.position.z, camera.position.x) - zoneShapes.centre;
+      const diff = Math.atan2(Math.sin(target - earth.current.rotation.y), Math.cos(target - earth.current.rotation.y));
+      earth.current.rotation.y += reducedMotion ? diff : diff * Math.min(1, dt * 3);
+    } else if (earth.current) earth.current.rotation.y += dt * (controls.tempo / (reducedMotion ? 2400 : 600));
+    if (box.current) {
+      box.current.visible = !!zoneShapes;
+      if (zoneShapes) box.current.geometry = zoneShapes.outline;
+    }
     sinceReport.current += dt;
     if (earth.current && sinceReport.current > 0.6) {
       sinceReport.current = 0;
@@ -110,6 +144,9 @@ function Planet({ textureUrl, controls, energy, level, reducedMotion, onView, ce
       <mesh ref={earth} rotation={[0, -0.9, 0]}>
         <sphereGeometry args={[2, 96, 96]} />
         <meshStandardMaterial ref={material} map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.15} roughness={0.9} />
+        <mesh ref={box} visible={false} geometry={patches[0]}>
+          <meshBasicMaterial color="#f5b82e" transparent opacity={0.28} depthWrite={false} toneMapped={false} />
+        </mesh>
         <mesh ref={patch} visible={false} geometry={patches[0]}>
           <meshBasicMaterial color="#e2542d" transparent opacity={0.4} depthWrite={false} toneMapped={false} />
         </mesh>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Globe, { BASE_TEXTURE } from "./components/Globe";
 import Modulator from "./components/Modulator";
 import NowPlaying from "./components/NowPlaying";
@@ -8,6 +8,7 @@ import News, { type NewsData } from "./components/News";
 import Ticker from "./components/Ticker";
 import { kidDescribe, MISSIONS } from "./kids";
 import { regionAt } from "./regions";
+import { zoneAt, zoneById } from "./zones";
 import { JukeboxEngine } from "./audio/engine";
 import { getSpectrum } from "./audio/analysis";
 import { describe, type MusicalFrame } from "./audio/mapping";
@@ -37,12 +38,17 @@ export default function App() {
   const [toast, setToast] = useState("");
   const [tab, setTab] = useState<Tab>(() => (params.get("tab") === "news" ? "news" : "playing"));
   const [region, setRegion] = useState<string | null>(null);
+  const [inView, setInView] = useState<string | null>(null); // zone facing the viewer
+  const [focus, setFocus] = useState<string | null>(() => params.get("zone")); // zone the music is limited to, or null for the whole planet
   const engine = useRef<JukeboxEngine | null>(null);
   const frameRef = useRef(0);
   const lastSlug = useRef<string | undefined>(undefined);
 
   // The globe reports which point faces the viewer (about twice a second).
-  const onView = useCallback((lat: number, lon: number) => setRegion(regionAt(lat, lon)), []);
+  const onView = useCallback((lat: number, lon: number) => {
+    setRegion(regionAt(lat, lon));
+    setInView(zoneAt(lat, lon)?.id ?? null);
+  }, []);
 
   useEffect(() => {
     const json = (url: string) => fetch(url).then((r) => r.json());
@@ -69,7 +75,10 @@ export default function App() {
   // In the time machine, the height of the wave (energy) selects the emissions scenario.
   const viz = catalog[track];
   const scenario = viz?.scenarios ? scenarioIndex(controls.energy, viz.scenarios.length) : 0;
-  const frames = viz?.scenarios ? viz.scenarios[scenario].frames : viz?.frames;
+  const whole = viz?.scenarios ? viz.scenarios[scenario].frames : viz?.frames;
+  // Focus: the music reads only one zone of the map. Only map-shaped records carry data per zone.
+  const zone = whole?.[0]?.zones?.[focus ?? ""] ? zoneById(focus) : null;
+  const frames = useMemo(() => (zone && whole ? whole.map((f) => ({ ...f, ...f.zones?.[zone.id] })) : whole), [whole, zone]);
 
   useEffect(() => {
     if (!frames || !viz) return;
@@ -154,7 +163,7 @@ export default function App() {
   if (current && music) {
     if (kids) description = kidDescribe(current, music);
     else if (active && current.year !== undefined)
-      description = `Year ${current.year}, ${active.label.toLowerCase()} scenario (${active.code}). Land heat index ${Math.round((current.heat ?? 0) * 100)} of 100. Playing in ${NOTE_NAMES[music.root]} ${music.mode}: the pitch rises and the harmony gets tenser as the land heats up.`;
+      description = `Year ${current.year}, ${active.label.toLowerCase()} scenario (${active.code}). ${zone ? `Warming of ${zone.label} since 1950:` : "Land heat index"} ${Math.round((current.heat ?? 0) * 100)} of 100. Playing in ${NOTE_NAMES[music.root]} ${music.mode}: the pitch rises and the harmony gets tenser as the land heats up.`;
     else description = describe(current, music);
   }
 
@@ -179,6 +188,7 @@ export default function App() {
           cell={cell}
           melody={layers.melody ? (music?.melody ?? []) : []}
           playing={playing}
+          zone={zone}
           accent={INK}
           reducedMotion={reducedMotion}
           onView={onView}
@@ -249,6 +259,11 @@ export default function App() {
             onSeek={(i) => engine.current?.seek(i)}
             onScenario={(i) => setControls((c) => ({ ...c, energy: energyForScenario(i, viz?.scenarios?.length) }))}
             description={description}
+            frames={frames}
+            zone={zone}
+            focus={focus}
+            inView={inView}
+            onFocus={setFocus}
             music={music}
             layers={layers}
             onLayers={setLayers}

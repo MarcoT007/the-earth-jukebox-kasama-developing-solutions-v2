@@ -295,3 +295,14 @@ kbd { padding: 0.1rem 0.4rem; border: 1px solid var(--line); border-radius: 5px;
 .crossfader label .control-title { font-size: 1.45rem; }
 .crossfader label strong { font-family: var(--display); font-size: 1.45rem; font-weight: 700; color: var(--coral-ink); }
 .crossfader .ends { display: flex; justify-content: space-between; margin: 0.35rem 0 0; font-family: var(--mono); font-size: 0.64rem; color: var(--muted); }
+
+/* ---------- zone focus ---------- */
+.zone-pick { margin-top: 0.9rem; padding: 0.7rem 0.8rem 0.8rem; border: 2px solid var(--ink); border-radius: 14px; background: #fff; }
+.zone-pick.on { background: color-mix(in srgb, var(--sun) 28%, #fff); box-shadow: 0 4px 0 var(--ink); }
+.zone-pick label { display: flex; flex-direction: column; gap: 0.1rem; margin-bottom: 0.5rem; }
+.zone-pick label span { font-size: 0.74rem; color: var(--muted); }
+.zone-pick select { width: 100%; padding: 0.55rem 0.6rem; border: 2px solid var(--ink); border-radius: 10px; background: #fff; color: var(--ink); font: inherit; font-size: 0.95rem; font-weight: 700; }
+.zone-here { display: block; width: 100%; margin-top: 0.4rem; padding: 0.5rem 0.6rem; border: 2px solid var(--ink); border-radius: 10px; background: var(--sun); font-size: 0.8rem; font-weight: 700; text-align: left; cursor: pointer; }
+.zone-here.back { background: #fff; }
+.zone-pick .empty { margin: 0; }
+.scan-zone { width: 100%; background-repeat: no-repeat; }

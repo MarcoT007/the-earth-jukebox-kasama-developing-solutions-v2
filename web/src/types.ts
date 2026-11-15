@@ -12,6 +12,8 @@ export interface FrameFeatures {
   year?: number; // time machine only
   heat?: number; // time machine only: 0..1 land heat index across all years and scenarios
   heatGrid?: number[][]; // time machine only: 4 x 8 heat of the land in each cell, 0..1 (-1 = no land)
+  /** Map-shaped records only: the same features computed inside each zone the listener can focus on. In the time machine the heat of a zone is how much it has warmed since 1950 (0..1 of the largest warming of any zone). */
+  zones?: Record<string, Partial<FrameFeatures>>;
   warmGrid?: number[][]; // time machine only: 4 x 8 warming of each cell since 1950, 0..1 (-1 = no land)
 }
 

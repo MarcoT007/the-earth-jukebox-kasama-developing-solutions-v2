@@ -43,6 +43,19 @@ it is highlighted*:
 - **Density** silences the darker columns, and they fade on the picture.
 - **Muting a voice** removes its marks from the picture.
 
+## Focus on a zone
+
+In the three map-shaped records (Climate Time Machine, sea surface currents, lightning) the listener can limit
+the music to one of 11 zones (North America, Mexico & Central America, South America, Europe, Africa, Middle East,
+South Asia, East Asia, Southeast Asia, Australia & Pacific, Arctic), from the list or with "Focus on what I see".
+The same 8 × 4 grid then divides the zone instead of the whole planet, the planet turns to face it and outlines
+it, and the mixer keeps working on that zone only. Open with `?zone=europe` to start focused.
+
+In the Time Machine the heat of a zone is how much it has warmed since 1950, on a scale where 100 is the largest
+warming of any zone, year and scenario. Antarctica is not offered: the source maps paint it at the cold end of the
+colour scale in every year, so its warming cannot be read from them. The other five records are camera views, not
+maps, and cannot be cut into zones. Zone data is built by `pipeline/build_time_machine.py` and `pipeline/build_zones.py`.
+
 ## The mixer
 
 The controls are laid out like a DJ mixer. Each voice has its own channel strip with a fader, a level meter,
@@ -69,7 +82,7 @@ npm run dev
 ```
 
 Data pipeline (Python 3, ffmpeg): `pip install -r pipeline/requirements.txt`, then
-`python pipeline/build_dataset.py` and `python pipeline/build_time_machine.py`.
+`python pipeline/build_dataset.py`, `python pipeline/build_zones.py` and `python pipeline/build_time_machine.py`.
 
 ## Credits
 

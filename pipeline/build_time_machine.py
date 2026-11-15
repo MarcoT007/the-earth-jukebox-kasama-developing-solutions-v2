@@ -27,6 +27,7 @@ import requests
 from PIL import Image
 
 from build_dataset import HEADERS, ROOT, features
+from zones import ZONES, crop, pixel_box
 
 SVS_ID = 5343
 BASE = "https://svs.gsfc.nasa.gov/vis/a000000/a005300/a005343"
@@ -40,6 +41,23 @@ SCENARIOS = [
     ("ssp370", "SSP3-7.0", "High emissions", "Emissions keep rising and roughly double by 2100."),
     ("ssp585", "SSP5-8.5", "Very high emissions", "Fossil fuel use grows fast; emissions roughly double by 2050."),
 ]
+
+
+def heat_cells(lum: np.ndarray, mask: np.ndarray) -> list[list[float]]:
+    h, w = mask.shape
+    cells = []
+    for i in range(4):
+        row = []
+        for j in range(8):
+            m = mask[i * h // 4:(i + 1) * h // 4, j * w // 8:(j + 1) * w // 8]
+            v = lum[i * h // 4:(i + 1) * h // 4, j * w // 8:(j + 1) * w // 8]
+            row.append(float(255 - v[m].mean()) if m.size and m.mean() > 0.04 else -1.0)
+        cells.append(row)
+    return cells
+
+
+def warming(grid: list[list[float]], start: list[list[float]]) -> list[list[float]]:
+    return [[max(0.0, v - start[i][j]) if v >= 0 and start[i][j] >= 0 else -1.0 for j, v in enumerate(row)] for i, row in enumerate(grid)]
 
 
 def main() -> None:
@@ -71,16 +89,14 @@ def main() -> None:
                 raw_heat = float(255 - lum[mask].mean())
                 # Same 4 x 8 grid the melody scans, but holding the data itself: mean heat of the land in each cell
                 # (-1 where the cell has almost no land, because this dataset does not cover the oceans).
-                h, w = mask.shape
-                cells = []
-                for i in range(4):
-                    row = []
-                    for j in range(8):
-                        m = mask[i * h // 4:(i + 1) * h // 4, j * w // 8:(j + 1) * w // 8]
-                        v = lum[i * h // 4:(i + 1) * h // 4, j * w // 8:(j + 1) * w // 8]
-                        row.append(float(255 - v[m].mean()) if m.mean() > 0.04 else -1.0)
-                    cells.append(row)
-                frames.append({"src": f"data/time-machine/{name}", "year": year, "heat": raw_heat, "heatGrid": cells, **features(img)})
+                cells = heat_cells(lum, mask)
+                # The same again for every zone the listener can focus on, cut out of the map.
+                zones = {}
+                for zone in ZONES:
+                    x0, y0, x1, y1 = pixel_box(zone, WIDTH, WIDTH // 2)
+                    zl, zm = lum[y0:y1, x0:x1], mask[y0:y1, x0:x1]
+                    zones[zone] = {"heat": float(255 - zl[zm].mean()) if zm.any() else -1.0, "heatGrid": heat_cells(zl, zm), **features(crop(img, zone))}
+                frames.append({"src": f"data/time-machine/{name}", "year": year, "heat": raw_heat, "heatGrid": cells, "zones": zones, **features(img)})
             scenarios.append({"id": sid, "code": code, "label": label, "blurb": blurb, "frames": frames})
 
     # Normalise heat to 0..1 across every year and scenario, so it is comparable between them.
@@ -98,12 +114,30 @@ def main() -> None:
     for s in scenarios:
         start = s["frames"][0]["heatGrid"]
         for f in s["frames"]:
-            f["_warm"] = [[max(0.0, v - start[i][j]) if v >= 0 and start[i][j] >= 0 else -1.0 for j, v in enumerate(row)] for i, row in enumerate(f["heatGrid"])]
+            f["_warm"] = warming(f["heatGrid"], start)
             top = max(top, max(v for row in f["_warm"] for v in row))
     for s in scenarios:
         for f in s["frames"]:
             f["heatGrid"] = [[round((v - clo) / (chi - clo), 4) if v >= 0 else -1 for v in row] for row in f["heatGrid"]]
             f["warmGrid"] = [[round(v / top, 4) if v >= 0 else -1 for v in row] for row in f.pop("_warm")]
+
+    # Zones: the heat index of a zone is how much it has warmed since 1950, on a scale where 1 is the largest
+    # warming of any zone, year or scenario. So every zone starts calm and the ones that warm most end tensest.
+    ztop, zcell = 1e-6, 1e-6
+    for s in scenarios:
+        first = s["frames"][0]["zones"]
+        for f in s["frames"]:
+            for zone, z in f["zones"].items():
+                z["_rise"] = max(0.0, z["heat"] - first[zone]["heat"]) if z["heat"] >= 0 else 0.0
+                z["_warm"] = warming(z["heatGrid"], first[zone]["heatGrid"])
+                ztop = max(ztop, z["_rise"])
+                zcell = max(zcell, max(v for row in z["_warm"] for v in row))
+    for s in scenarios:
+        for f in s["frames"]:
+            for z in f["zones"].values():
+                z["heat"] = round(z.pop("_rise") / ztop, 4)
+                z["heatGrid"] = [[round(min(1.0, max(0.0, (v - clo) / (chi - clo))), 4) if v >= 0 else -1 for v in row] for row in z["heatGrid"]]
+                z["warmGrid"] = [[round(v / zcell, 4) if v >= 0 else -1 for v in row] for row in z.pop("_warm")]
 
     entry = {
         "slug": "time-machine",
@@ -122,7 +156,7 @@ def main() -> None:
         "scenarios": scenarios,
         "frames": scenarios[1]["frames"],
     }
-    (OUT / "time-machine.json").write_text(json.dumps(entry, indent=1))
+    (OUT / "time-machine.json").write_text(json.dumps(entry, separators=(",", ":")))
     print(f"wrote {OUT / 'time-machine.json'}")
 
 

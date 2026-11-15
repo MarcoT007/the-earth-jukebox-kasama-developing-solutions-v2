@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { MusicalFrame } from "../audio/mapping";
 import type { Layers } from "../types";
+import { zoneBackground, type Zone } from "../zones";
 
 interface Props {
   src: string;
@@ -12,6 +13,7 @@ interface Props {
   playing: boolean;
   equirect: boolean; // true when left/right and top/bottom are really west/east and north/south
   kids: boolean;
+  zone: Zone | null; // show and play only this zone of the map
   heat: boolean; // time machine: the cells hold temperature data, not brightness
 }
 
@@ -19,7 +21,7 @@ const ROWS = 4;
 const COLS = 8;
 
 const LAYERS: { key: keyof Layers; from: string; to: string; kidFrom: string; kidTo: string; heatFrom?: string; kidHeatFrom?: string }[] = [
-  { key: "chord", from: "Colours", to: "chord", kidFrom: "Colours", kidTo: "long, soft notes", heatFrom: "Heat of all the land", kidHeatFrom: "Heat of the land" },
+  { key: "chord", from: "Colours", to: "chord", kidFrom: "Colours", kidTo: "long, soft notes", heatFrom: "Heat of the land", kidHeatFrom: "Heat of the land" },
   { key: "melody", from: "Light, left to right", to: "melody", kidFrom: "Bright places", kidTo: "the tune", heatFrom: "Warming of each place", kidHeatFrom: "Hot places" },
   { key: "beat", from: "Spots that stand out", to: "sparkles", kidFrom: "Tiny bright spots", kidTo: "sparkles", heatFrom: "Fastest-warming strips", kidHeatFrom: "Places heating fastest" },
 ];
@@ -29,7 +31,7 @@ const LAYERS: { key: keyof Layers; from: string; to: string; kidFrom: string; ki
  * The cell that is sounding lights up, silent columns fade, and sparkle columns carry a dot,
  * so every change made to the sound is visible on the picture.
  */
-export default function ScanView({ src, alt, music, layers, onLayers, step, playing, equirect, kids, heat }: Props) {
+export default function ScanView({ src, alt, music, layers, onLayers, step, playing, equirect, kids, heat, zone }: Props) {
   const grid = useRef<HTMLDivElement>(null);
   const latest = useRef({ music, layers, playing });
   latest.current = { music, layers, playing };
@@ -54,7 +56,7 @@ export default function ScanView({ src, alt, music, layers, onLayers, step, play
   return (
     <div className="scan">
       <div className="scan-picture">
-        <img src={src} alt={alt} />
+        {zone ? <div className="scan-zone" role="img" aria-label={`${zone.label}. ${alt}`} style={zoneBackground(src, zone)} /> : <img src={src} alt={alt} />}
         <div className="scan-grid" ref={grid} aria-hidden="true">
           {Array.from({ length: COLS }, (_, col) => {
             const silent = !music || !layers.melody || !music.melody[col];
