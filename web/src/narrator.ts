@@ -1,5 +1,6 @@
 /**
- * Narrator: reads the page aloud with the browser's built-in voice (Web Speech API).
+ * Narrator: reads the page aloud. Fixed phrases play as recorded clips (public/narrator, made once
+ * with pipeline/build_narrator.py); anything without a clip uses the browser's voice (Web Speech API).
  * It follows both the mouse and the keyboard focus, and reuses the labels the page already
  * exposes to screen readers, so there is one source of truth for every description.
  * It is off by default so it never talks over a real screen reader.
@@ -25,6 +26,16 @@ function roleOf(el: Element): string {
   return tag === "input" ? (el as HTMLInputElement).type : tag;
 }
 
+/** Recorded clips: phrase → file name. Empty until the index loads, or if it is missing. */
+const CLIP_BASE = `${import.meta.env.BASE_URL}narrator/`;
+let clips: Record<string, string> = {};
+fetch(`${CLIP_BASE}index.json`)
+  .then((r) => (r.ok ? r.json() : {}))
+  .then((d) => (clips = d))
+  .catch(() => {});
+/** How a phrase is looked up in the clip index. Must match pipeline/build_narrator.py. */
+export const clipKey = (s: string) => clean(s).replace(/[.!]+$/, "").toLowerCase();
+
 /** Current value or state of a control, in words. */
 export function valueOf(el: Element): string {
   const role = roleOf(el);
@@ -36,10 +47,10 @@ export function valueOf(el: Element): string {
   return "";
 }
 
-/** What to say for an element: its name, what kind of control it is, its value, and what it does. */
-export function describeElement(el: Element, simple: boolean): string {
+/** What to say for an element, as separate phrases: its name, what kind of control it is, its value, and what it does. */
+export function describeParts(el: Element, simple: boolean): string[] {
   const said = el.getAttribute("data-say");
-  if (said) return said;
+  if (said) return [said];
   const role = roleOf(el);
   const labelFor = el.id ? clean(document.querySelector(`label[for="${el.id}"]`)?.textContent) : "";
   const name =
@@ -48,18 +59,26 @@ export function describeElement(el: Element, simple: boolean): string {
     labelFor ||
     (role === "button" ? clean(el.getAttribute("title")) : "") ||
     clean(el.getAttribute("alt")) ||
-    clean((el as HTMLElement).innerText).slice(0, 400);
+    (clean((el as HTMLElement).innerText) || clean(el.textContent)).slice(0, 400);
   const hint = byIds(el, "aria-describedby") || (role !== "button" ? clean(el.getAttribute("title")) : "");
   const word = simple ? "" : (ROLE_WORDS[role] ?? "");
-  return [[name, word, valueOf(el)].filter(Boolean).join(", "), hint].filter(Boolean).join(". ");
+  return [name, word, valueOf(el), hint].filter(Boolean);
 }
+
+export const describeElement = (el: Element, simple: boolean) => describeParts(el, simple).join(". ");
+
+/** Every phrase the page can say right now. Used by pipeline/build_narrator.py to know which clips to record. */
+export const harvest = (simple: boolean, skip: string) =>
+  [...document.querySelectorAll(TARGETS)].filter((el) => !el.closest(skip)).flatMap((el) => describeParts(el, simple));
 
 export class Narrator {
   enabled = false;
   simple = false; // kids mode: no words like "slider" or "button"
   /** Called when the voice starts and stops, so the music can make room for it. */
   onSpeaking: (on: boolean) => void = () => {};
-  private last = "";
+  private last: string[] = [];
+  private run = 0;
+  private audio: HTMLAudioElement | null = null;
   private current: Element | null = null;
   private timer = 0;
   private observer: MutationObserver | null = null;
@@ -69,20 +88,59 @@ export class Narrator {
   }
 
   /** Speaks now, cutting whatever was being said. Works even when the narrator is off (used for the welcome hint). */
-  say(text: string) {
-    if (!this.supported || !text) return;
-    this.last = text;
-    speechSynthesis.cancel();
+  say(text: string | string[]) {
+    const parts = (Array.isArray(text) ? text : [text]).map(clean).filter(Boolean);
+    if (!parts.length) return;
+    this.last = parts;
+    this.hush();
+    const run = ++this.run;
+    // Phrases without a clip that follow each other are spoken in one breath by the browser's voice.
+    const chunks: { text: string; file?: string }[] = [];
+    for (const part of parts) {
+      const file = clips[clipKey(part)];
+      const prev = chunks[chunks.length - 1];
+      if (!file && prev && !prev.file) prev.text += `. ${part}`;
+      else chunks.push({ text: part, file });
+    }
+    const loaded = chunks.map((c) => (c.file ? new Audio(CLIP_BASE + c.file) : null));
+    this.onSpeaking(true);
+    const next = (i: number) => {
+      if (run !== this.run) return;
+      if (i >= chunks.length) return this.onSpeaking(false);
+      let moved = false;
+      const then = () => !moved && ((moved = true), next(i + 1));
+      const browser = () => (run === this.run ? this.browserVoice(chunks[i].text, then) : undefined);
+      const audio = loaded[i];
+      if (!audio) return browser();
+      this.audio = audio;
+      audio.onended = then;
+      audio.onerror = browser;
+      audio.play().catch(browser);
+    };
+    next(0);
+  }
+
+  private browserVoice(text: string, then: () => void) {
+    if (!this.supported) return then();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "en-US";
     u.rate = 1.05;
-    u.onstart = () => this.onSpeaking(true);
-    u.onend = u.onerror = () => !speechSynthesis.speaking && this.onSpeaking(false);
+    u.onend = u.onerror = then;
     speechSynthesis.speak(u);
   }
 
+  private hush() {
+    this.run++;
+    if (this.audio) {
+      this.audio.onended = this.audio.onerror = null;
+      this.audio.pause();
+      this.audio = null;
+    }
+    if (this.supported) speechSynthesis.cancel();
+  }
+
   /** Speaks after a short pause, so sweeping the mouse across the page does not trigger every element. */
-  sayLater(text: string, delay = 250) {
+  sayLater(text: string | string[], delay = 250) {
     clearTimeout(this.timer);
     this.timer = window.setTimeout(() => this.enabled && this.say(text), delay);
   }
@@ -101,7 +159,7 @@ export class Narrator {
     const el = this.target(e.target);
     if (!el || el === this.current) return;
     this.current = el;
-    const text = describeElement(el, this.simple);
+    const text = describeParts(el, this.simple);
     if (e.type === "focusin") this.say(text);
     else this.sayLater(text);
   };
@@ -136,3 +194,6 @@ export class Narrator {
     }
   }
 }
+
+// For pipeline/build_narrator.py.
+(window as unknown as { __ejHarvest: typeof harvest }).__ejHarvest = harvest;

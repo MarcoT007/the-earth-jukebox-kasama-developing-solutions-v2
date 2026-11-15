@@ -178,7 +178,7 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
                     value={controls[s.id]}
                     aria-label={`${name} level`}
                     aria-valuetext={pct(controls[s.id])}
-                    title={kids ? KID_KNOBS[s.id].hint : `${name} level: how loud the ${s.voice} plays. Double-click to reset.`}
+                    title={kids ? KID_KNOBS[s.id].hint : `${name} level: loudness of ${s.id === "volume" ? "everything" : `the ${s.voice}`}. Double-click to reset.`}
                     onChange={(e) => onChange({ ...controls, [s.id]: Number(e.target.value) })}
                     onDoubleClick={() => onChange({ ...controls, [s.id]: DEFAULT_CONTROLS[s.id] })}
                   />

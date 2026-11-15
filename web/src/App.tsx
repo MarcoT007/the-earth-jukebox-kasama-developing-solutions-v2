@@ -8,7 +8,7 @@ import News, { type NewsData } from "./components/News";
 import Ticker from "./components/Ticker";
 import { kidDescribe, MISSIONS } from "./kids";
 import { regionAt } from "./regions";
-import { zoneAt, zoneById } from "./zones";
+import { ZONES, zoneAt, zoneById } from "./zones";
 import { Narrator } from "./narrator";
 import { JukeboxEngine } from "./audio/engine";
 import { getSpectrum } from "./audio/analysis";
@@ -22,6 +22,19 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const INK = "#17233b";
 const narrator = new Narrator();
+const SAY = {
+  off: "Narrator off.",
+  onKids: "Narrator on. Point at something, or press Tab, and I will read it to you. Press R to hear it again.",
+  on: "Narrator on. Move with the Tab key or the mouse and I will read what you land on. Press R to repeat, V to turn me off, and Space to play or pause the music.",
+  hint: "Earth Jukebox. Press V to turn on the narrator, which reads this page aloud. Press Space to play the music.",
+};
+const missionToast = (m: { title: string; learned: string }) => `Mission complete: ${m.title}! ${m.learned}`;
+// Phrases the narrator says that are not written on the page; pipeline/build_narrator.py records them too.
+(window as unknown as { __ejExtra: string[] }).__ejExtra = [...Object.values(SAY), "Warming since 1950",
+  ...["major", "minor", "low-pass", "high-pass", "Back to the whole planet"],
+  ...MISSIONS.map((_, i) => `Missions: ${i} of ${MISSIONS.length} stars`),
+  `Missions: ${MISSIONS.length} of ${MISSIONS.length} stars`,
+  ...ZONES.flatMap((z) => [z.label, `Zone ${z.label}`, `Focus on what I see: ${z.label}`]), ...MISSIONS.map(missionToast)];
 const PANEL_LEFT = 316; // px the open panels cover on each side of the stage
 const PANEL_RIGHT = 316;
 const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -128,10 +141,10 @@ export default function App() {
     setNarrating((on) => {
       narrator.say(
         on
-          ? "Narrator off."
+          ? SAY.off
           : kids
-            ? "Narrator on. Point at something, or press Tab, and I will read it to you. Press R to hear it again."
-            : "Narrator on. Move with the Tab key or the mouse and I will read what you land on. Press R to repeat, V to turn me off, and Space to play or pause the music.",
+            ? SAY.onKids
+            : SAY.on,
       );
       return !on;
     });
@@ -143,7 +156,7 @@ export default function App() {
     if (narrating) return;
     const hint = (ev: KeyboardEvent) => {
       window.removeEventListener("keydown", hint, true);
-      if (ev.key.toLowerCase() !== "v") narrator.say("Earth Jukebox. Press V to turn on the narrator, which reads this page aloud. Press Space to play the music.");
+      if (ev.key.toLowerCase() !== "v") narrator.say(SAY.hint);
     };
     window.addEventListener("keydown", hint, true);
     return () => window.removeEventListener("keydown", hint, true);
@@ -197,7 +210,7 @@ export default function App() {
     const won = MISSIONS.filter((m) => !completed.includes(m.id) && m.done(state));
     if (!won.length) return;
     setCompleted((c) => [...c, ...won.map((m) => m.id)]);
-    setToast(`Mission complete: ${won[0].title}! ${won[0].learned}`);
+    setToast(missionToast(won[0]));
   }, [kids, playing, viz, controls, scenario, current, heard, completed]);
 
   useEffect(() => {
@@ -226,7 +239,7 @@ export default function App() {
     const z = zoneById(id);
     if (!z || !narrator.enabled) return;
     const heat = hoverState.current.whole?.[hoverState.current.frame]?.zones?.[z.id]?.heat;
-    narrator.sayLater(heat === undefined ? `${z.label}.` : `${z.label}. Warming since 1950: ${Math.round(heat * 100)} of 100.`);
+    narrator.sayLater(heat === undefined ? [z.label] : [z.label, "Warming since 1950", `${Math.round(heat * 100)} of 100`]);
   }, []);
 
   useEffect(() => {

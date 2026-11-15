@@ -128,6 +128,18 @@ def frames_from_movie(url: str, n: int) -> list[Image.Image]:
     return images
 
 
+def tidy(d: str, limit: int = 400) -> str:
+    """SVS descriptions end with a list of download files; keep the prose, up to a whole sentence."""
+    d = d.split(" || ")[0]
+    d = re.sub(r"\.(?=[A-Z][a-z])", ". ", d)
+    d = re.sub(r"~(\w+)~", r"\1", d)
+    d = re.sub(r"\s*(Coming soon to our YouTube channel\.|Available resolution[^.]*\.)", "", d).strip()
+    if len(d) > limit:
+        cut = d[:limit].rfind(". ")
+        d = d[: cut + 1] if cut > 80 else d[:limit].rsplit(" ", 1)[0] + "…"
+    return d
+
+
 def features(img: Image.Image) -> dict:
     """Visual features that drive the sonification (all values roughly 0..1)."""
     small = np.asarray(img.resize((256, max(1, round(256 * img.height / img.width)))), dtype=np.float32) / 255.0
@@ -200,7 +212,7 @@ def build(src: Source) -> dict:
         "slug": src.slug,
         "svsId": src.svs_id,
         "title": page.get("title"),
-        "description": description[:600],
+        "description": tidy(description),
         "credits": f"NASA Scientific Visualization Studio - {SVS}/{src.svs_id}/",
         "sourceUrl": f"{SVS}/{src.svs_id}/",
         "projection": src.projection,

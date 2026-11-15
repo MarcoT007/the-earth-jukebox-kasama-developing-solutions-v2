@@ -59,7 +59,10 @@ maps, and cannot be cut into zones. Zone data is built by `pipeline/build_time_m
 ## Narrator, themes and layout
 
 - **Narrator** (button in the top bar, or the `V` key): reads aloud whatever the mouse or the keyboard focus lands
-  on, using the browser's built-in voice (Web Speech API, English). It says the name of a control, its value and
+  on, in English. Fixed texts (controls, sections, zones, records, kids phrases, percentages and years) play as
+  clips recorded once with an ElevenLabs voice (`web/public/narrator`, made by `pipeline/build_narrator.py`; the
+  API key stays on the developer's machine). Texts that change, such as news headlines and the tempo, are read by
+  the browser's built-in voice (Web Speech API), which is also the fallback if a clip is missing. It says the name of a control, its value and
   what it does, announces only the new value while a control moves, names the zone under the mouse on the planet,
   and lowers the music while it speaks. `R` repeats. In kids mode it uses the simpler texts.
   Browsers do not let a page speak before the first key press or click, so the first key a visitor presses
