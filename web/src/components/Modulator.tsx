@@ -20,6 +20,7 @@ interface Props {
   value: string;
   /** Time machine: names of the two ends of the crossfader (lowest and highest emissions). */
   ends: [string, string] | null;
+  onHide: () => void;
 }
 
 export type NumKey = Exclude<keyof Controls, "shape">;
@@ -71,7 +72,7 @@ const SHAPES: { id: WaveShape; label: string; path: string }[] = [
 ];
 
 /** The mixing desk: every voice of the music has its own channel, like on a DJ mixer. */
-export default function Modulator({ controls, onChange, layers, onLayers, levels, music, kids, energyMeaning, value, ends }: Props) {
+export default function Modulator({ controls, onChange, layers, onLayers, levels, music, kids, energyMeaning, value, ends, onHide }: Props) {
   const meters = useRef<(HTMLSpanElement | null)[]>([]);
 
   // LED meters follow the real level of each channel.
@@ -107,7 +108,12 @@ export default function Modulator({ controls, onChange, layers, onLayers, levels
 
   return (
     <div className="modulator mixer">
-      <h2>{kids ? "Sound machine" : "Mixer"}</h2>
+      <div className="panel-head">
+        <h2>{kids ? "Sound machine" : "Mixer"}</h2>
+        <button className="panel-hide" aria-label="Hide this panel" onClick={onHide}>
+          Hide
+        </button>
+      </div>
       <WavePad controls={controls} onChange={onChange} />
       <p className="pad-help">
         <span>↕ {ends ? "Emissions" : kids ? "Power" : "Energy"}</span>

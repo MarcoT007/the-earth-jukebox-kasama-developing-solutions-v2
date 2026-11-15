@@ -31,6 +31,7 @@ export class JukeboxEngine {
   // DJ filter on the master: one knob sweeps a low-pass (left) or a high-pass (right).
   private djLow = new Tone.Filter({ frequency: 20000, type: "lowpass", Q: 2 });
   private djHigh = new Tone.Filter({ frequency: 10, type: "highpass", Q: 2 });
+  private duckGain = new Tone.Volume(0); // lowered while the narrator speaks
   private pad = new Tone.PolySynth(Tone.AMSynth, { volume: -18, envelope: { attack: 1.2, release: 3 } });
   private lead = new Tone.Synth({ oscillator: { type: "triangle" }, volume: -10, envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.4 } });
   private leadPan = new Tone.Panner(0);
@@ -46,7 +47,7 @@ export class JukeboxEngine {
     this.beatBus.connect(this.master); // dry, so the rhythm stays sharp
     [this.chordBus, this.melodyBus, this.beatBus].forEach((bus, i) => bus.connect(this.meters[i]));
     this.master.connect(this.meter);
-    this.master.chain(this.djLow, this.djHigh, Tone.getDestination());
+    this.master.chain(this.djLow, this.djHigh, this.duckGain, Tone.getDestination());
   }
 
   onFrame(fn: FrameListener) {
@@ -93,6 +94,11 @@ export class JukeboxEngine {
   level(): number {
     const v = this.meter.getValue();
     return typeof v === "number" ? v : v[0];
+  }
+
+  /** Turns the music down while the narrator is speaking, and back up afterwards. */
+  duck(on: boolean) {
+    this.duckGain.volume.rampTo(on ? -16 : 0, on ? 0.15 : 0.6);
   }
 
   /** Live 0..1 level of each channel: chord, melody, beat, master. */
@@ -170,6 +176,6 @@ export class JukeboxEngine {
   dispose() {
     this.loop?.dispose();
     Tone.getTransport().stop();
-    [this.pad, this.lead, this.kick, this.spark, this.filter, this.reverb, this.leadPan, this.master, this.meter, this.chordBus, this.melodyBus, this.beatBus, this.djLow, this.djHigh, ...this.meters].forEach((n) => n.dispose());
+    [this.pad, this.lead, this.kick, this.spark, this.filter, this.reverb, this.leadPan, this.master, this.meter, this.chordBus, this.melodyBus, this.beatBus, this.djLow, this.djHigh, this.duckGain, ...this.meters].forEach((n) => n.dispose());
   }
 }

@@ -56,6 +56,19 @@ warming of any zone, year and scenario. Antarctica is not offered: the source ma
 colour scale in every year, so its warming cannot be read from them. The other five records are camera views, not
 maps, and cannot be cut into zones. Zone data is built by `pipeline/build_time_machine.py` and `pipeline/build_zones.py`.
 
+## Narrator, themes and layout
+
+- **Narrator** (button in the top bar, or the `V` key): reads aloud whatever the mouse or the keyboard focus lands
+  on, using the browser's built-in voice (Web Speech API, English). It says the name of a control, its value and
+  what it does, announces only the new value while a control moves, names the zone under the mouse on the planet,
+  and lowers the music while it speaks. `R` repeats. In kids mode it uses the simpler texts.
+  Browsers do not let a page speak before the first key press or click, so the first key a visitor presses
+  triggers a spoken hint: "Press V to turn on the narrator". It is off by default so it does not talk over a
+  screen reader such as VoiceOver or NVDA; the page keeps its labels for those too.
+- **Light and dark theme**: button in the top bar, remembered on the device (`?theme=dark` to open in dark).
+- **Folding panels**: the mixer and the right panel each have a Hide button; the planet re-centres and resizes to
+  the free space, so panels, planet and record dock never overlap.
+
 ## The mixer
 
 The controls are laid out like a DJ mixer. Each voice has its own channel strip with a fader, a level meter,

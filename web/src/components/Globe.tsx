@@ -3,7 +3,7 @@ import { Billboard, OrbitControls } from "@react-three/drei";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { Controls } from "../types";
-import type { Zone } from "../zones";
+import { zoneAt, type Zone } from "../zones";
 
 export const BASE_TEXTURE = "textures/blue-marble.jpg";
 
@@ -17,6 +17,8 @@ interface GlobeProps {
   cell: () => { col: number; row: number } | null; // piece of the map that is sounding (equirect maps only)
   melody: (string | null)[]; // which of the 8 steps carry a note
   playing: boolean;
+  sides: [left: number, right: number]; // px of the stage covered by the open side panels
+  onHoverZone: (id: string | null) => void; // zone under the mouse, for the narrator
   zone: Zone | null; // zone in focus: outlined on the planet, and the planet turns to face it
   accent: string; // CSS colour of the current frame
   reducedMotion: boolean;
@@ -66,7 +68,11 @@ function useSmoothTexture(url: string, fallback: THREE.Texture) {
 const boxGeometry = (lon0: number, lon1: number, lat0: number, lat1: number, radius: number) =>
   new THREE.SphereGeometry(radius, 16, 10, ((lon0 + 180) / 360) * Math.PI * 2, ((lon1 - lon0) / 360) * Math.PI * 2, ((90 - lat1) / 180) * Math.PI, ((lat1 - lat0) / 180) * Math.PI);
 
-function Planet({ textureUrl, controls, energy, level, reducedMotion, onView, cell, zone }: GlobeProps) {
+function Planet({ textureUrl, controls, energy, level, reducedMotion, onView, cell, zone, onHoverZone }: GlobeProps) {
+  const hovered = useRef<string | null>(null);
+  const hover = (id: string | null) => {
+    if (id !== hovered.current) onHoverZone((hovered.current = id));
+  };
   const box = useRef<THREE.Mesh>(null);
   // In focus, the 8 x 4 cells divide the zone instead of the whole planet.
   const zoneShapes = useMemo(() => {
@@ -141,7 +147,12 @@ function Planet({ textureUrl, controls, energy, level, reducedMotion, onView, ce
   return (
     <group>
       {/* start with the Americas and the Atlantic facing the viewer */}
-      <mesh ref={earth} rotation={[0, -0.9, 0]}>
+      <mesh
+        ref={earth}
+        rotation={[0, -0.9, 0]}
+        onPointerMove={(e) => e.uv && hover(zoneAt(e.uv.y * 180 - 90, e.uv.x * 360 - 180)?.id ?? null)}
+        onPointerOut={() => hover(null)}
+      >
         <sphereGeometry args={[2, 96, 96]} />
         <meshStandardMaterial ref={material} map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.15} roughness={0.9} />
         <mesh ref={box} visible={false} geometry={patches[0]}>
@@ -224,21 +235,24 @@ function SoundRing(props: GlobeProps) {
   );
 }
 
-/** Keeps the whole ring visible on narrow (portrait) screens. */
-function FitCamera() {
+/** Keeps the planet and its ring inside the part of the stage that the open side panels leave free. */
+function FitCamera({ sides }: { sides: [number, number] }) {
   const { camera, size } = useThree();
+  const [left, right] = sides;
   useEffect(() => {
-    const aspect = size.width / size.height;
-    camera.position.setLength(7.8 * Math.max(1, 1.15 / aspect));
+    const free = Math.max(240, size.width - left - right);
+    camera.position.setLength(7.8 * Math.max(1, (1.15 * size.height) / free));
+    // Centre the planet in the free space between the panels.
+    (camera as THREE.PerspectiveCamera).setViewOffset(size.width, size.height, -(left - right) / 2, 0, size.width, size.height);
     camera.updateProjectionMatrix();
-  }, [camera, size]);
+  }, [camera, size, left, right]);
   return null;
 }
 
 export default function Globe(props: GlobeProps) {
   return (
     <Canvas camera={{ position: [0, 2.4, 7.4], fov: 45 }} aria-hidden="true">
-      <FitCamera />
+      <FitCamera sides={props.sides} />
       <ambientLight intensity={0.9} />
       <directionalLight position={[5, 3, 5]} intensity={2.2} />
       <Suspense fallback={null}>

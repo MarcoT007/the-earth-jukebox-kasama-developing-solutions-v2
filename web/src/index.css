@@ -16,6 +16,12 @@
   --coral-ink: #b83a17; /* coral for small text */
   --teal: #0e6f6a; /* news */
   --sun: #f5b82e; /* kids */
+  --surface: #fff; /* controls and fields */
+  --surface-2: #fff7ea; /* insets */
+  --surface-3: #e9e0cf; /* tracks and sunken parts */
+  --on-ink: #fff; /* text on an ink background */
+  --on-sun: #17233b; /* text on yellow, in both themes */
+  --glow: rgba(255, 255, 255, 0.9);
   --radius: 22px;
   --display: "Fraunces Variable", Georgia, serif;
   --font: "Space Grotesk Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -27,3 +33,24 @@ html, body, #root { height: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); }
 button { font: inherit; color: inherit; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Dark theme: night sky, same three signal colours, no neon. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0c1222;
+  --sky: #14213d;
+  --card: #151f36;
+  --ink: #edf1fa;
+  --muted: #9eabc6;
+  --line: #33425f;
+  --coral-ink: #ff9475;
+  --teal: #14857e;
+  --surface: #1f2b47;
+  --surface-2: #1a2540;
+  --surface-3: #2b3959;
+  --on-ink: #121a2e;
+  --glow: rgba(70, 110, 190, 0.3);
+}
+:root[data-theme="dark"] .card { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 18px 40px -18px rgba(0, 0, 0, 0.8); }
+:root[data-theme="dark"] .t-news, :root[data-theme="dark"] details a, :root[data-theme="dark"] .news-list a:hover { color: #5fd0c7; }
+:root[data-theme="dark"] .t-news[aria-selected="true"] { color: #fff; }

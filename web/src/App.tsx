@@ -9,6 +9,7 @@ import Ticker from "./components/Ticker";
 import { kidDescribe, MISSIONS } from "./kids";
 import { regionAt } from "./regions";
 import { zoneAt, zoneById } from "./zones";
+import { Narrator } from "./narrator";
 import { JukeboxEngine } from "./audio/engine";
 import { getSpectrum } from "./audio/analysis";
 import { describe, type MusicalFrame } from "./audio/mapping";
@@ -20,6 +21,9 @@ type Tab = "playing" | "news" | "missions";
 const params = new URLSearchParams(location.search);
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const INK = "#17233b";
+const narrator = new Narrator();
+const PANEL_LEFT = 404; // px the open panels cover on each side of the stage
+const PANEL_RIGHT = 350;
 const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 export default function App() {
@@ -40,6 +44,12 @@ export default function App() {
   const [region, setRegion] = useState<string | null>(null);
   const [inView, setInView] = useState<string | null>(null); // zone facing the viewer
   const [focus, setFocus] = useState<string | null>(() => params.get("zone")); // zone the music is limited to, or null for the whole planet
+  const [theme, setTheme] = useState<"light" | "dark">(() => (params.get("theme") ?? localStorage.getItem("ej2-theme")) === "dark" ? "dark" : "light");
+  const [narrating, setNarrating] = useState(() => localStorage.getItem("ej2-narrator") === "1");
+  const [width, setWidth] = useState(() => window.innerWidth);
+  const [leftOpen, setLeftOpen] = useState(true);
+  // On mid-sized screens both panels would crowd the planet, so the right one starts folded.
+  const [rightOpen, setRightOpen] = useState(() => window.innerWidth >= 1280 || window.innerWidth <= 1040 || params.has("tab") || params.has("kids"));
   const engine = useRef<JukeboxEngine | null>(null);
   const frameRef = useRef(0);
   const lastSlug = useRef<string | undefined>(undefined);
@@ -95,6 +105,50 @@ export default function App() {
     engine.current?.setLayers(layers);
   }, [layers]);
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("ej2-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Narrator: follows mouse and keyboard; the music steps back while it speaks.
+  useEffect(() => {
+    narrator.simple = kids;
+    narrator.onSpeaking = (on) => engine.current?.duck(on);
+    narrator.setEnabled(narrating);
+    localStorage.setItem("ej2-narrator", narrating ? "1" : "0");
+  }, [narrating, kids]);
+
+  const toggleNarrator = useCallback(() => {
+    setNarrating((on) => {
+      narrator.say(
+        on
+          ? "Narrator off."
+          : kids
+            ? "Narrator on. Point at something, or press Tab, and I will read it to you. Press R to hear it again."
+            : "Narrator on. Move with the Tab key or the mouse and I will read what you land on. Press R to repeat, V to turn me off, and Space to play or pause the music.",
+      );
+      return !on;
+    });
+  }, [kids]);
+
+  // A page cannot speak before the first key press (a browser rule). So the first key a visitor presses
+  // gets a spoken hint about the narrator, unless that key already turns it on.
+  useEffect(() => {
+    if (narrating) return;
+    const hint = (ev: KeyboardEvent) => {
+      window.removeEventListener("keydown", hint, true);
+      if (ev.key.toLowerCase() !== "v") narrator.say("Earth Jukebox. Press V to turn on the narrator, which reads this page aloud. Press Space to play the music.");
+    };
+    window.addEventListener("keydown", hint, true);
+    return () => window.removeEventListener("keydown", hint, true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const togglePlay = useCallback(async () => {
     if (!engine.current) return;
     if (playing) engine.current.pause();
@@ -108,6 +162,12 @@ export default function App() {
   // Keyboard: space = play/pause, N/P = next/previous visualization.
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
+      if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+      // Narrator keys work from anywhere except fields where letters mean something.
+      if (!(ev.target as HTMLElement).closest("select, textarea, input:not([type=range])")) {
+        if (ev.key.toLowerCase() === "v") return toggleNarrator();
+        if (ev.key.toLowerCase() === "r") return narrator.repeat();
+      }
       if ((ev.target as HTMLElement).closest("input, select, textarea, button, [role=slider], summary, a")) return;
       if (ev.code === "Space") {
         ev.preventDefault();
@@ -117,7 +177,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [togglePlay, selectTrack, track]);
+  }, [togglePlay, selectTrack, track, toggleNarrator]);
 
   const current = frames?.[frame];
   const active = viz?.scenarios?.[scenario];
@@ -159,6 +219,23 @@ export default function App() {
     return on && p && m && m.melody[s] ? { col: s, row: m.rows[s] } : null;
   }, []);
 
+  // Narrator: pointing at the planet says which zone is under the mouse, with its warming in the time machine.
+  const hoverState = useRef({ whole, frame });
+  hoverState.current = { whole, frame };
+  const onHoverZone = useCallback((id: string | null) => {
+    const z = zoneById(id);
+    if (!z || !narrator.enabled) return;
+    const heat = hoverState.current.whole?.[hoverState.current.frame]?.zones?.[z.id]?.heat;
+    narrator.sayLater(heat === undefined ? `${z.label}.` : `${z.label}. Warming since 1950: ${Math.round(heat * 100)} of 100.`);
+  }, []);
+
+  useEffect(() => {
+    if (toast && narrator.enabled) narrator.say(toast);
+  }, [toast]);
+
+  const stacked = width <= 1040;
+  const sides: [number, number] = stacked ? [0, 0] : [leftOpen ? PANEL_LEFT : 0, rightOpen ? PANEL_RIGHT : 0];
+
   let description = "";
   if (current && music) {
     if (kids) description = kidDescribe(current, music);
@@ -189,7 +266,9 @@ export default function App() {
           melody={layers.melody ? (music?.melody ?? []) : []}
           playing={playing}
           zone={zone}
-          accent={INK}
+          accent={theme === "dark" ? "#c9d6f2" : INK}
+          sides={sides}
+          onHoverZone={onHoverZone}
           reducedMotion={reducedMotion}
           onView={onView}
         />
@@ -202,7 +281,14 @@ export default function App() {
             Earth <span>Jukebox</span>
           </h1>
         </div>
-        <Ticker news={news} region={region} kids={kids} paused={reducedMotion} onOpen={() => setTab("news")} />
+        <Ticker news={news} region={region} kids={kids} paused={reducedMotion} onOpen={() => (setTab("news"), setRightOpen(true))} />
+        <button className="top-btn" role="switch" aria-checked={narrating} aria-label="Narrator: reads the page aloud. Shortcut: V" onClick={toggleNarrator}>
+          Narrator <kbd aria-hidden="true">V</kbd>
+          <span className="switch-track" aria-hidden="true" />
+        </button>
+        <button className="top-btn" aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+          <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span> {theme === "dark" ? "Light" : "Dark"}
+        </button>
         <button
           className="kids-toggle"
           role="switch"
@@ -210,6 +296,7 @@ export default function App() {
           onClick={() => {
             setKids(!kids);
             setTab(kids ? "playing" : "missions");
+            setRightOpen(true);
           }}
         >
           <span aria-hidden="true">★</span> Kids mode
@@ -217,8 +304,20 @@ export default function App() {
         </button>
       </header>
 
-      <aside className="panel card left" aria-label="Mixer">
+      {!leftOpen && (
+        <button className="panel-show left" onClick={() => setLeftOpen(true)}>
+          {kids ? "Sound machine" : "Mixer"} ›
+        </button>
+      )}
+      {!rightOpen && (
+        <button className="panel-show right" onClick={() => setRightOpen(true)}>
+          ‹ Now playing &amp; news
+        </button>
+      )}
+      <aside className="panel card left" aria-label="Mixer" hidden={!leftOpen}>
         <Modulator
+          key={theme}
+          onHide={() => setLeftOpen(false)}
           controls={controls}
           onChange={setControls}
           layers={layers}
@@ -232,7 +331,8 @@ export default function App() {
         />
       </aside>
 
-      <aside className="panel card right" aria-label="Now playing, news and missions">
+      <aside className="panel card right" aria-label="Now playing, news and missions" hidden={!rightOpen}>
+        <div className="panel-head">
         <div className="tabs" role="tablist">
           <button role="tab" className="t-playing" aria-selected={tab === "playing"} onClick={() => setTab("playing")}>
             ♪ Playing
@@ -245,6 +345,10 @@ export default function App() {
               ★ Missions {completed.length}/{MISSIONS.length}
             </button>
           )}
+        </div>
+          <button className="panel-hide" aria-label="Hide this panel" onClick={() => setRightOpen(false)}>
+            Hide
+          </button>
         </div>
         {kids && tab === "missions" ? (
           <Missions completed={completed} onReset={() => setCompleted([])} />
@@ -294,7 +398,7 @@ export default function App() {
             2100.
           </p>
           <div className="intro-actions">
-            <button className="cta" onClick={togglePlay} autoFocus>
+            <button className="cta" onClick={togglePlay} autoFocus aria-describedby="intro-keys">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg>
               Press play to hear the Earth
             </button>
@@ -308,9 +412,12 @@ export default function App() {
             >
               ★ Start in kids mode
             </button>
+            <button className="cta ghost" role="switch" aria-checked={narrating} onClick={toggleNarrator}>
+              Narrator: read the page aloud <kbd aria-hidden="true">V</kbd>
+            </button>
           </div>
-          <p className="keys">
-            <kbd>Space</kbd> play / pause · <kbd>N</kbd> <kbd>P</kbd> next / previous · works with screen readers
+          <p className="keys" id="intro-keys">
+            <kbd>V</kbd> narrator: reads the page aloud · <kbd>Space</kbd> play / pause · <kbd>N</kbd> <kbd>P</kbd> next / previous · works with screen readers
           </p>
         </div>
       )}
