@@ -1,4 +1,5 @@
 import { KID_STORIES } from "../kids";
+import { KIND_HELP, RECORD_INFO, recordName } from "../records";
 import type { MusicalFrame } from "../audio/mapping";
 import type { FrameFeatures, Layers, Visualization } from "../types";
 import { ZONES, zoneById, type Zone } from "../zones";
@@ -45,10 +46,18 @@ export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, d
   const year = f?.year;
   const active = viz.scenarios?.[scenario];
   const short = (label: string) => label.replace(" emissions", "");
+  const info = RECORD_INFO[viz.slug];
+  const name = recordName(viz);
 
   return (
     <div className="now-playing" key={viz.slug}>
-      <h3 title={viz.title}>{viz.title}</h3>
+      <h3 title={name}>{name}</h3>
+      {info && (
+        <p className={`np-kind ${info.kind}`} title={KIND_HELP[info.kind]}>
+          <b>{info.kindLabel}</b>
+          <span className="sr-only">. {KIND_HELP[info.kind]}</span>
+        </p>
+      )}
 
       <div className="np-time">
         {year !== undefined && <strong aria-hidden="true">{year}</strong>}
@@ -126,7 +135,7 @@ export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, d
           <ScanView
             zone={zone}
             src={f.src}
-            alt={`Frame ${frame + 1} of ${viz.title}. ${description}`}
+            alt={`Frame ${frame + 1} of ${name}. ${description}`}
             music={music}
             layers={layers}
             step={step}
@@ -138,11 +147,16 @@ export default function NowPlaying({ viz, frame, scenario, onSeek, onScenario, d
         )}
       </Fold>
 
-      <Fold title="About" value={viz.scenarios ? "is this a real prediction?" : "this record"}>
+      <Fold title="About" value={viz.scenarios ? "is this a real prediction?" : "is it real? how to read it"}>
         <div className="about">
-          {kids && KID_STORIES[viz.slug] ? <p>{KID_STORIES[viz.slug]}</p> : <p>{viz.description}</p>}
-          <a href={viz.sourceUrl} target="_blank" rel="noreferrer">
-            Source: NASA Scientific Visualization Studio #{viz.svsId}
+          {kids && KID_STORIES[viz.slug] ? <p>{KID_STORIES[viz.slug]}</p> : <p>{info ? info.basis : viz.description}</p>}
+          {info && (
+            <p className="read">
+              <b>How to read it:</b> {info.read}
+            </p>
+          )}
+          <a href={viz.sourceUrl} target="_blank" rel="noreferrer" title={viz.title}>
+            {viz.map ? "Inspired by" : "Source:"} NASA Scientific Visualization Studio #{viz.svsId}
           </a>
           {viz.map && (
             <a href={viz.map.sourceUrl} target="_blank" rel="noreferrer" title={`${viz.map.credits}. Layers: ${viz.map.layers.join(", ")}`}>

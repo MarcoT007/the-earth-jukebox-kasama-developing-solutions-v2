@@ -1,4 +1,5 @@
 import type { Visualization } from "../types";
+import { recordName } from "../records";
 
 interface Props {
   catalog: Visualization[];
@@ -26,11 +27,11 @@ export default function Dock({ catalog, track, playing, onSelect, onToggle }: Pr
       <ol className="records">
         {catalog.map((v, i) => (
           <li key={v.slug}>
-            <button className={`record${i === track && playing ? " spinning" : ""}`} aria-current={i === track} onClick={() => onSelect(i)} title={v.title}>
+            <button className={`record${i === track && playing ? " spinning" : ""}`} aria-current={i === track} onClick={() => onSelect(i)} title={recordName(v)}>
               <span className="disc">
                 <img src={v.frames[Math.floor(v.frames.length / 2)]?.src} alt="" />
               </span>
-              <span className="record-title">{v.title}</span>
+              <span className="record-title">{recordName(v)}</span>
             </button>
           </li>
         ))}

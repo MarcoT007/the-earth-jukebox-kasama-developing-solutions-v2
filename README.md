@@ -56,6 +56,18 @@ warming of any zone, year and scenario. Antarctica is not offered: the source ma
 colour scale in every year, so its warming cannot be read from them. Zone data is built by `pipeline/build_time_machine.py`,
 `pipeline/build_zones.py` and `pipeline/build_gibs_maps.py`.
 
+## Voiced stories and record names
+
+The **Stories** tab tells four real events (Hurricane Otis 2023, the Pakistan floods of 2022, the Amazon drought
+of 2023, and 2024 as the first year above 1.5 °C), each with one button for the language of the place and one for
+English. A story switches to its record, turns the planet to the place and shows captions. The voices are
+AI-generated (ElevenLabs); the words were written by the team from the sources linked on each card
+(`web/src/stories.ts`).
+
+Each record shows a plain name that matches the map on the globe, a label (Measured, Model + measurements,
+Forecast model or Projection) and how to read its colours (`web/src/records.ts`). The title of the NASA SVS
+visualization it comes from stays as the source link in About.
+
 ## A map for every record
 
 Five of the SVS visualizations (forest height, Perpetual Ocean, atmospheric river, carbon dioxide and air quality)

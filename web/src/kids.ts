@@ -28,8 +28,8 @@ export const KID_STORIES: Record<string, string> = {
     "The ocean never stops moving! Red and orange mean warm water. Blue means cold water. Warm colours make the music sound bright. Cold colours make it sound calm and deep.",
   lightning: "Each tiny flash is lightning seen from the Space Station. Bright flashes turn into sparkly, crackly sounds. Can you hear them?",
   "forest-height": "A laser on the Space Station measured how tall Earth’s forests are. Trees store carbon and help keep our planet cool.",
-  "ocean-temperature": "These swirls are giant rivers inside the ocean, called currents. They carry heat around the world like a moving belt.",
-  "atmospheric-river": "An atmospheric river is a river in the sky made of water vapour. It can bring lots of rain when it reaches land.",
+  "ocean-temperature": "This map shows how warm the top of the sea is. Red means warm water. Blue and purple mean cold water. Warm seas give storms more energy.",
+  "atmospheric-river": "This map shows the water hiding in the air. Blue is dry and red is very wet. Long wet streams are called atmospheric rivers, and they can bring lots of rain.",
   "carbon-dioxide": "This is carbon dioxide, a gas that comes from cars, factories and fires. Too much of it makes Earth warmer.",
   "air-quality": "This shows what floats in the air we breathe, like smoke and dust. Cleaner air is healthier for everyone.",
 };

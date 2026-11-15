@@ -6,6 +6,8 @@ import Dock from "./components/Dock";
 import Missions from "./components/Missions";
 import News, { type NewsData } from "./components/News";
 import Ticker from "./components/Ticker";
+import Stories, { StoryCaptions } from "./components/Stories";
+import { STORIES, type Story } from "./stories";
 import { kidDescribe, MISSIONS } from "./kids";
 import { regionAt } from "./regions";
 import { ZONES, zoneAt, zoneById } from "./zones";
@@ -16,7 +18,7 @@ import { describe, type MusicalFrame } from "./audio/mapping";
 import { DEFAULT_CONTROLS, DEFAULT_LAYERS, energyForScenario, scenarioIndex, type Controls, type Layers, type Visualization } from "./types";
 import "./App.css";
 
-type Tab = "playing" | "news" | "missions";
+type Tab = "playing" | "news" | "stories" | "missions";
 
 const params = new URLSearchParams(location.search);
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -53,7 +55,7 @@ export default function App() {
   const [completed, setCompleted] = useState<string[]>(() => JSON.parse(localStorage.getItem("ej2-missions") ?? "[]"));
   const [heard, setHeard] = useState<string[]>([]);
   const [toast, setToast] = useState("");
-  const [tab, setTab] = useState<Tab>(() => (params.get("tab") === "news" ? "news" : "playing"));
+  const [tab, setTab] = useState<Tab>(() => (params.get("tab") === "news" ? "news" : params.get("tab") === "stories" ? "stories" : "playing"));
   const [region, setRegion] = useState<string | null>(null);
   const [inView, setInView] = useState<string | null>(null); // zone facing the viewer
   const [focus, setFocus] = useState<string | null>(() => params.get("zone")); // zone the music is limited to, or null for the whole planet
@@ -132,7 +134,7 @@ export default function App() {
   // Narrator: follows mouse and keyboard; the music steps back while it speaks.
   useEffect(() => {
     narrator.simple = kids;
-    narrator.onSpeaking = (on) => engine.current?.duck(on);
+    narrator.onSpeaking = (on) => engine.current?.duck(on || !!storyAudio.current); // a story keeps the music low
     narrator.setEnabled(narrating);
     localStorage.setItem("ej2-narrator", narrating ? "1" : "0");
   }, [narrating, kids]);
@@ -169,6 +171,43 @@ export default function App() {
     setPlaying(!playing);
     setStarted(true);
   }, [playing]);
+
+  // Voiced stories: the planet turns to the place, its record plays quietly underneath, and the clip of the chosen language plays.
+  const [story, setStory] = useState<{ story: Story; part: number } | null>(null);
+  const storyAudio = useRef<HTMLAudioElement | null>(null);
+  const getStoryAudio = useCallback(() => storyAudio.current, []);
+  const stopStory = useCallback(() => {
+    if (storyAudio.current) {
+      storyAudio.current.onended = null;
+      storyAudio.current.pause();
+      storyAudio.current = null;
+    }
+    engine.current?.duck(false);
+    setStory(null);
+  }, []);
+  const playStory = useCallback(
+    async (s: Story, part: number) => {
+      stopStory();
+      const i = catalog.findIndex((v) => v.slug === s.record); // each story plays over the record its last line talks about
+      if (i >= 0) setTrack(i);
+      setFocus(s.zone);
+      setStarted(true);
+      if (engine.current && !playing) {
+        await engine.current.play();
+        setPlaying(true);
+      }
+      // One language per press: the clip of the chosen part plays alone, then the music comes back up.
+      const a = new Audio(s.parts[part].audio);
+      storyAudio.current = a;
+      a.onended = stopStory;
+      a.onerror = stopStory;
+      engine.current?.duck(true);
+      setStory({ story: s, part });
+      a.play().catch(stopStory);
+    },
+    [catalog, playing, stopStory],
+  );
+  useEffect(() => stopStory, [stopStory]);
 
   const selectTrack = useCallback((i: number) => catalog.length && setTrack((i + catalog.length) % catalog.length), [catalog.length]);
 
@@ -324,7 +363,7 @@ export default function App() {
       )}
       {!rightOpen && (
         <button className="panel-show right" onClick={() => setRightOpen(true)}>
-          ‹ Now playing &amp; news
+          ‹ Now playing, news &amp; stories
         </button>
       )}
       <aside className="panel card left" aria-label="Mixer" hidden={!leftOpen}>
@@ -353,6 +392,9 @@ export default function App() {
           <button role="tab" className="t-news" aria-selected={tab === "news"} onClick={() => setTab("news")}>
             <span className="dot" aria-hidden="true" /> News
           </button>
+          <button role="tab" className="t-stories" aria-selected={tab === "stories"} onClick={() => setTab("stories")}>
+            Stories
+          </button>
           {kids && (
             <button role="tab" className="t-missions" aria-label={`Missions: ${completed.length} of ${MISSIONS.length} stars`} aria-selected={tab === "missions"} onClick={() => setTab("missions")}>
               ★ {completed.length}/{MISSIONS.length}
@@ -367,6 +409,8 @@ export default function App() {
           <Missions completed={completed} onReset={() => setCompleted([])} />
         ) : tab === "news" ? (
           <News data={news} regionInView={region} kids={kids} />
+        ) : tab === "stories" ? (
+          <Stories stories={STORIES} playing={story ? { id: story.story.id, part: story.part } : null} onPlay={playStory} onStop={stopStory} />
         ) : (
           <NowPlaying
             viz={viz}
@@ -392,6 +436,8 @@ export default function App() {
       <div className="toast" role="status" aria-live="polite">
         {toast && <span>★ {toast}</span>}
       </div>
+
+      {story && <StoryCaptions story={story.story} part={story.part} audio={getStoryAudio} onStop={stopStory} />}
 
       <Dock catalog={catalog} track={track} playing={playing} onSelect={selectTrack} onToggle={togglePlay} />
 
