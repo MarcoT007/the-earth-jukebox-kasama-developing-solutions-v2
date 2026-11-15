@@ -129,6 +129,12 @@ export class Narrator {
     speechSynthesis.speak(u);
   }
 
+  /** Stops talking at once, for example when the listener starts to speak. */
+  quiet() {
+    this.hush();
+    this.onSpeaking(false);
+  }
+
   private hush() {
     this.run++;
     if (this.audio) {

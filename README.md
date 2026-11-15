@@ -1,4 +1,6 @@
-# The Earth Jukebox v2 – KASAMA Developing Solutions
+# KASAMA for Earth
+
+*What does our planet sound like?* Our answer to the NASA Space Apps 2026 challenge "The Earth Information Jukebox", by team KASAMA Developing Solutions. (Earlier working name: The Earth Jukebox v2.)
 
 NASA Space Apps Challenge 2026 · Challenge: [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/)
 
@@ -55,6 +57,13 @@ In the Time Machine the heat of a zone is how much it has warmed since 1950, on 
 warming of any zone, year and scenario. Antarctica is not offered: the source maps paint it at the cold end of the
 colour scale in every year, so its warming cannot be read from them. Zone data is built by `pipeline/build_time_machine.py`,
 `pipeline/build_zones.py` and `pipeline/build_gibs_maps.py`.
+
+## Voice control, spoken tutorial and kids missions
+
+Hold the space bar, speak, and let go: the page can be played by voice alone (Chrome or Edge; orders in
+English; say "help"). A short tap still plays and pauses. A spoken tutorial for blind and low-vision visitors
+starts from the welcome screen, with the T key, or by saying "tutorial". Kids mode has twelve missions on a
+card in the bottom right corner. See `CHANGELOG.md` for the list of orders and the known limits.
 
 ## Voiced stories and record names
 

@@ -88,7 +88,7 @@ export const STORIES: Story[] = [
     place: "Pakistan",
     when: "August 2022",
     blurb:
-      "The monsoon began in June and did not stop. By the end of August the government said a third of the country was under water and 33 million people were affected.",
+      "The monsoon did not stop. By late August the government said a third of the country was under water, with 33 million people affected.",
     record: "atmospheric-river",
     recordLabel: "Water vapour",
     zone: "south-asia",

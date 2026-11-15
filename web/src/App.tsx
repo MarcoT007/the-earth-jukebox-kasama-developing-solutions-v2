@@ -8,6 +8,9 @@ import News, { type NewsData } from "./components/News";
 import Ticker from "./components/Ticker";
 import Stories, { StoryCaptions } from "./components/Stories";
 import { STORIES, type Story } from "./stories";
+import { HELP, HELP_MIXER, parseCommand, voice, VOICE_SAY, type Command, type NumKey } from "./voice";
+import { RECORD_INFO, recordName } from "./records";
+import { TUTORIAL, TUTORIAL_SAY, type TutorialState } from "./tutorial";
 import { kidDescribe, MISSIONS } from "./kids";
 import { regionAt } from "./regions";
 import { ZONES, zoneAt, zoneById } from "./zones";
@@ -18,7 +21,7 @@ import { describe, type MusicalFrame } from "./audio/mapping";
 import { DEFAULT_CONTROLS, DEFAULT_LAYERS, energyForScenario, scenarioIndex, type Controls, type Layers, type Visualization } from "./types";
 import "./App.css";
 
-type Tab = "playing" | "news" | "stories" | "missions";
+type Tab = "playing" | "news" | "stories";
 
 const params = new URLSearchParams(location.search);
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -28,11 +31,31 @@ const SAY = {
   off: "Narrator off.",
   onKids: "Narrator on. Point at something, or press Tab, and I will read it to you. Press R to hear it again.",
   on: "Narrator on. Move with the Tab key or the mouse and I will read what you land on. Press R to repeat, V to turn me off, and Space to play or pause the music.",
-  hint: "Earth Jukebox. Press V to turn on the narrator, which reads this page aloud. Press Space to play the music.",
+  hint: "Kasama for Earth. Press V to turn on the narrator, which reads this page aloud. Press Space to play the music.",
 };
 const missionToast = (m: { title: string; learned: string }) => `Mission complete: ${m.title}! ${m.learned}`;
 // Phrases the narrator says that are not written on the page; pipeline/build_narrator.py records them too.
-(window as unknown as { __ejExtra: string[] }).__ejExtra = [...Object.values(SAY), "Warming since 1950",
+const HEARD = {
+  playing: "Playing", paused: "Paused", kidsOn: "Kids mode on", kidsOff: "Normal mode", noStory: "There is no story for that yet.", stopped: "Stopped",
+  dark: "Dark mode", light: "Light mode", mixerHidden: "Mixer hidden", mixerShown: "Mixer shown", panelHidden: "Panel hidden", panelShown: "Panel shown",
+  nowPlaying: "Now playing", news: "News", stories: "Stories", noNews: "No headlines right now.", missionsReset: "Missions reset", muted: "muted", on: "on", solo: "solo",
+  allOn: "All channels on", reset: "Mixer reset", whole: "Whole planet", followsData: "follows the data", off: "off", open: "open", closed: "closed", noSection: "That section is not on the page right now.",
+};
+// How each mixer control is called and read aloud, and the range a spoken amount moves it in.
+const SPOKEN: Record<NumKey, { label: string; min: number; max: number; say: (v: number) => string }> = {
+  energy: { label: "Energy", min: 0, max: 1, say: (v) => `${Math.round(v * 100)}%` },
+  volume: { label: "Volume", min: 0, max: 1, say: (v) => `${Math.round(v * 100)}%` },
+  chord: { label: "Colours", min: 0, max: 1, say: (v) => `${Math.round(v * 100)}%` },
+  melody: { label: "Light", min: 0, max: 1, say: (v) => `${Math.round(v * 100)}%` },
+  beat: { label: "Bright spots", min: 0, max: 1, say: (v) => `${Math.round(v * 100)}%` },
+  space: { label: "Echo", min: 0, max: 1, say: (v) => `${Math.round(v * 100)}%` },
+  density: { label: "Notes", min: 0, max: 1, say: (v) => `${Math.round(v * 100)}%` },
+  tempo: { label: "Speed", min: 50, max: 160, say: (v) => `${Math.round(v)} beats per minute` },
+  warmth: { label: "Mood", min: -1, max: 1, say: (v) => (v > 0.02 ? "major" : v < -0.02 ? "minor" : HEARD.followsData) },
+  filter: { label: "Filter", min: -1, max: 1, say: (v) => (v < -0.02 ? "low-pass" : v > 0.02 ? "high-pass" : HEARD.off) },
+};
+const SHAPE_SAY = { sine: "Sine wave", triangle: "Triangle wave", square: "Square wave", sawtooth: "Saw wave" };
+(window as unknown as { __ejExtra: string[] }).__ejExtra = [...Object.values(SAY), ...Object.values(VOICE_SAY), ...Object.values(TUTORIAL_SAY), ...TUTORIAL.flatMap((t) => t.say), ...HELP, ...HELP_MIXER, ...Object.values(HEARD), ...Object.values(SHAPE_SAY), ...Object.values(SPOKEN).map((c) => c.label), "Warming since 1950",
   ...["major", "minor", "low-pass", "high-pass", "Back to the whole planet"],
   ...MISSIONS.map((_, i) => `Missions: ${i} of ${MISSIONS.length} stars`),
   `Missions: ${MISSIONS.length} of ${MISSIONS.length} stars`,
@@ -158,7 +181,7 @@ export default function App() {
     if (narrating) return;
     const hint = (ev: KeyboardEvent) => {
       window.removeEventListener("keydown", hint, true);
-      if (ev.key.toLowerCase() !== "v") narrator.say(SAY.hint);
+      if (!"vt".includes(ev.key.toLowerCase())) narrator.say([SAY.hint, VOICE_SAY.hint, TUTORIAL_SAY.offer]);
     };
     window.addEventListener("keydown", hint, true);
     return () => window.removeEventListener("keydown", hint, true);
@@ -211,7 +234,7 @@ export default function App() {
 
   const selectTrack = useCallback((i: number) => catalog.length && setTrack((i + catalog.length) % catalog.length), [catalog.length]);
 
-  // Keyboard: space = play/pause, N/P = next/previous visualization.
+  // Keyboard: N/P = next/previous visualization. The space bar is handled with voice control, below.
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
       if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
@@ -221,15 +244,309 @@ export default function App() {
         if (ev.key.toLowerCase() === "r") return narrator.repeat();
       }
       if ((ev.target as HTMLElement).closest("input, select, textarea, button, [role=slider], summary, a")) return;
-      if (ev.code === "Space") {
-        ev.preventDefault();
-        togglePlay();
-      } else if (ev.key === "n") selectTrack(track + 1);
+      if (ev.key === "n") selectTrack(track + 1);
       else if (ev.key === "p") selectTrack(track - 1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [togglePlay, selectTrack, track, toggleNarrator]);
+
+  // Voice control: hold the space bar (or the Voice button), speak, let go. A short tap of the space bar still plays and pauses.
+  const [listening, setListening] = useState(false);
+  const [voiceCount, setVoiceCount] = useState(0); // orders given by voice (a kids mission and a tutorial step wait for one)
+  const [spoken, setHeardText] = useState("");
+  const runCommand = useRef<(c: Command) => void>(() => {});
+  runCommand.current = (c: Command) => {
+    const say = (t: string | string[]) => narrator.say(t);
+    const start = async () => {
+      setStarted(true);
+      if (engine.current && !playing) {
+        await engine.current.play();
+        setPlaying(true);
+      }
+    };
+    const name = viz ? recordName(viz) : "";
+    const info = viz ? RECORD_INFO[viz.slug] : undefined;
+    switch (c.do) {
+      case "play":
+        start();
+        return say([HEARD.playing, name]);
+      case "pause":
+        if (playing) togglePlay();
+        return say(HEARD.paused);
+      case "stop":
+        if (story) stopStory();
+        else if (playing) togglePlay();
+        return say(HEARD.stopped);
+      case "next":
+      case "previous": {
+        const i = (track + (c.do === "next" ? 1 : -1) + catalog.length) % catalog.length;
+        setTrack(i);
+        start();
+        return say([recordName(catalog[i]), RECORD_INFO[catalog[i].slug]?.kindLabel ?? ""]);
+      }
+      case "record": {
+        const i = catalog.findIndex((v) => v.slug === c.slug);
+        if (i < 0) return say(VOICE_SAY.unknown);
+        setTrack(i);
+        setTab("playing");
+        start();
+        return say([recordName(catalog[i]), RECORD_INFO[c.slug]?.kindLabel ?? ""]);
+      }
+      case "zone":
+        setFocus(c.id);
+        start();
+        return say(c.id ? `Zone ${zoneById(c.id)?.label}` : "Back to the whole planet");
+      case "story": {
+        const s = STORIES.find((x) => x.id === c.id) ?? (c.id ? undefined : (STORIES.find((x) => x.record === viz?.slug) ?? STORIES[0]));
+        if (!s) return say(HEARD.noStory);
+        narrator.quiet();
+        setTab("stories");
+        setRightOpen(true);
+        return void playStory(s, c.lang === "local" ? 0 : s.parts.length - 1);
+      }
+      case "what":
+        return say(info ? [name, info.kindLabel, info.basis] : name);
+      case "read":
+        return say(info ? `How to read it: ${info.read}` : name);
+      case "narrator":
+        setNarrating(c.on);
+        return say(c.on ? SAY.on : SAY.off);
+      case "kids":
+        setKids(c.on);
+        setTab("playing"); // same as the Kids mode switch
+        setRightOpen(true);
+        return say(c.on ? HEARD.kidsOn : HEARD.kidsOff);
+      case "tutorial":
+        return tutorialGo(c.on ? 0 : null, c.on ? undefined : TUTORIAL_SAY.left);
+      case "help":
+        return say(HELP);
+      case "helpMixer":
+        return say(HELP_MIXER);
+      case "repeat":
+        return narrator.repeat();
+      case "where":
+        return say(zone ? `Zone ${zone.label}` : HEARD.whole);
+      case "theme": {
+        const to = c.to === "toggle" ? (theme === "dark" ? "light" : "dark") : c.to;
+        setTheme(to);
+        return say(HEARD[to]);
+      }
+      case "panel":
+        if (c.side !== "right") setLeftOpen(c.open);
+        if (c.side !== "left") setRightOpen(c.open);
+        return say(c.side === "left" ? (c.open ? HEARD.mixerShown : HEARD.mixerHidden) : c.open ? HEARD.panelShown : HEARD.panelHidden);
+      case "tab":
+        if (c.tab === "missions") {
+          // The missions live on their own card in kids mode: say how many are done and which one is next.
+          setKids(true);
+          const next = MISSIONS.find((m) => !completed.includes(m.id));
+          return say([`Missions: ${completed.length} of ${MISSIONS.length} stars`, ...(next ? [next.title, next.goal] : [])]);
+        }
+        setTab(c.tab);
+        setRightOpen(true);
+        return say( c.tab === "playing" ? HEARD.nowPlaying : c.tab === "news" ? HEARD.news : HEARD.stories);
+      case "missions":
+        setCompleted([]);
+        return say(HEARD.missionsReset);
+      case "section": {
+        // The folding sections of both panels: found by their title, as a sighted visitor would.
+        if (/channels|knobs|filter|wave/.test(c.name)) setLeftOpen(true);
+        else (setTab("playing"), setRightOpen(true));
+        const want = c.name === "filter" ? "knobs" : c.name;
+        return void setTimeout(() => {
+          const fold = [...document.querySelectorAll<HTMLDetailsElement>("details.fold")].find((d) => d.querySelector("summary b")?.textContent?.toLowerCase().includes(want));
+          if (!fold) return say(HEARD.noSection);
+          fold.open = c.open;
+          say([fold.querySelector("summary b")?.textContent ?? "", c.open ? HEARD.open : HEARD.closed]);
+        }, 120);
+      }
+      case "news": {
+        setTab("news");
+        setRightOpen(true);
+        const region = c.zone ? news?.regions[c.zone === "arctic" ? "polar" : c.zone] : undefined;
+        const items = (region ? region.items : (news?.global ?? [])).slice(0, 3);
+        return say(items.length ? [region ? region.label : HEARD.news, ...items.map((i) => i.title)] : HEARD.noNews);
+      }
+      case "set": {
+        const spec = SPOKEN[c.key];
+        const span = spec.max - spec.min;
+        const now = controls[c.key];
+        const a = c.amount;
+        let v = a.bpm !== undefined ? a.bpm : a.to !== undefined ? spec.min + a.to * span : a.by !== undefined ? now + a.by * span : now;
+        v = Math.min(spec.max, Math.max(spec.min, v));
+        if (c.key === "tempo") v = Math.round(v);
+        if (v !== now) setControls({ ...controls, [c.key]: v });
+        return say([spec.label, spec.say(v)]);
+      }
+      case "shape":
+        setControls({ ...controls, shape: c.shape });
+        return say(SHAPE_SAY[c.shape]);
+      case "mute":
+        setLayers({ ...layers, [c.channel]: !c.on });
+        return say([SPOKEN[c.channel].label, c.on ? HEARD.muted : HEARD.on]);
+      case "solo":
+        setLayers({ chord: c.channel === "chord", melody: c.channel === "melody", beat: c.channel === "beat" });
+        return say([SPOKEN[c.channel].label, HEARD.solo]);
+      case "allChannels":
+        setLayers(DEFAULT_LAYERS);
+        return say(HEARD.allOn);
+      case "reset":
+        setControls(DEFAULT_CONTROLS);
+        setLayers(DEFAULT_LAYERS);
+        return say(HEARD.reset);
+      case "scenario":
+      case "year": {
+        // Both belong to the Time Machine: go there first if another record is on.
+        const i = catalog.findIndex((v) => v.scenarios);
+        const machine = catalog[i];
+        if (!machine?.scenarios || !machine.years) return say(VOICE_SAY.unknown);
+        if (i !== track) setTrack(i);
+        setTab("playing");
+        start();
+        if (c.do === "scenario") {
+          const index = Math.min(c.index, machine.scenarios.length - 1);
+          setControls({ ...controls, energy: energyForScenario(index, machine.scenarios.length) });
+          return say(machine.scenarios[index].label);
+        }
+        const years = machine.years;
+        const at = years.reduce((best, y, j) => (Math.abs(y - c.year) < Math.abs(years[best] - c.year) ? j : best), 0);
+        setTimeout(() => engine.current?.seek(at), i !== track ? 400 : 0); // after the record has changed
+        return say(String(years[at]));
+      }
+      case "frame": {
+        const n = frames?.length ?? 0;
+        if (!n) return say(VOICE_SAY.unknown);
+        const at = c.to === "first" ? 0 : c.to === "last" ? n - 1 : c.to === "next" ? (frame + 1) % n : c.to === "previous" ? (frame - 1 + n) % n : Math.min(n, Math.max(1, c.to)) - 1;
+        engine.current?.seek(at);
+        const y = frames?.[at]?.year;
+        return say(y !== undefined ? String(y) : `Picture ${at + 1} of ${n}`);
+      }
+      default:
+        return say(VOICE_SAY.unknown);
+    }
+  };
+  const tapPlay = useRef(togglePlay);
+  tapPlay.current = togglePlay;
+  useEffect(() => {
+    let clear = 0;
+    voice.onListening = (on, text) => {
+      setListening(on);
+      setHeardText(text);
+      if (on) narrator.quiet(); // never talk over the listener
+      engine.current?.duck(on || !!storyAudio.current);
+      clearTimeout(clear);
+      if (!on) clear = window.setTimeout(() => setHeardText(""), 5000);
+    };
+    voice.onHeard = (text) => (setVoiceCount((n) => n + 1), runCommand.current(parseCommand(text)));
+    voice.onProblem = (problem) => {
+      narrator.say(VOICE_SAY[problem]);
+      setHeardText(`(${problem}) ${VOICE_SAY[problem]}`); // also on screen, so a sighted helper can see why it closed
+      clearTimeout(clear);
+      clear = window.setTimeout(() => setHeardText(""), 8000);
+    };
+    (window as unknown as { __ejVoice: (t: string) => void }).__ejVoice = (t) => (setHeardText(t), voice.onHeard(t)); // for tests: an order typed instead of spoken
+
+    // Hold = talk, tap = play/pause. Works from anywhere on the page, also with the focus on a button.
+    const HOLD = 350;
+    let timer = 0;
+    let down = false;
+    let held = false;
+    const typing = (t: EventTarget | null) => !!(t as HTMLElement | null)?.closest?.("select, textarea, input:not([type=range])");
+    const control = (t: EventTarget | null) => !!(t as HTMLElement | null)?.closest?.("input, select, textarea, button, [role=slider], summary, a");
+    const onDown = (ev: KeyboardEvent) => {
+      if (ev.code !== "Space" || ev.metaKey || ev.ctrlKey || ev.altKey || typing(ev.target)) return;
+      if (!control(ev.target) || held) ev.preventDefault(); // no page scroll; a held key must not press the button under the focus
+      if (ev.repeat || down) return;
+      down = true;
+      timer = window.setTimeout(() => {
+        held = true;
+        voice.start();
+      }, HOLD);
+    };
+    const onUp = (ev: KeyboardEvent) => {
+      if (ev.code !== "Space" || !down) return;
+      down = false;
+      clearTimeout(timer);
+      if (held) {
+        held = false;
+        ev.preventDefault(); // the button under the focus is not pressed
+        ev.stopPropagation();
+        voice.stop();
+      } else if (!control(ev.target) && !typing(ev.target)) tapPlay.current();
+    };
+    const onBlur = () => {
+      clearTimeout(timer);
+      down = false;
+      if (held) {
+        held = false;
+        voice.stop();
+      }
+    };
+    window.addEventListener("keydown", onDown, true);
+    window.addEventListener("keyup", onUp, true);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", onDown, true);
+      window.removeEventListener("keyup", onUp, true);
+      window.removeEventListener("blur", onBlur);
+      clearTimeout(timer);
+      clearTimeout(clear);
+    };
+  }, []);
+
+  // Spoken tutorial for blind and low-vision visitors: T starts it, Enter skips a step, Escape leaves.
+  const [tutorial, setTutorial] = useState<number | null>(null);
+  const tutorialNow: TutorialState = { playing, track, voice: voiceCount, zone: zone?.id ?? null, story: !!story, narrating };
+  const tutorialStart = useRef(tutorialNow);
+  const tutorialLive = useRef(tutorialNow);
+  tutorialLive.current = tutorialNow;
+  const tutorialSteps = useMemo(() => TUTORIAL.filter((t) => voice.supported || !t.needsVoice), []);
+  const tutorialGo = useCallback(
+    (to: number | null, why?: string) => {
+      if (to !== null && to >= tutorialSteps.length) return (setTutorial(null), narrator.say(TUTORIAL_SAY.finished));
+      setTutorial(to);
+      if (to === null) return void (why && narrator.say(why));
+      setStarted(true); // the welcome screen steps aside
+      tutorialStart.current = { ...tutorialLive.current, story: false };
+      const intro = to === 0 && !voice.supported ? [TUTORIAL_SAY.skipVoice] : [];
+      narrator.say([...(why ? [why] : []), ...tutorialSteps[to].say.slice(0, to === 0 ? 2 : undefined), ...intro, ...(to === 0 ? tutorialSteps[0].say.slice(2) : [])]);
+    },
+    [tutorialSteps],
+  );
+  // A step that waits for something moves on by itself once the visitor has done it.
+  const tutorialTimer = useRef(0);
+  useEffect(() => {
+    if (tutorial === null || tutorialTimer.current) return;
+    if (tutorialNow.story) tutorialStart.current.story = true; // the story step ends when the story it started is over
+    if (!tutorialSteps[tutorial].done?.(tutorialNow, tutorialStart.current)) return;
+    // The page redraws many times a second while music plays, so the wait must survive a redraw.
+    tutorialTimer.current = window.setTimeout(() => {
+      tutorialTimer.current = 0;
+      tutorialGo(tutorial + 1, TUTORIAL_SAY.good);
+    }, 2600); // leaves room for the spoken answer to the order
+  }); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(
+    () => () => {
+      clearTimeout(tutorialTimer.current); // leaving or skipping a step cancels its pending move
+      tutorialTimer.current = 0;
+    },
+    [tutorial],
+  );
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.metaKey || ev.ctrlKey || ev.altKey || (ev.target as HTMLElement).closest("select, textarea, input:not([type=range])")) return;
+      if (ev.key.toLowerCase() === "t" && tutorial === null) return tutorialGo(0);
+      if (tutorial === null) return;
+      if (ev.key === "Escape") return tutorialGo(null, TUTORIAL_SAY.left);
+      if (ev.key === "Enter" && !(ev.target as HTMLElement).closest("button, a, summary")) {
+        ev.preventDefault();
+        tutorialGo(tutorial + 1);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [tutorial, tutorialGo]);
 
   const current = frames?.[frame];
   const active = viz?.scenarios?.[scenario];
@@ -245,12 +562,12 @@ export default function App() {
   // Kids mode: check the missions whenever something changes.
   useEffect(() => {
     if (!kids) return;
-    const state = { playing, slug: viz?.slug, controls, scenario, year: current?.year, heard: heard.length };
+    const state = { playing, slug: viz?.slug, controls, scenario, year: current?.year, heard: heard.length, zone: zone?.id ?? null, layers, story: !!story, voice: voiceCount };
     const won = MISSIONS.filter((m) => !completed.includes(m.id) && m.done(state));
     if (!won.length) return;
     setCompleted((c) => [...c, ...won.map((m) => m.id)]);
     setToast(missionToast(won[0]));
-  }, [kids, playing, viz, controls, scenario, current, heard, completed]);
+  }, [kids, playing, viz, controls, scenario, current, heard, completed, zone, layers, story, voiceCount]);
 
   useEffect(() => {
     if (!toast) return;
@@ -330,13 +647,24 @@ export default function App() {
         <div className="brand">
           <span className="brand-mark" aria-hidden="true" />
           <h1>
-            Earth <span>Jukebox</span>
+            KASAMA <span>for Earth</span>
           </h1>
         </div>
         <Ticker news={news} region={region} kids={kids} paused={reducedMotion} onOpen={() => (setTab("news"), setRightOpen(true))} />
         <button className="top-btn" role="switch" aria-checked={narrating} aria-label="Narrator: reads the page aloud. Shortcut: V" onClick={toggleNarrator}>
           Narrator <kbd aria-hidden="true">V</kbd>
           <span className="switch-track" aria-hidden="true" />
+        </button>
+        <button
+          className={`top-btn voice-btn${listening ? " on" : ""}`}
+          aria-label="Voice control: hold the space bar, or hold this button, and speak. Say help to hear what you can say."
+          onPointerDown={() => voice.start()}
+          onPointerUp={() => voice.stop()}
+          onPointerLeave={() => voice.stop()}
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1A7 7 0 0 0 19 12z" /></svg>
+          Voice <kbd aria-hidden="true">hold Space</kbd>
         </button>
         <button className="top-btn" aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
           <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span> {theme === "dark" ? "Light" : "Dark"}
@@ -347,7 +675,7 @@ export default function App() {
           aria-checked={kids}
           onClick={() => {
             setKids(!kids);
-            setTab(kids ? "playing" : "missions");
+            setTab("playing");
             setRightOpen(true);
           }}
         >
@@ -395,19 +723,12 @@ export default function App() {
           <button role="tab" className="t-stories" aria-selected={tab === "stories"} onClick={() => setTab("stories")}>
             Stories
           </button>
-          {kids && (
-            <button role="tab" className="t-missions" aria-label={`Missions: ${completed.length} of ${MISSIONS.length} stars`} aria-selected={tab === "missions"} onClick={() => setTab("missions")}>
-              ★ {completed.length}/{MISSIONS.length}
-            </button>
-          )}
         </div>
           <button className="panel-hide" aria-label="Hide this panel" onClick={() => setRightOpen(false)}>
             Hide
           </button>
         </div>
-        {kids && tab === "missions" ? (
-          <Missions completed={completed} onReset={() => setCompleted([])} />
-        ) : tab === "news" ? (
+        {tab === "news" ? (
           <News data={news} regionInView={region} kids={kids} />
         ) : tab === "stories" ? (
           <Stories stories={STORIES} playing={story ? { id: story.story.id, part: story.part } : null} onPlay={playStory} onStop={stopStory} />
@@ -437,6 +758,35 @@ export default function App() {
         {toast && <span>★ {toast}</span>}
       </div>
 
+      {(listening || spoken) && (
+        <div className={`heard${listening ? " on" : ""}`} aria-hidden="true">
+          <b>{listening ? "Listening…" : spoken.startsWith("(") ? "Voice:" : "Heard:"}</b> {spoken || (listening ? "speak, then let go" : "")}
+        </div>
+      )}
+
+      {kids && started && <Missions completed={completed} onReset={() => setCompleted([])} />}
+
+      {tutorial !== null && (
+        <div className="tutorial" role="region" aria-label="Spoken tutorial">
+          <p className="eyebrow">
+            Spoken tutorial · step {tutorial + 1} of {tutorialSteps.length}
+          </p>
+          <h3>{tutorialSteps[tutorial].title}</h3>
+          <p aria-hidden="true">{tutorialSteps[tutorial].say[tutorialSteps[tutorial].say.length - 1]}</p>
+          <div>
+            <button onClick={() => narrator.repeat()}>
+              Repeat <kbd aria-hidden="true">R</kbd>
+            </button>
+            <button onClick={() => tutorialGo(tutorial + 1)}>
+              {tutorialSteps[tutorial].done ? "Skip" : "Next"} <kbd aria-hidden="true">Enter</kbd>
+            </button>
+            <button onClick={() => tutorialGo(null, TUTORIAL_SAY.left)}>
+              Leave <kbd aria-hidden="true">Esc</kbd>
+            </button>
+          </div>
+        </div>
+      )}
+
       {story && <StoryCaptions story={story.story} part={story.part} audio={getStoryAudio} onStop={stopStory} />}
 
       <Dock catalog={catalog} track={track} playing={playing} onSelect={selectTrack} onToggle={togglePlay} />
@@ -464,18 +814,20 @@ export default function App() {
               className="cta alt"
               onClick={() => {
                 setKids(true);
-                setTab("missions");
                 togglePlay();
               }}
             >
               ★ Start in kids mode
+            </button>
+            <button className="cta ghost" onClick={() => tutorialGo(0)} aria-label="Spoken tutorial for blind and low-vision visitors. Shortcut: T">
+              Spoken tutorial <span className="cta-note">for blind and low-vision visitors</span> <kbd aria-hidden="true">T</kbd>
             </button>
             <button className="cta ghost" role="switch" aria-checked={narrating} onClick={toggleNarrator}>
               Narrator: read the page aloud <kbd aria-hidden="true">V</kbd>
             </button>
           </div>
           <p className="keys" id="intro-keys">
-            <kbd>V</kbd> narrator: reads the page aloud · <kbd>Space</kbd> play / pause · <kbd>N</kbd> <kbd>P</kbd> next / previous · works with screen readers
+            <kbd>T</kbd> spoken tutorial · <kbd>V</kbd> narrator: reads the page aloud · <kbd>Space</kbd> tap to play / pause, hold to talk · <kbd>N</kbd> <kbd>P</kbd> next / previous · works with screen readers
           </p>
         </div>
       )}

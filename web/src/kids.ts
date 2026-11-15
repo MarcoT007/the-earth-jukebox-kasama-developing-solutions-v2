@@ -2,6 +2,7 @@
  * Kids mode: plain-language labels, explanations and learning missions.
  * Everything here is content, so it is easy to edit or translate.
  */
+import type { Layers } from "./types";
 import { colourTemperature, type MusicalFrame } from "./audio/mapping";
 import type { Controls, FrameFeatures, WaveShape } from "./types";
 
@@ -53,6 +54,10 @@ export interface MissionState {
   scenario: number; // 0 (low emissions) .. 3 (very high)
   year: number | undefined;
   heard: number; // how many different records were played
+  zone: string | null; // zone the music is limited to
+  layers: Layers;
+  story: boolean; // a voiced story is playing
+  voice: number; // how many orders were given by voice
 }
 
 export interface Mission {
@@ -91,6 +96,62 @@ export const MISSIONS: Mission[] = [
     goal: "Play three different records.",
     learned: "Different pictures of Earth make different music.",
     done: (s) => s.heard >= 3,
+  },
+  {
+    id: "trees",
+    title: "Measure the trees",
+    goal: "Find the forest height record and play it.",
+    learned: "A laser on the Space Station measured how tall Earth’s forests are.",
+    done: (s) => s.playing && s.slug === "forest-height",
+  },
+  {
+    id: "sea",
+    title: "Warm sea, cold sea",
+    goal: "Find the sea surface temperature record and play it.",
+    learned: "Red water is warm and blue water is cold. Warm seas give storms more energy.",
+    done: (s) => s.playing && s.slug === "ocean-temperature",
+  },
+  {
+    id: "place",
+    title: "Listen to one place",
+    goal: "Open Zone and pick one part of the world, like Africa.",
+    learned: "Every part of the world makes its own music.",
+    done: (s) => s.playing && s.zone !== null,
+  },
+  {
+    id: "fast",
+    title: "Speed up the planet",
+    goal: "Open Knobs and turn Speed up past 120.",
+    learned: "Faster music makes the planet spin faster.",
+    done: (s) => s.playing && s.controls.tempo >= 120,
+  },
+  {
+    id: "sparkles",
+    title: "Only the sparkles",
+    goal: "In the sound machine, press Only under Bright spots.",
+    learned: "The sparkles are the brightest spots of the picture.",
+    done: (s) => s.playing && s.layers.beat && !s.layers.chord && !s.layers.melody,
+  },
+  {
+    id: "hot",
+    title: "See a hotter future",
+    goal: "In the Time Machine, make the wave tall until it says “Very high emissions”.",
+    learned: "More pollution makes the planet hotter. That is why cleaner choices matter.",
+    done: (s) => s.playing && s.slug === "time-machine" && s.scenario === 3,
+  },
+  {
+    id: "story",
+    title: "Hear a true story",
+    goal: "Open Stories and press a language button.",
+    learned: "Real events on Earth can be told with music and a voice.",
+    done: (s) => s.story,
+  },
+  {
+    id: "talk",
+    title: "Talk to the jukebox",
+    goal: "Hold the space bar, say “next”, and let go.",
+    learned: "You can play the Earth with your voice, without looking at the screen.",
+    done: (s) => s.voice > 0,
   },
 ];
 

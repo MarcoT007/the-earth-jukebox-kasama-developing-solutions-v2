@@ -1,5 +1,64 @@
 # Changelog
 
+## 2026-11-15 — KASAMA for Earth: voice control, spoken tutorial, more kids missions
+
+**New name.** The project and the page are now called **KASAMA for Earth**. The slogan "What does our planet
+sound like?" stays on the welcome screen. The repository and the site address keep their old names so shared
+links do not break.
+
+**Voice control.** Hold the space bar (or the Voice button), speak, let go; a short tap still plays and pauses.
+A rising and a falling tone mark the microphone opening and closing, the music and the narrator step back while
+the listener speaks, and every order is answered aloud. The microphone follows the key, not the browser: if
+Chrome closes its recognition session during a hold, a new one is opened and the words heard so far are kept.
+Orders are in English and cover the whole page:
+
+| Area | Examples |
+|---|---|
+| Playback and records | play, pause, next, previous, stop, "forest height", "carbon dioxide" |
+| Zones | "go to Europe", "whole planet", "where am I" |
+| Stories and news | "tell me the story of Pakistan in Urdu", "read the news", "news from Europe" |
+| Mixer | "volume up", "energy 100", "speed 120", "more echo", "mute the colours", "solo light", "major", "low pass", "square", "reset" |
+| Time Machine and frames | "year 2050", "very high emissions", "next picture", "last picture", "frame 12" |
+| Page | "dark mode", "kids mode", "normal mode", "hide the mixer", "open stories", "open about", "narrator on", "repeat" |
+| Help | "help", "help with the mixer", "tutorial", "what is this", "how do I read it" |
+
+**Spoken tutorial for blind and low-vision visitors.** Offered on the welcome screen, and started with the T key
+or by saying "tutorial". Eight spoken steps; each waits for the visitor to do what it teaches and then moves on.
+Enter skips a step, R repeats it, Escape leaves. Where the browser cannot recognise speech, the three voice
+steps are skipped and the tutorial says so.
+
+**Kids mode.** Twelve missions instead of four. They moved out of the right panel to a card in the bottom right
+corner that shows the twelve stars and the next mission, with a small astronaut leaning over its frame. The
+right panel is back to three tabs, and the record dock shifts left to make room.
+
+**Welcome screen.** The four buttons sit in two rows of two: play and kids mode above, spoken tutorial and
+narrator below.
+
+**Stories.** Each story plays over the record its closing line names (unchanged), now documented in the code.
+
+**Files.**
+- `web/src/voice.ts` (new): the microphone and the interpreter of orders (`parseCommand`, testable without a
+  microphone through `window.__ejVoice("...")`).
+- `web/src/tutorial.ts` (new): the tutorial steps.
+- `web/src/App.tsx`: runs the orders, the space-bar hold, the tutorial, the mission card; new name.
+- `web/src/kids.ts`, `web/src/components/Missions.tsx`: the missions and their card.
+- `web/src/narrator.ts`: `quiet()`, so the narrator stops when the listener speaks.
+- `pipeline/narrator_phrases.json`, `web/public/narrator/`: 162 narrator clips for the new spoken texts.
+- `web/index.html`, `README.md`: new name.
+
+**Known limits.**
+- Voice control needs Chrome or Edge and a connection; in Brave it does not work, and the page says so aloud.
+  The first time, the browser asks for the microphone.
+- Tested by typing the orders (135 phrases) and by key presses in headless Chrome, and by the team speaking in
+  Chrome. Not tested with a screen reader running, which may take the space bar for itself.
+- Orders are English only.
+- The astronaut is an SVG drawn with AI assistance; it carries no agency insignia.
+- In kids mode, the "Heard" label can sit over the mission toast for a few seconds.
+- The tutorial has not been tried by a blind person.
+
+**Backup.** State before this change: tag `backup/2026-11-15-before-voice` (commit `deee498`) and
+`~/kasama-backups/earth-jukebox-v2-2026-11-15-deee498.bundle`.
+
 ## 2026-11-15 — Voiced stories, and record names that match the globe
 
 **Voiced stories (new "Stories" tab).** Four real events, each told over the record and the zone it belongs to.
