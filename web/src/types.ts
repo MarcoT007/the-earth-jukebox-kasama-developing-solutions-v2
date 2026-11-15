@@ -48,9 +48,13 @@ export interface Controls {
   volume: number; // 0..1
   energy: number; // 0..1 wave amplitude: intensity of the sound, and the emissions scenario in the time machine
   shape: WaveShape; // waveform of the melody
+  chord: number; // 0..1 channel fader: colours -> chord
+  melody: number; // 0..1 channel fader: light -> melody
+  beat: number; // 0..1 channel fader: standout spots -> sparkles and kick
+  filter: number; // -1..1 DJ filter: left cuts the highs, right cuts the lows, 0 = off
 }
 
-export const DEFAULT_CONTROLS: Controls = { tempo: 84, warmth: 0, density: 0.6, space: 0.25, volume: 0.8, energy: 0.4, shape: "triangle" };
+export const DEFAULT_CONTROLS: Controls = { tempo: 84, warmth: 0, density: 0.6, space: 0.25, volume: 0.8, energy: 0.4, shape: "triangle", chord: 0.75, melody: 0.75, beat: 0.75, filter: 0 };
 
 /** Energy (wave amplitude) picks one of the four emissions scenarios. */
 export const scenarioIndex = (energy: number, count = 4) => Math.min(count - 1, Math.floor(energy * count));

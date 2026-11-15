@@ -140,6 +140,7 @@ export default function App() {
   const textureUrl = viz?.projection === "equirect" && current ? current.src : BASE_TEXTURE;
   const level = useCallback(() => engine.current?.level() ?? 0, []);
   const step = useCallback(() => engine.current?.currentStep() ?? 0, []);
+  const levels = useCallback(() => engine.current?.levels() ?? [0, 0, 0, 0], []);
   // Sound -> planet: the piece of the map that is singing right now (only when the map is wrapped on the globe).
   const cellState = useRef({ music, playing, on: false });
   cellState.current = { music, playing, on: layers.melody && viz?.projection === "equirect" };
@@ -206,8 +207,18 @@ export default function App() {
         </button>
       </header>
 
-      <aside className="panel card left" aria-label="Sound modulator">
-        <Modulator controls={controls} onChange={setControls} music={music} kids={kids} energyMeaning={energyMeaning} />
+      <aside className="panel card left" aria-label="Mixer">
+        <Modulator
+          controls={controls}
+          onChange={setControls}
+          layers={layers}
+          onLayers={setLayers}
+          levels={levels}
+          music={music}
+          kids={kids}
+          energyMeaning={energyMeaning}
+          ends={active && viz?.scenarios ? [viz.scenarios[0].label, viz.scenarios[viz.scenarios.length - 1].label] : null}
+        />
       </aside>
 
       <aside className="panel card right" aria-label="Now playing, news and missions">

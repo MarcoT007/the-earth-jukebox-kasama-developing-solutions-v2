@@ -12,6 +12,10 @@ export const KID_KNOBS: Record<Exclude<keyof Controls, "shape">, { label: string
   density: { label: "Notes", hint: "More notes or fewer notes. Quiet parts of the picture go dark." },
   space: { label: "Echo", hint: "Makes the sound feel big, like in a cave" },
   volume: { label: "Loud", hint: "How loud the music is" },
+  chord: { label: "Colours", hint: "How loud the long, soft notes are. They come from the colours." },
+  melody: { label: "Tune", hint: "How loud the tune is. It comes from the bright places." },
+  beat: { label: "Sparkles", hint: "How loud the sparkles and the drum are." },
+  filter: { label: "Tunnel", hint: "Turn left for a muffled sound, like under water. Turn right for a thin sound, like a tiny radio." },
 };
 
 export const KID_SHAPES: Record<WaveShape, string> = { sine: "Smooth", triangle: "Soft", square: "Blocky", sawtooth: "Buzzy" };

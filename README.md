@@ -43,6 +43,21 @@ it is highlighted*:
 - **Density** silences the darker columns, and they fade on the picture.
 - **Muting a voice** removes its marks from the picture.
 
+## The mixer
+
+The controls are laid out like a DJ mixer. Each voice has its own channel strip with a fader, a level meter,
+Mute and Solo; the master strip has the volume and the echo.
+
+| Control | What it does |
+|---|---|
+| Chord / Melody / Beat faders | Level of each voice. Solo one to hear a single rule on its own. |
+| Mood (chord) | Pushes the chord to major or minor; in the centre the data decides. |
+| Notes (melody) | How many columns of the picture are played. |
+| Tempo (beat) | Speed of the scan and of the planet's spin. |
+| Filter | DJ filter: left cuts the highs, right cuts the lows. Sound only. |
+| Wave shape | Timbre of the melody. Sound only. |
+| Energy crossfader | Intensity of the sound; in the Time Machine it slides from low to very high emissions. |
+
 The rules live in `web/src/audio/mapping.ts`; the engine is `web/src/audio/engine.ts`.
 
 ## Run it

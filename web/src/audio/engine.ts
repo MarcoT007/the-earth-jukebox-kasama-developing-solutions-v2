@@ -23,6 +23,14 @@ export class JukeboxEngine {
   private reverb = new Tone.Reverb({ decay: 6, wet: 0.4 });
   private filter = new Tone.Filter(2000, "lowpass");
   private meter = new Tone.Meter({ smoothing: 0.85, normalRange: true });
+  // One bus per voice, like the channels of a mixer: its own fader and its own level meter.
+  private chordBus = new Tone.Volume(0);
+  private melodyBus = new Tone.Volume(0);
+  private beatBus = new Tone.Volume(0);
+  private meters = [0, 1, 2].map(() => new Tone.Meter({ smoothing: 0.8, normalRange: true }));
+  // DJ filter on the master: one knob sweeps a low-pass (left) or a high-pass (right).
+  private djLow = new Tone.Filter({ frequency: 20000, type: "lowpass", Q: 2 });
+  private djHigh = new Tone.Filter({ frequency: 10, type: "highpass", Q: 2 });
   private pad = new Tone.PolySynth(Tone.AMSynth, { volume: -18, envelope: { attack: 1.2, release: 3 } });
   private lead = new Tone.Synth({ oscillator: { type: "triangle" }, volume: -10, envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.4 } });
   private leadPan = new Tone.Panner(0);
@@ -31,12 +39,14 @@ export class JukeboxEngine {
 
   constructor(controls: Controls) {
     this.controls = controls;
-    this.pad.chain(this.filter, this.reverb, this.master);
-    this.lead.chain(this.leadPan, this.reverb);
-    this.kick.connect(this.master);
-    this.spark.connect(this.reverb);
+    this.pad.chain(this.filter, this.chordBus, this.reverb, this.master);
+    this.lead.chain(this.leadPan, this.melodyBus, this.reverb);
+    this.kick.connect(this.beatBus);
+    this.spark.connect(this.beatBus);
+    this.beatBus.connect(this.master); // dry, so the rhythm stays sharp
+    [this.chordBus, this.melodyBus, this.beatBus].forEach((bus, i) => bus.connect(this.meters[i]));
     this.master.connect(this.meter);
-    this.master.toDestination();
+    this.master.chain(this.djLow, this.djHigh, Tone.getDestination());
   }
 
   onFrame(fn: FrameListener) {
@@ -62,6 +72,14 @@ export class JukeboxEngine {
     this.reverb.wet.rampTo(c.space, 0.5);
     this.lead.oscillator.type = c.shape;
     this.master.volume.rampTo(c.volume <= 0.01 ? -Infinity : Tone.gainToDb(c.volume), 0.2);
+    // Channel faders: 75% is the reference mix, the top of the fader adds about 5 dB.
+    const fader = (v: number) => (v <= 0.01 ? -Infinity : Tone.gainToDb((v / 0.75) ** 2));
+    this.chordBus.volume.rampTo(fader(c.chord), 0.1);
+    this.melodyBus.volume.rampTo(fader(c.melody), 0.1);
+    this.beatBus.volume.rampTo(fader(c.beat), 0.1);
+    // Filter knob: turning left closes a low-pass from 20 kHz down to 200 Hz, turning right opens a high-pass up to 3 kHz.
+    this.djLow.frequency.rampTo(c.filter < 0 ? 20000 * (200 / 20000) ** -c.filter : 20000, 0.1);
+    this.djHigh.frequency.rampTo(c.filter > 0 ? 10 * (3000 / 10) ** c.filter : 10, 0.1);
     this.refreshFrame();
   }
 
@@ -75,6 +93,14 @@ export class JukeboxEngine {
   level(): number {
     const v = this.meter.getValue();
     return typeof v === "number" ? v : v[0];
+  }
+
+  /** Live 0..1 level of each channel: chord, melody, beat, master. */
+  levels(): number[] {
+    return [...this.meters, this.meter].map((m) => {
+      const v = m.getValue();
+      return typeof v === "number" ? v : v[0];
+    });
   }
 
   /** Step of the bar that is currently sounding (0..7), for the visualizers. */
@@ -144,6 +170,6 @@ export class JukeboxEngine {
   dispose() {
     this.loop?.dispose();
     Tone.getTransport().stop();
-    [this.pad, this.lead, this.kick, this.spark, this.filter, this.reverb, this.leadPan, this.master, this.meter].forEach((n) => n.dispose());
+    [this.pad, this.lead, this.kick, this.spark, this.filter, this.reverb, this.leadPan, this.master, this.meter, this.chordBus, this.melodyBus, this.beatBus, this.djLow, this.djHigh, ...this.meters].forEach((n) => n.dispose());
   }
 }
